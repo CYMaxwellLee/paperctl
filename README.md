@@ -32,24 +32,29 @@ Built for research labs juggling multiple paper submissions across conferences (
 ## Installation
 
 ```bash
-# 1. Clone
-git clone https://github.com/CYMaxwellLee/paperctl.git ~/paperctl
-# (or wherever you prefer)
+# 1. Clone — pick any path you like
+git clone https://github.com/CYMaxwellLee/paperctl.git ~/Project/paperctl
+#   other common choices:
+#   git clone ... ~/paperctl
+#   git clone ... /opt/paperctl
 
-# 2. Symlink to PATH
-ln -sf ~/paperctl/paperctl /usr/local/bin/paperctl
+# 2. Symlink to PATH (use the path you chose above)
+ln -sf ~/Project/paperctl/paperctl /usr/local/bin/paperctl
 
 # 3. Install jq (recommended, python3 works as fallback)
 brew install jq          # macOS
 # apt install jq         # Ubuntu/Debian
 ```
 
+> **Note:** paperctl resolves its own install location via symlinks at runtime — you can clone it anywhere and the tool will find its `paperctl.d/` directory automatically.
+
 ## Quick Start
 
 ```bash
 # 1. Create a conference workspace
 mkdir ~/Project/Papers/eccv2026
-cp ~/paperctl/examples/conference.json.example ~/Project/Papers/eccv2026/conference.json
+cp "$(dirname "$(which paperctl)")/examples/conference.json.example" \
+   ~/Project/Papers/eccv2026/conference.json
 # Edit conference.json — fill in your papers, Overleaf URLs, etc.
 
 # 2. Bootstrap (clone repos, set up remotes)
@@ -156,7 +161,7 @@ paperctl is designed so that switching conferences requires **zero code changes*
 mkdir ~/Project/Papers/neurips2025
 
 # 2. Create config
-cp ~/paperctl/examples/conference.json.example \
+cp "$(dirname "$(which paperctl)")/examples/conference.json.example" \
    ~/Project/Papers/neurips2025/conference.json
 # Edit: change conference name/year/slug/template/org, add your papers
 
@@ -185,9 +190,9 @@ Set the `template` field in `conference.json` to match.
 ### Method A: Clean Re-init (Recommended)
 
 ```bash
-# 1. Install paperctl
-git clone https://github.com/CYMaxwellLee/paperctl.git ~/paperctl
-ln -sf ~/paperctl/paperctl /usr/local/bin/paperctl
+# 1. Install paperctl (clone to any path you prefer)
+git clone https://github.com/CYMaxwellLee/paperctl.git ~/Project/paperctl
+ln -sf ~/Project/paperctl/paperctl /usr/local/bin/paperctl
 brew install jq
 
 # 2. Set up Git credential storage
