@@ -1,0 +1,38 @@
+paperctl — Conference paper management tool
+
+USAGE
+  paperctl <command> [--dir <path>] [--paper <name>] [args...]
+
+COMMANDS
+  start              Pull all repos (run before every work session)
+  sync               Full bidirectional sync (pull + push all remotes)
+  push [msg]         Commit & push repos that have changes
+  pull-overleaf      Pull latest from Overleaf
+  pull-upstream      Pull from upstream (fork repos only)
+  check              Run format compliance checks
+  init               Bootstrap repos from conference.json
+  status             Show conference & paper status
+  help               Show this help
+
+GLOBAL FLAGS
+  --dir <path>       Path to conference directory (default: $PWD)
+  --paper <name>     Operate on a single paper only
+
+SETUP
+  1. Create a conference directory (e.g. ~/Project/Papers/eccv2026/)
+  2. Add a conference.json with conference info + paper list
+  3. Run: paperctl init     (clones repos, sets up remotes)
+  4. Run: paperctl start    (daily pre-session sync)
+
+EXAMPLES
+  cd ~/Project/Papers/eccv2026
+  paperctl start                          # sync before working
+  paperctl push "fix: abstract typo"      # commit & push changes
+  paperctl push --paper elsa "fix typo"   # push single paper
+  paperctl check                          # format compliance check
+  paperctl status                         # overview dashboard
+
+  # New conference
+  mkdir ~/Project/Papers/neurips2025
+  vim ~/Project/Papers/neurips2025/conference.json
+  paperctl init --dir ~/Project/Papers/neurips2025

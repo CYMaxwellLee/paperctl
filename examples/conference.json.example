@@ -1,0 +1,39 @@
+{
+  "conference": {
+    "name": "ECCV",
+    "year": 2026,
+    "slug": "eccv2026",
+    "template": "eccv",
+    "org": "MyLab-2026",
+    "template_repo": "https://github.com/paolo-favaro/paper-template.git",
+    "deadline": "2026-03-07T17:59:00Z"
+  },
+  "defaults": {
+    "github_branch": "main",
+    "overleaf_branch": "master",
+    "overleaf_remote": "overleaf",
+    "upstream_remote": "upstream",
+    "upstream_branch": ""
+  },
+  "papers": [
+    {
+      "name": "my-paper",
+      "repo": "eccv2026-my-paper",
+      "overleaf": "https://git.overleaf.com/YOUR_OVERLEAF_PROJECT_ID",
+      "paper_id": null,
+      "title": "My Paper Title",
+      "domain": "Computer Vision",
+      "status": "outline"
+    },
+    {
+      "name": "forked-paper",
+      "repo": "eccv2026-forked-paper",
+      "overleaf": "https://git.overleaf.com/YOUR_OVERLEAF_PROJECT_ID",
+      "upstream": "student-github-user/their-repo-name",
+      "paper_id": null,
+      "title": "Student's Paper",
+      "domain": "3D Vision",
+      "status": "early"
+    }
+  ]
+}

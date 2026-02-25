@@ -1,0 +1,62 @@
+#!/bin/bash
+# paperctl -- Conference paper management tool
+# Usage: paperctl <command> [args]
+#
+# Commands:
+#   start           Pull all repos (pre-session sync)
+#   sync            Full bidirectional sync (pull + push all)
+#   push [msg]      Commit + push repos with changes
+#   pull-overleaf   Pull from Overleaf only
+#   pull-upstream   Pull from upstream (fork repos only)
+#   check           Run format compliance checks
+#   init            Bootstrap repos from conference.json
+#   status          Show conference & paper status
+#   help            Show this help
+
+set -euo pipefail
+
+# Dependency check
+_check_dep() {
+  command -v "$1" &>/dev/null || { echo "ERROR: '$1' is required. $2" >&2; exit 1; }
+}
+_check_dep git "Install from https://git-scm.com/"
+if ! command -v jq &>/dev/null && ! command -v python3 &>/dev/null; then
+  echo "ERROR: Either 'jq' or 'python3' is required for JSON parsing." >&2
+  echo "  Install jq: brew install jq (macOS) or apt install jq (Linux)" >&2
+  exit 1
+fi
+
+# Resolve symlinks to find the real install directory
+_self="$0"
+while [[ -L "$_self" ]]; do
+  _dir="$(cd "$(dirname "$_self")" && pwd)"
+  _self="$(readlink "$_self")"
+  [[ "$_self" != /* ]] && _self="$_dir/$_self"
+done
+PAPERCTL_ROOT="$(cd "$(dirname "$_self")" && pwd)"
+PAPERCTL_LIB="$PAPERCTL_ROOT/paperctl.d"
+COMMAND="${1:-help}"
+shift 2>/dev/null || true
+
+# Parse global flags
+while [[ "${1:-}" == --* ]]; do
+  case "$1" in
+    --dir) PAPERCTL_DIR="$2"; shift 2 ;;
+    --paper) PAPERCTL_PAPER="$2"; shift 2 ;;
+    *) break ;;
+  esac
+done
+export PAPERCTL_DIR PAPERCTL_PAPER PAPERCTL_ROOT PAPERCTL_LIB
+
+case "$COMMAND" in
+  start)          . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_start.sh" "$@" ;;
+  sync)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_sync.sh" "$@" ;;
+  push)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_push.sh" "$@" ;;
+  pull-overleaf)  . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_pull_overleaf.sh" "$@" ;;
+  pull-upstream)  . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_pull_upstream.sh" "$@" ;;
+  check)          . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_check.sh" "$@" ;;
+  init)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_init.sh" "$@" ;;
+  status)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_status.sh" "$@" ;;
+  help|--help|-h) cat "$PAPERCTL_LIB/help.txt" ;;
+  *)              echo "Unknown command: $COMMAND. Run 'paperctl help'." >&2; exit 1 ;;
+esac
