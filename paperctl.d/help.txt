@@ -12,6 +12,8 @@ COMMANDS
   check              Run format compliance checks
   init               Bootstrap repos from conference.json
   status             Show conference & paper status
+  digest             Show recent changes (Overleaf/upstream) per paper
+  dashboard          Auto-generate README dashboard from conference.json
   help               Show this help
 
 GLOBAL FLAGS
@@ -31,6 +33,17 @@ EXAMPLES
   paperctl push --paper elsa "fix typo"   # push single paper
   paperctl check                          # format compliance check
   paperctl status                         # overview dashboard
+
+  # Monitor student changes
+  paperctl digest                          # all papers' Overleaf changes
+  paperctl digest --paper elsa             # single paper
+  paperctl digest --todos-only             # just TODO/FIXME markers
+  paperctl digest --output digest.md       # save to file
+
+  # Auto-generate dashboard
+  paperctl dashboard                       # print to stdout
+  paperctl dashboard --output README.md    # save to file
+  paperctl dashboard --format json         # JSON output
 
   # New conference
   mkdir ~/Project/Papers/neurips2025
