@@ -13,6 +13,7 @@ COMMANDS
   init               Bootstrap repos from conference.json
   status             Show conference & paper status
   digest             Show recent changes (Overleaf/upstream) per paper
+  report             Student activity report (compare pre/post sync state)
   dashboard          Auto-generate README dashboard from conference.json
   help               Show this help
 
@@ -39,6 +40,12 @@ EXAMPLES
   paperctl digest --paper elsa             # single paper
   paperctl digest --todos-only             # just TODO/FIXME markers
   paperctl digest --output digest.md       # save to file
+
+  # Student activity report (after `paperctl start`)
+  paperctl report                         # show what changed since last sync
+  paperctl report --paper fadir           # single paper
+  paperctl report --update-notes          # also update conference.json notes
+  paperctl report --output report.md      # save to file
 
   # Auto-generate dashboard
   paperctl dashboard                       # print to stdout

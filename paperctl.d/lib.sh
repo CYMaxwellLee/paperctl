@@ -100,6 +100,93 @@ is_fork() {
   [[ -n "$upstream" && "$upstream" != "null" ]]
 }
 
+# --- State Management ---
+STATE_FILE=""
+
+_state_file_path() {
+  echo "${CONF_DIR}/.paperctl_state.json"
+}
+
+# Save current HEAD SHA of all papers to state file (call before sync)
+save_pre_sync_state() {
+  local sf
+  sf=$(_state_file_path)
+  local ts
+  ts=$(date "+%Y-%m-%dT%H:%M:%S%z")
+
+  # Build JSON using python3 (works everywhere, jq may not have -n on all systems)
+  local papers_json="{"
+  local first=true
+  local i=0
+  while [[ $i -lt $CONF_PAPER_COUNT ]]; do
+    local name=$(paper_field $i "name")
+    local repo=$(paper_field $i "repo")
+    local repo_dir="$CONF_DIR/$repo"
+    if [[ -d "$repo_dir" ]]; then
+      local sha
+      sha=$(git -C "$repo_dir" rev-parse HEAD 2>/dev/null || echo "unknown")
+      if [[ "$first" == "true" ]]; then
+        first=false
+      else
+        papers_json+=","
+      fi
+      papers_json+="\"$name\":\"$sha\""
+    fi
+    i=$((i + 1))
+  done
+  papers_json+="}"
+
+  python3 -c "
+import json, sys
+data = {
+    'timestamp': sys.argv[1],
+    'papers': json.loads(sys.argv[2])
+}
+with open(sys.argv[3], 'w') as f:
+    json.dump(data, f, indent=2)
+" "$ts" "$papers_json" "$sf"
+
+  echo "📌 Pre-sync state saved to $(basename "$sf")"
+}
+
+# Read saved state; sets STATE_FILE and returns 0 if exists, 1 if not
+load_sync_state() {
+  STATE_FILE=$(_state_file_path)
+  if [[ -f "$STATE_FILE" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Get saved SHA for a paper name from state file
+get_saved_sha() {
+  local name="$1"
+  if [[ -z "$STATE_FILE" || ! -f "$STATE_FILE" ]]; then
+    echo ""
+    return
+  fi
+  # Use bracket notation to handle hyphens in paper names (e.g. pnr-fungraph)
+  if command -v jq &>/dev/null; then
+    jq -r ".papers[\"$name\"]" "$STATE_FILE"
+  else
+    python3 -c "
+import json, sys
+data = json.load(open(sys.argv[1]))
+print(data.get('papers', {}).get(sys.argv[2], 'null'))
+" "$STATE_FILE" "$name"
+  fi
+}
+
+# Get saved timestamp from state file
+get_saved_timestamp() {
+  if [[ -z "$STATE_FILE" || ! -f "$STATE_FILE" ]]; then
+    echo ""
+    return
+  fi
+  _jq "$STATE_FILE" ".timestamp"
+}
+
 # --- Iterate Over Papers ---
 for_each_paper() {
   local callback="$1"

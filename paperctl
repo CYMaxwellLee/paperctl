@@ -12,6 +12,7 @@
 #   init            Bootstrap repos from conference.json
 #   status          Show conference & paper status
 #   digest          Show recent changes (Overleaf/upstream) per paper
+#   report          Student activity report (compare pre/post sync)
 #   dashboard       Auto-generate README dashboard from conference.json
 #   help            Show this help
 
@@ -61,6 +62,7 @@ case "$COMMAND" in
   status)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_status.sh" "$@" ;;
   digest)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_digest.sh" "$@" ;;
   dashboard)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_dashboard.sh" "$@" ;;
+  report)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_report.sh" "$@" ;;
   help|--help|-h) cat "$PAPERCTL_LIB/help.txt" ;;
   *)              echo "Unknown command: $COMMAND. Run 'paperctl help'." >&2; exit 1 ;;
 esac

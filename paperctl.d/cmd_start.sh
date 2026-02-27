@@ -7,6 +7,10 @@ echo "🚀 Starting work session — syncing all repos..."
 echo "   Conference: $CONF_NAME $CONF_YEAR ($CONF_SLUG)"
 echo ""
 
+# Save pre-sync state for later comparison (used by `paperctl report`)
+save_pre_sync_state
+echo ""
+
 _start_paper() {
   local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
   local branch
