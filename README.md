@@ -31,14 +31,19 @@ Built for research labs juggling multiple paper submissions across conferences (
 
 ## Installation
 
-```bash
-# 1. Clone — pick any path you like
-git clone https://github.com/CYMaxwellLee/paperctl.git ~/Project/paperctl
-#   other common choices:
-#   git clone ... ~/paperctl
-#   git clone ... /opt/paperctl
+### Quick Install
 
-# 2. Symlink to PATH (use the path you chose above)
+```bash
+curl -sL https://raw.githubusercontent.com/CYMaxwellLee/paperctl/main/install.sh | bash
+```
+
+### Manual Install
+
+```bash
+# 1. Clone (pick any path you like)
+git clone https://github.com/CYMaxwellLee/paperctl.git ~/Project/paperctl
+
+# 2. Symlink to PATH
 ln -sf ~/Project/paperctl/paperctl /usr/local/bin/paperctl
 
 # 3. Install jq (recommended, python3 works as fallback)
@@ -46,7 +51,7 @@ brew install jq          # macOS
 # apt install jq         # Ubuntu/Debian
 ```
 
-> **Note:** paperctl resolves its own install location via symlinks at runtime — you can clone it anywhere and the tool will find its `paperctl.d/` directory automatically.
+> **Note:** paperctl resolves its own install location via symlinks at runtime -- you can clone it anywhere and the tool will find its `paperctl.d/` directory automatically.
 
 ## Quick Start
 
@@ -71,16 +76,60 @@ paperctl status                       # dashboard
 
 ## Commands
 
+### Sync & Git
+
 | Command | Description |
 |---------|-------------|
-| `paperctl start` | Pull all remotes (run before every work session) |
+| `paperctl start` | Save state + pull all remotes (run before every work session) |
 | `paperctl sync` | Full bidirectional sync (pull + push all remotes) |
 | `paperctl push [msg]` | Commit & push repos that have local changes |
 | `paperctl pull-overleaf` | Pull latest from Overleaf only |
 | `paperctl pull-upstream` | Pull from upstream (fork repos only) |
-| `paperctl check` | Run format compliance checks |
-| `paperctl init` | Bootstrap repos from `conference.json` |
+
+`sync` supports these flags:
+
+| Flag | Description |
+|------|-------------|
+| `--parallel` | Sync all repos concurrently (background subshells) |
+| `--auto-resolve` | Auto-resolve merge conflicts by taking theirs |
+| `--paper <name>` | Sync a single repo only |
+
+Large image files (>2MB) in `figures/` are flagged during sync with a warning.
+
+### Status & Monitoring
+
+| Command | Description |
+|---------|-------------|
 | `paperctl status` | Show conference dashboard & paper status |
+| `paperctl autostatus` | Auto-detect paper status from section content |
+| `paperctl pages` | Extract page counts from compiled PDFs |
+| `paperctl digest` | Show recent Overleaf/upstream changes per paper |
+| `paperctl report` | Student activity report (diff since last `start`) |
+| `paperctl dashboard` | Auto-generate README/STATUS.md dashboards |
+
+`autostatus` classifies papers as `early` / `outline` / `draft` / `near-complete` / `complete` by scanning `.tex` section files and counting non-comment lines.
+
+`dashboard` supports:
+- `--output README.md` -- save dashboard to file
+- `--status STATUS.md` -- generate progress table with stats
+- `--format json` -- JSON output
+
+### Quality & Validation
+
+| Command | Description |
+|---------|-------------|
+| `paperctl check` | Run format compliance checks |
+| `paperctl validate` | Static LaTeX validation (refs, cites, figures) |
+| `paperctl lint` | Writing-style lint (BAN rules) |
+| `paperctl preflight` | Submission preflight (anonymity, TODOs, conflicts) |
+| `paperctl strip` | Strip professor macros for camera-ready |
+| `paperctl heatmap` | Per-section change heatmap (student activity) |
+
+### Setup
+
+| Command | Description |
+|---------|-------------|
+| `paperctl init` | Bootstrap repos from `conference.json` |
 | `paperctl help` | Show usage help |
 
 ### Global Flags
@@ -89,17 +138,36 @@ paperctl status                       # dashboard
 |------|-------------|
 | `--dir <path>` | Path to conference directory (default: `$PWD`) |
 | `--paper <name>` | Operate on a single paper only |
+| `--repo <name>` | Alias for `--paper` |
 
 ### Examples
 
 ```bash
-# Push a single paper
-paperctl push --paper elsa "fix: Table 1 caption"
+# Daily workflow
+paperctl start                           # sync before working
+paperctl push --paper elsa "v2 intro"    # commit & push single paper
 
-# Check format for one paper
-paperctl check --paper ivl
+# Parallel sync with auto-resolve
+paperctl sync --parallel --auto-resolve
 
-# Operate from a different directory
+# Monitor student changes
+paperctl report                          # what changed since last start
+paperctl report --update-notes           # also update conference.json
+
+# Auto-detect + update status
+paperctl autostatus --update             # upgrade status in conference.json
+paperctl pages --update                  # write page counts to conference.json
+
+# Generate dashboards
+paperctl dashboard --output eccv2026-meta/README.md
+paperctl dashboard --status eccv2026-meta/STATUS.md
+
+# Quality pipeline
+paperctl validate --compile --paper elsa # compile + validate
+paperctl lint --paper textnav            # writing-style checks
+paperctl preflight                       # submission readiness
+
+# From a different directory
 paperctl status --dir ~/Project/Papers/neurips2025
 ```
 
@@ -146,11 +214,15 @@ Each conference workspace needs a `conference.json` at its root. See [`examples/
 | `name` | ✅ | Short name used with `--paper` flag |
 | `repo` | ✅ | GitHub repo name (under `org`) |
 | `overleaf` | ✅ | Overleaf Git URL (`https://git.overleaf.com/PROJECT_ID`) |
-| `upstream` | ❌ | Upstream GitHub path (`user/repo`) — presence marks this as a fork |
+| `upstream` | ❌ | Upstream GitHub path (`user/repo`); presence marks this as a fork |
 | `paper_id` | ❌ | Submission ID from OpenReview/CMT |
 | `title` | ❌ | Paper title |
 | `domain` | ❌ | Research domain |
-| `status` | ❌ | Progress status (`early`, `outline`, `near-complete`, `complete`) |
+| `status` | ❌ | Progress: `early`, `outline`, `draft`, `near-complete`, `complete` |
+| `batch` | ❌ | Priority batch number (used by `dashboard`) |
+| `claude_project` | ❌ | Whether a Claude project exists for this paper |
+| `knowledge_uploaded` | ❌ | Whether reference papers have been uploaded |
+| `notes` | ❌ | Free-form notes (shown in dashboard, updated by `report --update-notes`) |
 
 ## Switching to a New Conference
 
@@ -190,31 +262,30 @@ Set the `template` field in `conference.json` to match.
 ### Method A: Clean Re-init (Recommended)
 
 ```bash
-# 1. Install paperctl (clone to any path you prefer)
-git clone https://github.com/CYMaxwellLee/paperctl.git ~/Project/paperctl
-ln -sf ~/Project/paperctl/paperctl /usr/local/bin/paperctl
-brew install jq
+# 1. Install paperctl
+curl -sL https://raw.githubusercontent.com/CYMaxwellLee/paperctl/main/install.sh | bash
 
 # 2. Set up Git credential storage
 git config --global credential.helper store
+# macOS alternative: git config --global credential.helper osxkeychain
 
 # 3. Set up GitHub authentication
 #    Create a PAT at https://github.com/settings/tokens
 #    It will be cached on first git push
 
 # 4. Set up Overleaf authentication
-#    Go to: Overleaf → Account Settings → Git Integration
+#    Go to: Overleaf > Account Settings > Git Integration
 #    Generate a "Git Authentication Token" (starts with olp_)
 #    When prompted by git: username = "git", password = your olp_ token
 
-# 5. Copy conference.json from old machine
+# 5. Clone the meta repo (conference.json is tracked here)
 mkdir ~/Project/Papers/eccv2026
-scp old-mac:~/Project/Papers/eccv2026/conference.json \
-    ~/Project/Papers/eccv2026/
+cd ~/Project/Papers/eccv2026
+git clone https://github.com/YourOrg/eccv2026-meta.git
+ln -sf eccv2026-meta/conference.json conference.json
 
 # 6. Bootstrap everything
-cd ~/Project/Papers/eccv2026
-paperctl init      # clones all repos, sets up all remotes
+paperctl init      # clones all paper repos, sets up all remotes
 paperctl start     # syncs all content from GitHub + Overleaf
 ```
 
