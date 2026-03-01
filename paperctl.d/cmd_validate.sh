@@ -26,6 +26,22 @@ while [[ "${1:-}" == --* ]]; do
   esac
 done
 
+# --- Resolve TeX binaries (BasicTeX / MacTeX may not be in PATH) ---
+PDFLATEX=""
+BIBTEX=""
+for _texbin in "/Library/TeX/texbin" "/usr/local/texlive/2025/bin/universal-darwin" "/usr/local/texlive/2024/bin/universal-darwin"; do
+  if [[ -x "$_texbin/pdflatex" ]]; then
+    PDFLATEX="$_texbin/pdflatex"
+    BIBTEX="$_texbin/bibtex"
+    break
+  fi
+done
+# Fallback: check PATH
+if [[ -z "$PDFLATEX" ]] && command -v pdflatex &>/dev/null; then
+  PDFLATEX="$(command -v pdflatex)"
+  BIBTEX="$(command -v bibtex)"
+fi
+
 # --- Collect ALL tex content recursively (strips comments) ---
 _collect_all_tex() {
   local repo_dir="$1" main_tex="$2"
@@ -433,7 +449,7 @@ _validate_paper() {
   local pdf_file=""
 
   if $DO_COMPILE; then
-    if command -v pdflatex &>/dev/null; then
+    if [[ -n "$PDFLATEX" ]]; then
       echo ""
       check_info "Compiling locally..."
       local main_base
@@ -444,16 +460,16 @@ _validate_paper() {
       compile_log=$(mktemp)
 
       # Pass 1: pdflatex
-      (cd "$tex_dir" && pdflatex -interaction=nonstopmode -halt-on-error "$main_base.tex" > "$compile_log" 2>&1) || true
+      (cd "$tex_dir" && "$PDFLATEX" -interaction=nonstopmode -halt-on-error "$main_base.tex" > "$compile_log" 2>&1) || true
 
       # bibtex (if .bib exists)
-      if [[ -n "$bib_file" ]]; then
-        (cd "$tex_dir" && bibtex "$main_base" >> "$compile_log" 2>&1) || true
+      if [[ -n "$bib_file" && -n "$BIBTEX" ]]; then
+        (cd "$tex_dir" && "$BIBTEX" "$main_base" >> "$compile_log" 2>&1) || true
       fi
 
       # Pass 2 & 3: pdflatex
-      (cd "$tex_dir" && pdflatex -interaction=nonstopmode "$main_base.tex" >> "$compile_log" 2>&1) || true
-      (cd "$tex_dir" && pdflatex -interaction=nonstopmode "$main_base.tex" >> "$compile_log" 2>&1) || true
+      (cd "$tex_dir" && "$PDFLATEX" -interaction=nonstopmode "$main_base.tex" >> "$compile_log" 2>&1) || true
+      (cd "$tex_dir" && "$PDFLATEX" -interaction=nonstopmode "$main_base.tex" >> "$compile_log" 2>&1) || true
 
       # Check compilation result
       if [[ -f "$tex_dir/$main_base.pdf" ]]; then
@@ -506,7 +522,7 @@ _validate_paper() {
         "$main_base.snm" "$main_base.vrb" "$main_base.fls" "$main_base.fdb_latexmk" \
         "$main_base.synctex.gz" 2>/dev/null) || true
     else
-      check_warn "pdflatex not found. Install: brew install --cask mactex-no-gui"
+      check_warn "pdflatex not found. Install BasicTeX: brew install --cask basictex"
     fi
   fi
 
