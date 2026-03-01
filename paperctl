@@ -14,6 +14,8 @@
 #   lint            Writing-style lint (BAN rules, em dash, openers)
 #   init            Bootstrap repos from conference.json
 #   status          Show conference & paper status
+#   autostatus      Auto-detect paper status from section content
+#   pages           Extract page counts from compiled PDFs
 #   digest          Show recent changes (Overleaf/upstream) per paper
 #   report          Student activity report (compare pre/post sync)
 #   dashboard       Auto-generate README dashboard from conference.json
@@ -48,7 +50,7 @@ shift 2>/dev/null || true
 while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --dir) PAPERCTL_DIR="$2"; shift 2 ;;
-    --paper) PAPERCTL_PAPER="$2"; shift 2 ;;
+    --paper|--repo) PAPERCTL_PAPER="$2"; shift 2 ;;
     *) break ;;
   esac
 done
@@ -68,6 +70,8 @@ case "$COMMAND" in
   heatmap)        . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_heatmap.sh" "$@" ;;
   init)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_init.sh" "$@" ;;
   status)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_status.sh" "$@" ;;
+  autostatus)     . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_autostatus.sh" "$@" ;;
+  pages)          . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_pages.sh" "$@" ;;
   digest)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_digest.sh" "$@" ;;
   dashboard)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_dashboard.sh" "$@" ;;
   report)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_report.sh" "$@" ;;
