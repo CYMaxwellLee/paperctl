@@ -64,6 +64,8 @@ case "$COMMAND" in
   validate)       . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_validate.sh" "$@" ;;
   strip)          . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_strip.sh" "$@" ;;
   lint)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_lint.sh" "$@" ;;
+  preflight)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_preflight.sh" "$@" ;;
+  heatmap)        . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_heatmap.sh" "$@" ;;
   init)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_init.sh" "$@" ;;
   status)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_status.sh" "$@" ;;
   digest)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_digest.sh" "$@" ;;

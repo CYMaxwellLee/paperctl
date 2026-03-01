@@ -352,7 +352,83 @@ _validate_paper() {
   fi
 
   # ============================================================
-  # CHECK 6: Local compilation (--compile flag)
+  # CHECK 6: BibTeX health (duplicates + orphans)
+  # ============================================================
+  if [[ -n "$bib_file" ]]; then
+    # Duplicate bib keys
+    local dup_keys
+    dup_keys=$(grep -oE '@[a-zA-Z]+\{[^,]+,' "$bib_file" 2>/dev/null \
+      | sed 's/@[a-zA-Z]*{//;s/,$//' \
+      | sort | uniq -d)
+    if [[ -n "$dup_keys" ]]; then
+      local dup_count
+      dup_count=$(_count_lines "$dup_keys")
+      check_warn "Duplicate bib keys ($dup_count):"
+      echo "$dup_keys" | while IFS= read -r k; do
+        echo "         $k"
+      done
+    fi
+
+    # Orphaned bib entries (defined but never cited)
+    if [[ -n "${cites:-}" ]]; then
+      local orphans=()
+      while IFS= read -r key; do
+        [[ -z "$key" ]] && continue
+        if ! echo "$cites" | grep -qxF "$key"; then
+          orphans+=("$key")
+        fi
+      done <<< "$bib_keys"
+      local orphan_count=${#orphans[@]}
+      if [[ $orphan_count -gt 0 && $orphan_count -le 10 ]]; then
+        check_info "Unused bib entries ($orphan_count): $(IFS=, ; echo "${orphans[*]}" | head -c 80)"
+      elif [[ $orphan_count -gt 10 ]]; then
+        check_info "Unused bib entries: $orphan_count (run with --paper to see list)"
+      fi
+    fi
+  fi
+
+  # ============================================================
+  # CHECK 7: Figure/table label completeness
+  # ============================================================
+  # Labels defined but never referenced
+  local fig_labels tab_labels
+  fig_labels=$(echo "$labels" | grep '^fig:' || true)
+  tab_labels=$(echo "$labels" | grep '^tab:' || true)
+
+  if [[ -n "$fig_labels" ]]; then
+    local unreffed_figs=()
+    while IFS= read -r fl; do
+      [[ -z "$fl" ]] && continue
+      if ! echo "$refs" | grep -qxF "$fl"; then
+        unreffed_figs+=("$fl")
+      fi
+    done <<< "$fig_labels"
+    if [[ ${#unreffed_figs[@]} -gt 0 ]]; then
+      check_warn "Unreferenced figures (${#unreffed_figs[@]}):"
+      for u in "${unreffed_figs[@]}"; do
+        echo "         $u"
+      done
+    fi
+  fi
+
+  if [[ -n "$tab_labels" ]]; then
+    local unreffed_tabs=()
+    while IFS= read -r tl; do
+      [[ -z "$tl" ]] && continue
+      if ! echo "$refs" | grep -qxF "$tl"; then
+        unreffed_tabs+=("$tl")
+      fi
+    done <<< "$tab_labels"
+    if [[ ${#unreffed_tabs[@]} -gt 0 ]]; then
+      check_warn "Unreferenced tables (${#unreffed_tabs[@]}):"
+      for u in "${unreffed_tabs[@]}"; do
+        echo "         $u"
+      done
+    fi
+  fi
+
+  # ============================================================
+  # CHECK 8: Local compilation (--compile flag)
   # ============================================================
   local pdf_file=""
 

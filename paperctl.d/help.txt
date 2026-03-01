@@ -13,6 +13,8 @@ COMMANDS
   validate           Static LaTeX validation (refs, cites, files, pages)
   strip              Strip \cyl{}/\tingru{} to _clean/ (originals untouched)
   lint               Writing-style lint (BAN rules)
+  preflight          Submission preflight (anonymity, TODOs, conflicts)
+  heatmap            Per-section change heatmap (student activity)
   init               Bootstrap repos from conference.json
   status             Show conference & paper status
   digest             Show recent changes (Overleaf/upstream) per paper
@@ -67,6 +69,14 @@ EXAMPLES
 
   # Writing quality
   paperctl lint --paper textnav           # check BAN rules
+
+  # Submission preflight
+  paperctl preflight                      # full checklist (anonymity, TODOs, etc.)
+  paperctl preflight --paper textnav      # single paper
+
+  # Student activity heatmap
+  paperctl heatmap                        # all papers, last 3 days
+  paperctl heatmap --since "1 day ago"    # custom time range
 
   # New conference
   mkdir ~/Project/Papers/neurips2025
