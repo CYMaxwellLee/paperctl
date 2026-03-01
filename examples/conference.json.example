@@ -23,7 +23,11 @@
       "paper_id": null,
       "title": "My Paper Title",
       "domain": "Computer Vision",
-      "status": "outline"
+      "status": "outline",
+      "batch": 1,
+      "claude_project": false,
+      "knowledge_uploaded": false,
+      "notes": ""
     },
     {
       "name": "forked-paper",
@@ -33,7 +37,11 @@
       "paper_id": null,
       "title": "Student's Paper",
       "domain": "3D Vision",
-      "status": "early"
+      "status": "early",
+      "batch": 2,
+      "claude_project": false,
+      "knowledge_uploaded": false,
+      "notes": ""
     }
   ]
 }
