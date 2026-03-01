@@ -17,6 +17,8 @@ COMMANDS
   heatmap            Per-section change heatmap (student activity)
   init               Bootstrap repos from conference.json
   status             Show conference & paper status
+  autostatus         Auto-detect paper status from section content
+  pages              Extract page counts from compiled PDFs
   digest             Show recent changes (Overleaf/upstream) per paper
   report             Student activity report (compare pre/post sync state)
   dashboard          Auto-generate README dashboard from conference.json
@@ -25,6 +27,7 @@ COMMANDS
 GLOBAL FLAGS
   --dir <path>       Path to conference directory (default: $PWD)
   --paper <name>     Operate on a single paper only
+  --repo <name>      Alias for --paper
 
 SETUP
   1. Create a conference directory (e.g. ~/Project/Papers/eccv2026/)
@@ -56,6 +59,23 @@ EXAMPLES
   paperctl dashboard                       # print to stdout
   paperctl dashboard --output README.md    # save to file
   paperctl dashboard --format json         # JSON output
+  paperctl dashboard --status STATUS.md    # generate STATUS.md progress table
+
+  # Sync with advanced options
+  paperctl sync --parallel                 # sync all repos concurrently
+  paperctl sync --auto-resolve             # auto-resolve merge conflicts (take theirs)
+  paperctl sync --parallel --auto-resolve  # combine both
+  paperctl sync --repo elsa               # sync single repo only
+
+  # Auto-detect paper status from section content
+  paperctl autostatus                      # show detected status for all papers
+  paperctl autostatus --paper elsa         # single paper
+  paperctl autostatus --update             # update conference.json (upgrade only)
+
+  # Extract page counts from compiled PDFs
+  paperctl pages                           # show page counts for all papers
+  paperctl pages --paper textnav           # single paper
+  paperctl pages --update                  # write page counts to conference.json
 
   # Pre-push validation
   paperctl validate                       # check all papers
