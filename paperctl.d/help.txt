@@ -10,6 +10,9 @@ COMMANDS
   pull-overleaf      Pull latest from Overleaf
   pull-upstream      Pull from upstream (fork repos only)
   check              Run format compliance checks
+  validate           Static LaTeX validation (refs, cites, files, pages)
+  strip              Strip \cyl{}/\tingru{} to _clean/ (originals untouched)
+  lint               Writing-style lint (BAN rules)
   init               Bootstrap repos from conference.json
   status             Show conference & paper status
   digest             Show recent changes (Overleaf/upstream) per paper
@@ -51,6 +54,19 @@ EXAMPLES
   paperctl dashboard                       # print to stdout
   paperctl dashboard --output README.md    # save to file
   paperctl dashboard --format json         # JSON output
+
+  # Pre-push validation
+  paperctl validate                       # check all papers
+  paperctl validate --paper textnav       # single paper
+  paperctl validate --compile             # also compile locally (needs pdflatex)
+
+  # Camera-ready preparation
+  paperctl strip --paper textnav          # create _clean/ with stripped macros
+  paperctl strip --paper textnav --diff   # preview changes without writing
+  paperctl strip --remove-comments        # also remove comment blocks
+
+  # Writing quality
+  paperctl lint --paper textnav           # check BAN rules
 
   # New conference
   mkdir ~/Project/Papers/neurips2025
