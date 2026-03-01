@@ -44,20 +44,34 @@ if [[ -n "$DEADLINE" && "$DEADLINE" != "null" ]]; then
   # Parse deadline date portion
   _dl_date="${DEADLINE%%T*}"
 
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$DEADLINE" "+%s" &>/dev/null 2>&1; then
-    # macOS
-    _dl_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$DEADLINE" "+%s" 2>/dev/null)
-    _dl_human=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$DEADLINE" "+%Y-%m-%d %H:%M UTC" 2>/dev/null)
+  if TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%SZ" "$DEADLINE" "+%s" &>/dev/null 2>&1; then
+    # macOS — parse in UTC to get correct epoch
+    _dl_epoch=$(TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%SZ" "$DEADLINE" "+%s" 2>/dev/null)
+    _dl_human=$(TZ=UTC date -r "$_dl_epoch" "+%Y-%m-%d %H:%M UTC" 2>/dev/null)
   else
     # Linux
     _dl_epoch=$(date -d "$DEADLINE" "+%s" 2>/dev/null || echo "")
     _dl_human=$(date -d "$DEADLINE" "+%Y-%m-%d %H:%M UTC" 2>/dev/null || echo "$DEADLINE")
   fi
 
+  # Taiwan time (UTC+8)
+  _dl_tw=""
+  if [[ -n "${_dl_epoch:-}" ]]; then
+    if date -r "$_dl_epoch" "+%s" &>/dev/null 2>&1; then
+      _dl_tw=$(TZ=Asia/Taipei date -r "$_dl_epoch" "+%-m/%-d %H:%M" 2>/dev/null || echo "")
+    else
+      _dl_tw=$(TZ=Asia/Taipei date -d "@$_dl_epoch" "+%-m/%-d %H:%M" 2>/dev/null || echo "")
+    fi
+  fi
+
   if [[ -n "${_dl_epoch:-}" ]]; then
     _now_epoch=$(date "+%s")
     _days_left=$(( (_dl_epoch - _now_epoch) / 86400 ))
-    _deadline_display="$_dl_human (**$_days_left days remaining**)"
+    if [[ -n "${_dl_tw:-}" ]]; then
+      _deadline_display="$_dl_human（台灣 $_dl_tw）(**$_days_left days remaining**)"
+    else
+      _deadline_display="$_dl_human (**$_days_left days remaining**)"
+    fi
   else
     _deadline_display="$DEADLINE"
   fi
@@ -187,6 +201,66 @@ _dp ""
 _dp "---"
 _dp ""
 
+# --- Heatmap summary (embedded) ---
+_HEAT_SINCE="3 days ago"
+
+_dashboard_heatmap() {
+  local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
+
+  local since_sha
+  since_sha=$(git -C "$repo_dir" log --until="$_HEAT_SINCE" --format="%H" -1 2>/dev/null || echo "")
+  [[ -z "$since_sha" ]] && since_sha=$(git -C "$repo_dir" rev-list --max-parents=0 HEAD 2>/dev/null | head -1)
+
+  local total_add=0 total_del=0
+  if [[ -n "$since_sha" ]]; then
+    while IFS= read -r _hl; do
+      [[ -z "$_hl" ]] && continue
+      local _hi _hd _hf
+      _hi=$(echo "$_hl" | awk '{print $1}')
+      _hd=$(echo "$_hl" | awk '{print $2}')
+      _hf=$(echo "$_hl" | awk '{print $3}')
+      [[ "$_hi" == "-" ]] && continue
+      [[ "$_hf" != *.tex && "$_hf" != *.bib ]] && continue
+      total_add=$(( total_add + _hi ))
+      total_del=$(( total_del + _hd ))
+    done < <(git -C "$repo_dir" diff --numstat "$since_sha"..HEAD 2>/dev/null)
+  fi
+
+  local total=$(( total_add + total_del ))
+
+  # Bar: 15 chars, scale 1500
+  local bar_len=0
+  if [[ "$total" -gt 0 ]]; then
+    bar_len=$(( (total * 15) / 1500 ))
+    [[ "$bar_len" -lt 1 ]] && bar_len=1
+    [[ "$bar_len" -gt 15 ]] && bar_len=15
+  fi
+  local bar="" i=0
+  while [[ $i -lt $bar_len ]]; do bar+="█"; i=$((i+1)); done
+  while [[ $i -lt 15 ]]; do bar+="░"; i=$((i+1)); done
+
+  # Figures
+  local figs=0
+  if [[ -n "$since_sha" ]]; then
+    figs=$(git -C "$repo_dir" diff --name-only "$since_sha"..HEAD 2>/dev/null \
+      | grep -cE '\.(pdf|png|jpg|jpeg|eps|svg)$' || true)
+    [[ -z "$figs" ]] && figs=0
+  fi
+  local fig_col="-"
+  [[ "$figs" -gt 0 ]] && fig_col="$figs"
+
+  _dp "| $name | \`$bar\` | +$total_add | -$total_del | **$total** | $fig_col |"
+}
+
+_dp "## 🔥 近期活動 (since: $_HEAT_SINCE)"
+_dp ""
+_dp "| Paper | Heatmap | +Add | -Del | Total | 📊 Fig |"
+_dp "|-------|:-------:|-----:|-----:|------:|:------:|"
+for_each_paper _dashboard_heatmap
+_dp ""
+_dp "---"
+_dp ""
+
 # --- Key dates ---
 if [[ -n "$DEADLINE" && "$DEADLINE" != "null" ]]; then
   _dp "## 🔥 Key Dates"
@@ -194,7 +268,9 @@ if [[ -n "$DEADLINE" && "$DEADLINE" != "null" ]]; then
   _dp "| Date | Event |"
   _dp "|------|-------|"
   if [[ -n "${_dl_date:-}" ]]; then
-    _dp "| **${_dl_date}** | ⏰ **Deadline** |"
+    _dl_time_str="⏰ **Deadline**"
+    [[ -n "${_dl_tw:-}" ]] && _dl_time_str+=" (台灣 $_dl_tw)"
+    _dp "| **${_dl_date}** | $_dl_time_str |"
   fi
   _dp ""
   _dp "---"

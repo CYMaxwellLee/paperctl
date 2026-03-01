@@ -452,24 +452,25 @@ _validate_paper() {
     if [[ -n "$PDFLATEX" ]]; then
       echo ""
       check_info "Compiling locally..."
-      local main_base
+      local main_base main_rel
       main_base=$(basename "$main_tex" .tex)
+      main_rel="${main_tex#$repo_dir/}"  # e.g. "ECCV_submission/main.tex" or "main.tex"
 
-      # Run in tex_dir to resolve relative paths
+      # Compile from repo root (matches Overleaf project root) with output in tex_dir
       local compile_log
       compile_log=$(mktemp)
 
       # Pass 1: pdflatex
-      (cd "$tex_dir" && "$PDFLATEX" -interaction=nonstopmode -halt-on-error "$main_base.tex" > "$compile_log" 2>&1) || true
+      (cd "$repo_dir" && "$PDFLATEX" -interaction=nonstopmode -halt-on-error -output-directory="$tex_dir" "$main_rel" > "$compile_log" 2>&1) || true
 
-      # bibtex (if .bib exists)
+      # bibtex (if .bib exists) — runs from tex_dir where .aux lives
       if [[ -n "$bib_file" && -n "$BIBTEX" ]]; then
         (cd "$tex_dir" && "$BIBTEX" "$main_base" >> "$compile_log" 2>&1) || true
       fi
 
       # Pass 2 & 3: pdflatex
-      (cd "$tex_dir" && "$PDFLATEX" -interaction=nonstopmode "$main_base.tex" >> "$compile_log" 2>&1) || true
-      (cd "$tex_dir" && "$PDFLATEX" -interaction=nonstopmode "$main_base.tex" >> "$compile_log" 2>&1) || true
+      (cd "$repo_dir" && "$PDFLATEX" -interaction=nonstopmode -output-directory="$tex_dir" "$main_rel" >> "$compile_log" 2>&1) || true
+      (cd "$repo_dir" && "$PDFLATEX" -interaction=nonstopmode -output-directory="$tex_dir" "$main_rel" >> "$compile_log" 2>&1) || true
 
       # Check compilation result
       if [[ -f "$tex_dir/$main_base.pdf" ]]; then
