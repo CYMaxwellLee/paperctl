@@ -32,6 +32,7 @@ _status_emoji() {
   case "$1" in
     complete)       echo "🟢" ;;
     near-complete)  echo "🟡" ;;
+    draft)          echo "🟡" ;;
     outline)        echo "🔴" ;;
     early)          echo "🔴" ;;
     cvpr-reject)    echo "🟡" ;;
@@ -343,9 +344,16 @@ if [[ -n "$DASH_STATUS" ]]; then
       *)              emoji="⚪"; label="$status" ;;
     esac
 
-    # Compile check (look for main.pdf)
-    local compile="✅"
-    [[ ! -f "$repo_dir/main.pdf" ]] && compile="-"
+    # Compile check (look for main.pdf in repo root or subdirectories)
+    local compile="-"
+    if [[ -f "$repo_dir/main.pdf" ]]; then
+      compile="✅"
+    else
+      # Check common subdirectories
+      for _csub in ECCV_submission submission CVPR_submission; do
+        [[ -f "$repo_dir/$_csub/main.pdf" ]] && { compile="✅"; break; }
+      done
+    fi
 
     # Claude status
     local claude="⬜"

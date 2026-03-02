@@ -21,18 +21,63 @@ printf "%-20s %6s  %s\n" "-----" "-----" "---"
 
 _pages_paper() {
   local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
-  
-  # Find main.pdf — check common locations
-  local pdf=""
-  for candidate in "$repo_dir/main.pdf" "$repo_dir"/*.pdf; do
-    if [[ -f "$candidate" ]]; then
-      pdf="$candidate"
-      break
+
+  # Find main.tex location (may be in subdirectory)
+  local tex_dir="$repo_dir"
+  if [[ -f "$repo_dir/main.tex" ]]; then
+    tex_dir="$repo_dir"
+  else
+    # Search common subdirectories
+    for _sub in ECCV_submission submission CVPR_submission; do
+      if [[ -f "$repo_dir/$_sub/main.tex" ]]; then
+        tex_dir="$repo_dir/$_sub"
+        break
+      fi
+    done
+    # Fallback: find first main.tex
+    if [[ ! -f "$tex_dir/main.tex" ]]; then
+      local _found_tex
+      _found_tex=$(find "$repo_dir" -name "main.tex" -not -path "*/.git/*" -print -quit 2>/dev/null || true)
+      [[ -n "$_found_tex" ]] && tex_dir=$(dirname "$_found_tex")
     fi
-  done
-  
+  fi
+
+  # Find main.pdf — check tex_dir first, then repo root (some compile from root)
+  local pdf=""
+  [[ -f "$tex_dir/main.pdf" ]] && pdf="$tex_dir/main.pdf"
+  [[ -z "$pdf" && -f "$repo_dir/main.pdf" ]] && pdf="$repo_dir/main.pdf"
+
+  # If no PDF found, try to compile
+  if [[ -z "$pdf" ]]; then
+    local _pdflatex=""
+    for _tbin in "/Library/TeX/texbin/pdflatex" \
+                 "/usr/local/texlive/2025/bin/universal-darwin/pdflatex" \
+                 "/usr/local/texlive/2024/bin/universal-darwin/pdflatex"; do
+      [[ -x "$_tbin" ]] && { _pdflatex="$_tbin"; break; }
+    done
+    [[ -z "$_pdflatex" ]] && _pdflatex=$(command -v pdflatex 2>/dev/null || echo "")
+
+    if [[ -n "$_pdflatex" && -f "$tex_dir/main.tex" ]]; then
+      if [[ "$tex_dir" == "$repo_dir" ]]; then
+        # main.tex in repo root — compile directly
+        (cd "$repo_dir" && "$_pdflatex" -interaction=batchmode main.tex) &>/dev/null || true
+      else
+        # main.tex in subdirectory — compile from repo root with TEXINPUTS
+        # This handles cross-directory references like \input{ECCV_submission/common_macros}
+        local _rel_tex="${tex_dir#$repo_dir/}/main.tex"
+        (cd "$repo_dir" && TEXINPUTS=".:${tex_dir#$repo_dir/}/:" "$_pdflatex" -interaction=batchmode "$_rel_tex") &>/dev/null || true
+      fi
+      # PDF may appear in repo root or tex_dir depending on compile location
+      if [[ -f "$repo_dir/main.pdf" ]]; then
+        pdf="$repo_dir/main.pdf"
+      elif [[ -f "$tex_dir/main.pdf" ]]; then
+        pdf="$tex_dir/main.pdf"
+      fi
+    fi
+  fi
+
   if [[ -z "$pdf" || ! -f "$pdf" ]]; then
-    printf "%-20s %6s  %s\n" "$name" "-" "(no PDF found)"
+    printf "%-20s %6s  %s\n" "$name" "-" "(no main.tex or compile failed)"
     return
   fi
   
