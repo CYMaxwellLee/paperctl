@@ -28,12 +28,24 @@ COMMANDS
   bib-check          Validate bibliography (undefined cites, duplicates)
   ref-check          Check cross-references (undefined refs, missing figs)
   overview           Unified dashboard (pages, words, git, activity)
+  setup              Check environment & guide TeX Live installation
   help               Show this help
 
 GLOBAL FLAGS
   --dir <path>       Path to conference directory (auto-detected from $PWD)
   --paper <name>     Operate on a single paper only
   --repo <name>      Alias for --paper
+
+CROSS-PLATFORM
+  paperctl runs on macOS, Linux (Debian/Ubuntu, Fedora, Arch), and Docker.
+  TeX Live is required for: compile, validate --compile
+  All other commands work without TeX Live.
+
+  Quick setup:
+    paperctl setup                          # check what's installed
+    sudo bash setup-texlive.sh              # install TeX Live (auto-detects platform)
+    docker build -t paperctl .              # build Docker image (includes TeX Live)
+    docker run --rm -v ./eccv2026:/workspace paperctl compile  # compile in Docker
 
 SETUP
   1. Create a conference directory (e.g. ~/Project/Papers/eccv2026/)

@@ -105,6 +105,12 @@ if command -v paperctl &>/dev/null; then
   echo "  4. Bootstrap:"
   echo "     cd ~/Project/Papers/eccv2026 && paperctl init"
   echo ""
+  echo "  5. Check TeX Live environment:"
+  echo "     paperctl setup"
+  echo ""
+  echo "  6. Install TeX Live (if not installed):"
+  echo "     sudo bash $INSTALL_PATH/setup-texlive.sh"
+  echo ""
 else
   _yellow "Installed but not in PATH. Add to your shell:"
   echo "  export PATH=\"$SYMLINK_DIR:\$PATH\""
