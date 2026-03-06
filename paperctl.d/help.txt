@@ -22,10 +22,16 @@ COMMANDS
   digest             Show recent changes (Overleaf/upstream) per paper
   report             Student activity report (compare pre/post sync state)
   dashboard          Auto-generate README dashboard from conference.json
+  compile            Compile all papers (pdflatex → bibtex → pdflatex ×2)
+  wordcount          Word count per section (prose only, strips LaTeX)
+  patch              Apply SEARCH/REPLACE patch files to papers
+  bib-check          Validate bibliography (undefined cites, duplicates)
+  ref-check          Check cross-references (undefined refs, missing figs)
+  overview           Unified dashboard (pages, words, git, activity)
   help               Show this help
 
 GLOBAL FLAGS
-  --dir <path>       Path to conference directory (default: $PWD)
+  --dir <path>       Path to conference directory (auto-detected from $PWD)
   --paper <name>     Operate on a single paper only
   --repo <name>      Alias for --paper
 
@@ -97,6 +103,31 @@ EXAMPLES
   # Student activity heatmap
   paperctl heatmap                        # all papers, last 3 days
   paperctl heatmap --since "1 day ago"    # custom time range
+
+  # Compile all papers locally
+  paperctl compile                          # compile all, report page counts
+  paperctl compile --paper ewm             # compile single paper
+  paperctl compile --parallel              # compile concurrently
+  paperctl compile --clean                 # remove aux files after
+
+  # Word count analysis
+  paperctl wordcount                        # per-section breakdown
+  paperctl wordcount --summary             # totals only
+  paperctl wordcount --paper textnav       # single paper
+
+  # Apply patch files (from Claude Code review)
+  paperctl patch --paper ewm patch.md       # apply SEARCH/REPLACE hunks
+  paperctl patch --paper ewm --dry-run p.md # preview without modifying
+  paperctl patch --paper ewm --reverse p.md # reverse a patch
+
+  # Bibliography validation
+  paperctl bib-check                        # check all papers
+  paperctl bib-check --paper ewm           # single paper
+  paperctl bib-check --unused              # also show unused bib entries
+
+  # Cross-reference check
+  paperctl ref-check                        # check all papers
+  paperctl ref-check --paper textnav       # single paper
 
   # New conference
   mkdir ~/Project/Papers/neurips2025

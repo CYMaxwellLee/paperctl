@@ -1,6 +1,25 @@
 #!/bin/bash
 # paperctl.d/lib.sh -- Core library for paperctl
 
+# --- Universal --help handler ---
+# If any remaining arg is --help or -h, show command usage and exit
+for _arg in "$@"; do
+  if [[ "$_arg" == "--help" || "$_arg" == "-h" ]]; then
+    _cmd="${COMMAND:-paperctl}"
+    echo "Usage: paperctl $_cmd [--paper <name>] [options]"
+    echo ""
+    # Extract examples from help.txt
+    _section=$(sed -n "/paperctl $_cmd/p" "$PAPERCTL_LIB/help.txt" 2>/dev/null | head -6)
+    if [[ -n "$_section" ]]; then
+      echo "Examples:"
+      echo "$_section" | sed 's/^/  /'
+    fi
+    echo ""
+    echo "Run 'paperctl help' for full documentation."
+    exit 0
+  fi
+done
+
 # --- JSON query helper (jq preferred, python3 fallback) ---
 _jq() {
   local file="$1" query="$2"
@@ -44,17 +63,32 @@ print(json.dumps(data))
 }
 
 # --- Config Location ---
+# Searches upward from CWD to find conference.json (like git finds .git/)
 find_config() {
-  local search_dir="${PAPERCTL_DIR:-$PWD}"
-  if [[ -f "$search_dir/conference.json" ]]; then
-    echo "$search_dir/conference.json"
-  elif [[ -f "$PWD/conference.json" ]]; then
-    echo "$PWD/conference.json"
-  else
-    echo "ERROR: conference.json not found in $search_dir" >&2
+  # Explicit --dir takes priority
+  if [[ -n "${PAPERCTL_DIR:-}" ]]; then
+    if [[ -f "$PAPERCTL_DIR/conference.json" ]]; then
+      echo "$PAPERCTL_DIR/conference.json"
+      return
+    fi
+    echo "ERROR: conference.json not found in $PAPERCTL_DIR" >&2
     echo "Run from a conference directory or use --dir <path>" >&2
     exit 1
   fi
+
+  # Walk upward from CWD to find conference.json
+  local dir="$PWD"
+  while [[ "$dir" != "/" ]]; do
+    if [[ -f "$dir/conference.json" ]]; then
+      echo "$dir/conference.json"
+      return
+    fi
+    dir=$(dirname "$dir")
+  done
+
+  echo "ERROR: conference.json not found (searched upward from $PWD)" >&2
+  echo "Run from a conference directory or use --dir <path>" >&2
+  exit 1
 }
 
 # --- Load Config ---
@@ -86,6 +120,47 @@ load_config() {
 paper_field() {
   local idx="$1" field="$2"
   _jq "$CONF_FILE" ".papers[$idx].$field"
+}
+
+# --- Paper Lookup ---
+# Find paper index by name; returns index or empty string
+paper_index_by_name() {
+  local target="$1"
+  local i=0
+  while [[ $i -lt $CONF_PAPER_COUNT ]]; do
+    local name
+    name=$(paper_field $i "name")
+    if [[ "$name" == "$target" ]]; then
+      echo "$i"
+      return
+    fi
+    i=$((i + 1))
+  done
+  echo ""
+}
+
+# Verify --paper flag points to a valid paper
+require_paper_flag() {
+  if [[ -z "${PAPERCTL_PAPER:-}" ]]; then
+    echo "ERROR: --paper <name> is required for this command" >&2
+    exit 1
+  fi
+  local idx
+  idx=$(paper_index_by_name "$PAPERCTL_PAPER")
+  if [[ -z "$idx" ]]; then
+    echo "ERROR: unknown paper '$PAPERCTL_PAPER'" >&2
+    echo "  Available: $(for_each_paper_name)" >&2
+    exit 1
+  fi
+}
+
+# List all paper names (one per line)
+for_each_paper_name() {
+  local i=0
+  while [[ $i -lt $CONF_PAPER_COUNT ]]; do
+    paper_field $i "name"
+    i=$((i + 1))
+  done
 }
 
 # --- Branch Detection ---

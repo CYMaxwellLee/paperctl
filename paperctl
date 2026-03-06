@@ -19,6 +19,12 @@
 #   digest          Show recent changes (Overleaf/upstream) per paper
 #   report          Student activity report (compare pre/post sync)
 #   dashboard       Auto-generate README dashboard from conference.json
+#   compile         Compile all papers (pdflatex + bibtex) with page counts
+#   wordcount       Word count per section for all papers
+#   patch           Apply SEARCH/REPLACE patch files
+#   bib-check       Validate bibliography entries
+#   ref-check       Check cross-references and missing figures
+#   overview        Unified dashboard (pages, words, git status, activity)
 #   help            Show this help
 
 set -euo pipefail
@@ -44,16 +50,26 @@ done
 PAPERCTL_ROOT="$(cd "$(dirname "$_self")" && pwd)"
 PAPERCTL_LIB="$PAPERCTL_ROOT/paperctl.d"
 COMMAND="${1:-help}"
+export COMMAND
 shift 2>/dev/null || true
 
-# Parse global flags
-while [[ "${1:-}" == --* ]]; do
-  case "$1" in
-    --dir) PAPERCTL_DIR="$2"; shift 2 ;;
-    --paper|--repo) PAPERCTL_PAPER="$2"; shift 2 ;;
-    *) break ;;
-  esac
-done
+# Parse global flags (before and after command)
+_parse_global_flags() {
+  while [[ "${1:-}" == --* ]]; do
+    case "$1" in
+      --dir)
+        [[ -z "${2:-}" ]] && { echo "ERROR: --dir requires a path" >&2; exit 1; }
+        PAPERCTL_DIR="$2"; shift 2 ;;
+      --paper|--repo)
+        [[ -z "${2:-}" ]] && { echo "ERROR: --paper requires a name" >&2; exit 1; }
+        PAPERCTL_PAPER="$2"; shift 2 ;;
+      *) break ;;
+    esac
+  done
+  _REMAINING_ARGS=("$@")
+}
+_parse_global_flags "$@"
+set -- ${_REMAINING_ARGS+"${_REMAINING_ARGS[@]}"}
 export PAPERCTL_DIR PAPERCTL_PAPER PAPERCTL_ROOT PAPERCTL_LIB
 
 case "$COMMAND" in
@@ -75,6 +91,12 @@ case "$COMMAND" in
   digest)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_digest.sh" "$@" ;;
   dashboard)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_dashboard.sh" "$@" ;;
   report)         . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_report.sh" "$@" ;;
+  compile)        . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_compile.sh" "$@" ;;
+  wordcount)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_wordcount.sh" "$@" ;;
+  patch)          . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_patch.sh" "$@" ;;
+  bib-check)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_bibcheck.sh" "$@" ;;
+  ref-check)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_refcheck.sh" "$@" ;;
+  overview)       . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_overview.sh" "$@" ;;
   help|--help|-h) cat "$PAPERCTL_LIB/help.txt" ;;
   *)              echo "Unknown command: $COMMAND. Run 'paperctl help'." >&2; exit 1 ;;
 esac

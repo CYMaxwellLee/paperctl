@@ -1,0 +1,110 @@
+# GitHub Actions CI — LaTeX Compile + Validate
+# Copy to .github/workflows/ci.yml in each paper repo
+#
+# Triggers on push to main branch. Runs:
+#   1. Compile (pdflatex + bibtex + pdflatex x2)
+#   2. Cross-reference check
+#   3. Bibliography check
+#   4. Page count report
+#
+# Customize MAIN_TEX and TEX_DIR as needed.
+
+name: LaTeX CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+env:
+  MAIN_TEX: main.tex
+  TEX_DIR: .
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Find main.tex
+        run: |
+          if [ -f "$TEX_DIR/$MAIN_TEX" ]; then
+            echo "FOUND=$TEX_DIR/$MAIN_TEX" >> $GITHUB_ENV
+          elif [ -f "ECCV_submission/$MAIN_TEX" ]; then
+            echo "FOUND=ECCV_submission/$MAIN_TEX" >> $GITHUB_ENV
+            echo "TEX_DIR=ECCV_submission" >> $GITHUB_ENV
+          elif [ -f "submission/$MAIN_TEX" ]; then
+            echo "FOUND=submission/$MAIN_TEX" >> $GITHUB_ENV
+            echo "TEX_DIR=submission" >> $GITHUB_ENV
+          else
+            echo "::error::main.tex not found"
+            exit 1
+          fi
+
+      - name: Compile (pass 1)
+        run: cd ${{ env.TEX_DIR }} && pdflatex -interaction=nonstopmode $MAIN_TEX || true
+
+      - name: BibTeX
+        run: |
+          cd ${{ env.TEX_DIR }}
+          MAIN_BASE=$(basename $MAIN_TEX .tex)
+          bibtex $MAIN_BASE || true
+
+      - name: Compile (pass 2 + 3)
+        run: |
+          cd ${{ env.TEX_DIR }}
+          pdflatex -interaction=nonstopmode $MAIN_TEX || true
+          pdflatex -interaction=nonstopmode $MAIN_TEX || true
+
+      - name: Check compile result
+        run: |
+          cd ${{ env.TEX_DIR }}
+          MAIN_BASE=$(basename $MAIN_TEX .tex)
+          if [ ! -f "$MAIN_BASE.pdf" ]; then
+            echo "::error::Compilation failed — no PDF produced"
+            # Show first few errors from log
+            grep "^!" "$MAIN_BASE.log" | head -5 || true
+            exit 1
+          fi
+
+          # Report page count
+          PAGES=$(pdfinfo "$MAIN_BASE.pdf" 2>/dev/null | grep "Pages:" | awk '{print $2}' || echo "?")
+          echo "📄 Pages: $PAGES"
+
+          # Report errors/warnings
+          ERRORS=$(grep -c "^!" "$MAIN_BASE.log" 2>/dev/null || echo 0)
+          WARNINGS=$(grep -c "^LaTeX Warning:" "$MAIN_BASE.log" 2>/dev/null || echo 0)
+          UNDEF=$(grep -c "undefined" "$MAIN_BASE.log" 2>/dev/null || echo 0)
+
+          echo "📊 Errors: $ERRORS | Warnings: $WARNINGS | Undefined: $UNDEF"
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "::warning::$ERRORS LaTeX errors found"
+            grep "^!" "$MAIN_BASE.log" | head -10
+          fi
+
+          if [ "$UNDEF" -gt 0 ]; then
+            echo "::warning::$UNDEF undefined references/citations"
+            grep "undefined" "$MAIN_BASE.log" | head -10
+          fi
+
+      - name: Upload PDF artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdf
+          path: ${{ env.TEX_DIR }}/*.pdf
+          retention-days: 7
+
+      - name: Upload compile log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-log
+          path: ${{ env.TEX_DIR }}/*.log
+          retention-days: 3
