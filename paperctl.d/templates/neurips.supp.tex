@@ -1,0 +1,151 @@
+% Standalone supplementary material — NeurIPS __YEAR__
+% Paper: __TITLE__
+% Compiles independently: pdflatex supp && bibtex supp && pdflatex supp && pdflatex supp
+
+\documentclass{article}
+
+%%
+%% NeurIPS style
+%%
+\usepackage[final]{neurips___YEAR__}   % adjust filename to match year
+
+%%
+%% Packages
+%%
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb}
+\usepackage{float}              % for [H] float specifier
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{pifont}
+
+%%
+%% Annotation macros
+%%
+\newcommand{\cyl}[1]{\textcolor{blue}{#1}}
+\newcommand{\todo}[1]{\textbf{\color{red}[TODO: #1]}}
+\newcommand{\cmark}{\color{Green}\ding{51}}
+\newcommand{\xmark}{\color{Bittersweet}\ding{55}}
+
+%%
+%% Abbreviation shortcuts
+%%
+\usepackage{xspace}
+\newcommand{\eg}{\emph{e.g.}\xspace}
+\newcommand{\ie}{\emph{i.e.}\xspace}
+\newcommand{\etal}{\emph{et al.}\xspace}
+\newcommand{\wrt}{w.r.t.\xspace}
+\newcommand{\etc}{etc.\xspace}
+\newcommand{\cf}{\emph{cf.}\xspace}
+
+%%
+%% Math shortcuts
+%%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+%%
+%% Hyperref (must come before cleveref)
+%%
+\usepackage[breaklinks,colorlinks,citecolor=blue]{hyperref}
+
+%%
+%% Cross-references
+%%
+\usepackage[capitalize,noabbrev]{cleveref}
+\AtBeginDocument{%
+  \crefname{figure}{Fig.}{Figs.}%
+  \Crefname{figure}{Fig.}{Figs.}%
+  \crefname{table}{Table}{Tables}%
+  \Crefname{table}{Table}{Tables}%
+  \crefname{section}{Sec.}{Secs.}%
+  \Crefname{section}{Sec.}{Secs.}%
+  \crefformat{equation}{Eq.~(#2#1#3)}%
+}
+
+% ============================================================
+
+\begin{document}
+
+\title{Supplementary Material}
+\author{Anonymous NeurIPS __YEAR__ submission}
+\maketitle
+
+\setcounter{page}{1}
+
+%% ============================================================
+%%  Section 1: Notation Reference
+%% ============================================================
+\section{Notation Reference}
+\label{sec:supp_notation}
+
+\Cref{tab:notation} summarizes the principal symbols used throughout the main paper.
+
+\begin{table}[H]
+\centering
+\caption{Summary of notation.}
+\label{tab:notation}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} \\
+\midrule
+% TODO: Fill in notation from your paper
+$x$             & Input \\
+$y$             & Output \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ============================================================
+%%  Section 2: Implementation Details
+%% ============================================================
+\section{Implementation Details}
+\label{sec:supp_impl}
+
+% TODO: Training details, hyperparameters, hardware, runtime
+
+%% ============================================================
+%%  Section 3: Additional Experiments
+%% ============================================================
+\section{Additional Experiments}
+\label{sec:supp_experiments}
+
+% TODO: Ablation studies, sensitivity analysis, additional baselines
+
+%% ============================================================
+%%  Section 4: Proofs and Derivations
+%% ============================================================
+% \section{Proofs and Derivations}
+% \label{sec:supp_proofs}
+% TODO: Uncomment if you have theoretical results
+
+%% ============================================================
+%%  Section 5: Additional Qualitative Results
+%% ============================================================
+\section{Additional Qualitative Results}
+\label{sec:supp_qualitative}
+
+% TODO: Visualization, failure cases, additional examples
+
+%% ============================================================
+%%  Section 6: Dataset Details
+%% ============================================================
+% \section{Dataset Details}
+% \label{sec:supp_dataset}
+% TODO: Uncomment if you need dataset statistics, splits, preprocessing
+
+%% ============================================================
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

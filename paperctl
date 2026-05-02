@@ -25,6 +25,8 @@
 #   bib-check       Validate bibliography entries
 #   ref-check       Check cross-references and missing figures
 #   overview        Unified dashboard (pages, words, git status, activity)
+#   scaffold-supp   Generate standalone supp.tex from template
+#   supp-check      Validate supplementary material structure
 #   help            Show this help
 
 set -euo pipefail
@@ -97,6 +99,8 @@ case "$COMMAND" in
   bib-check)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_bibcheck.sh" "$@" ;;
   ref-check)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_refcheck.sh" "$@" ;;
   overview)       . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_overview.sh" "$@" ;;
+  scaffold-supp)  . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_scaffold_supp.sh" "$@" ;;
+  supp-check)     . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_supp_check.sh" "$@" ;;
   setup)          . "$PAPERCTL_LIB/cmd_setup.sh" "$@" ;;
   help|--help|-h) cat "$PAPERCTL_LIB/help.txt" ;;
   *)              echo "Unknown command: $COMMAND. Run 'paperctl help'." >&2; exit 1 ;;

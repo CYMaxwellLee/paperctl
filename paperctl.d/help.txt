@@ -28,6 +28,8 @@ COMMANDS
   bib-check          Validate bibliography (undefined cites, duplicates)
   ref-check          Check cross-references (undefined refs, missing figs)
   overview           Unified dashboard (pages, words, git, activity)
+  scaffold-supp      Generate standalone supp.tex from conference template
+  supp-check         Validate supplementary material structure & naming
   setup              Check environment & guide TeX Live installation
   help               Show this help
 
@@ -140,6 +142,14 @@ EXAMPLES
   # Cross-reference check
   paperctl ref-check                        # check all papers
   paperctl ref-check --paper textnav       # single paper
+
+  # Supplementary material
+  paperctl scaffold-supp --paper ewm        # generate supp.tex from template
+  paperctl scaffold-supp --all              # generate for all papers
+  paperctl scaffold-supp --paper ewm --force  # overwrite existing
+  paperctl scaffold-supp --paper ewm --preview # print to stdout
+  paperctl supp-check                       # validate supp structure (all)
+  paperctl supp-check --paper textnav      # single paper
 
   # New conference
   mkdir ~/Project/Papers/neurips2025

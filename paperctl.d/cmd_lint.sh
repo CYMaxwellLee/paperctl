@@ -11,7 +11,14 @@
 #      (Notably, Importantly, Crucially, Interestingly,
 #       Essentially, Fundamentally, Consequently, Additionally, Furthermore,
 #       Remarkably, Significantly, Particularly, Ultimately, Accordingly)
-#   3. [Add more rules here]
+#   3. Banned single words: thereby, utilize, straightforward, numerous
+#   4. Banned GPT-isms (sentence-initial or mid):
+#      "It is worth noting that", "As expected,", "As can be seen from",
+#      "demonstrates the effectiveness of", "has gained significant attention",
+#      "Recently, many works"
+#   5. Bare \ref{} for Figure/Table/Eq./Section (must be \cref or \Cref)
+#   6. Float placement [h], [b], [H] (must be [t])
+#   7. Straight quotes "..." in prose (must be ``...'')
 #
 # Usage:
 #   paperctl lint [--paper <name>]       # lint \cyl{} regions only
@@ -48,6 +55,34 @@ RULE_SEVERITY+=("fail")
 RULE_PATTERNS+=('(^|[{])\s*(Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Furthermore|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),')
 RULE_DESCS+=("Adverb+comma sentence opener (except Specifically)")
 RULE_SEVERITY+=("fail")
+
+# --- RULE 3: Banned single words ---
+RULE_PATTERNS+=('\b(thereby|utilize|utilizes|utilized|utilizing|straightforward|numerous)\b')
+RULE_DESCS+=("Banned word (thereby/utilize/straightforward/numerous)")
+RULE_SEVERITY+=("fail")
+
+# --- RULE 4: Banned GPT-isms / phrases ---
+RULE_PATTERNS+=('(It is worth noting that|As expected,|As can be seen from|demonstrates the effectiveness of|has gained significant attention|Recently, many works)')
+RULE_DESCS+=("GPT-ism phrase")
+RULE_SEVERITY+=("fail")
+
+# --- RULE 5: Bare \ref{} for Figure/Table/Eq./Section ---
+# Must be \cref{} or \Cref{} -- catches "Figure~\ref{...}", "Table \ref{...}", etc.
+RULE_PATTERNS+=('(Figure|Table|Eq\.|Equation|Section|Sec\.|Fig\.)[~ ]*\\ref\{')
+RULE_DESCS+=("Bare \\\\ref{} -- use \\\\cref{} or \\\\Cref{}")
+RULE_SEVERITY+=("fail")
+
+# --- RULE 6: Float placement [h]/[b]/[H] (must be [t]) ---
+RULE_PATTERNS+=('\\begin\{(figure|table|figure\*|table\*)\}\[(h|b|H|ht|hb|tb|bt|hbt|tbh|htbp)\]')
+RULE_DESCS+=("Float placement -- use [t] only")
+RULE_SEVERITY+=("warn")
+
+# --- RULE 7: Straight quotes in prose (heuristic) ---
+# Matches "word..." or "...word" patterns that look like prose quotes
+# Skips lines that look like code/url/path/comment
+RULE_PATTERNS+=('(^|[^\\=>:_/])"[A-Za-z]')
+RULE_DESCS+=("Straight quote -- use \\\`\\\`...'' instead")
+RULE_SEVERITY+=("warn")
 
 # ============================================================
 
@@ -130,8 +165,9 @@ _lint_paper() {
     # Get content to lint
     local content
     if $SCAN_ALL; then
-      # Scan all non-comment lines
-      content=$(grep -n '' "$tex_file" | grep -v '^\s*%')
+      # Scan all non-comment lines (filter must be applied AFTER line-numbering;
+      # grep -n produces "N:content" so comment regex needs N: prefix)
+      content=$(grep -n '' "$tex_file" | grep -v '^[0-9]*:[[:space:]]*%')
     else
       # Scan only \cyl{} regions
       content=$(_extract_cyl_regions "$tex_file")
@@ -162,11 +198,13 @@ _lint_paper() {
           file_violations=$((file_violations + 1))
           local icon="❌"
           [[ "$severity" == "warn" ]] && icon="⚠️ "
-          # Extract line number (format: content_lineno:file_lineno:content)
+          # Extract line number (format: outer_grep_n:file_lineno:content)
+          # grep -n '' added file_lineno first, then grep -nE wraps with outer index;
+          # the actual file line is the SECOND field, content is third+.
           local lineno
-          lineno=$(echo "$match_line" | cut -d: -f1)
+          lineno=$(echo "$match_line" | cut -d: -f2)
           local text
-          text=$(echo "$match_line" | cut -d: -f2- | sed 's/^[[:space:]]*//' | head -c 80)
+          text=$(echo "$match_line" | cut -d: -f3- | sed 's/^[[:space:]]*//' | head -c 80)
           echo "    $icon L$lineno [$desc]: $text"
         done <<< "$matches"
       fi
