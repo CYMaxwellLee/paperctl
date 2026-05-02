@@ -316,11 +316,16 @@ _dashboard_notes() {
   _dp "### $emoji $name &nbsp;·&nbsp; \`#${paper_id:--}\` &nbsp;·&nbsp; ${pages:-?}p &nbsp;·&nbsp; *$label*"
   _dp ""
   _dp "> [!${alert_kind}]"
+  # GitHub alert callout collapses consecutive '> line' into one paragraph;
+  # insert blank '>' line between fields to force a paragraph break (visible gap).
+  local printed_first=false
   if [[ -n "$student_lead" && "$student_lead" != "null" ]]; then
-    _dp "> **Student lead:** $student_lead"
+    _dp "> **Student lead:** &nbsp;$student_lead"
+    printed_first=true
   fi
   if [[ -n "$authors" && "$authors" != "null" ]]; then
-    _dp "> **Authors:** $authors"
+    [[ "$printed_first" == "true" ]] && _dp ">"
+    _dp "> **Authors:** &nbsp;$authors"
   fi
   _dp ""
   # Render activity log as a 2-column table: Date | Activity.
