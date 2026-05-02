@@ -221,156 +221,9 @@ _dp ""
 _dp "---"
 _dp ""
 
-# --- Heatmap summary (embedded) ---
-_HEAT_SINCE="3 days ago"
-
-_dashboard_heatmap() {
-  local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
-
-  local since_sha
-  since_sha=$(git -C "$repo_dir" log --until="$_HEAT_SINCE" --format="%H" -1 2>/dev/null || echo "")
-  [[ -z "$since_sha" ]] && since_sha=$(git -C "$repo_dir" rev-list --max-parents=0 HEAD 2>/dev/null | head -1)
-
-  local total_add=0 total_del=0
-  if [[ -n "$since_sha" ]]; then
-    while IFS= read -r _hl; do
-      [[ -z "$_hl" ]] && continue
-      local _hi _hd _hf
-      _hi=$(echo "$_hl" | awk '{print $1}')
-      _hd=$(echo "$_hl" | awk '{print $2}')
-      _hf=$(echo "$_hl" | awk '{print $3}')
-      [[ "$_hi" == "-" ]] && continue
-      [[ "$_hf" != *.tex && "$_hf" != *.bib ]] && continue
-      total_add=$(( total_add + _hi ))
-      total_del=$(( total_del + _hd ))
-    done < <(git -C "$repo_dir" diff --numstat "$since_sha"..HEAD 2>/dev/null)
-  fi
-
-  local total=$(( total_add + total_del ))
-
-  # Bar: 15 chars, scale 1500
-  local bar_len=0
-  if [[ "$total" -gt 0 ]]; then
-    bar_len=$(( (total * 15) / 1500 ))
-    [[ "$bar_len" -lt 1 ]] && bar_len=1
-    [[ "$bar_len" -gt 15 ]] && bar_len=15
-  fi
-  local bar="" i=0
-  while [[ $i -lt $bar_len ]]; do bar+="█"; i=$((i+1)); done
-  while [[ $i -lt 15 ]]; do bar+="░"; i=$((i+1)); done
-
-  # Figures
-  local figs=0
-  if [[ -n "$since_sha" ]]; then
-    figs=$(git -C "$repo_dir" diff --name-only "$since_sha"..HEAD 2>/dev/null \
-      | grep -cE '\.(pdf|png|jpg|jpeg|eps|svg)$' || true)
-    [[ -z "$figs" ]] && figs=0
-  fi
-  local fig_col="-"
-  [[ "$figs" -gt 0 ]] && fig_col="$figs"
-
-  _dp "| $name | \`$bar\` | +$total_add | -$total_del | **$total** | $fig_col |"
-}
-
-_dp "## 🔥 近期活動 (since: $_HEAT_SINCE)"
-_dp ""
-_dp "| Paper | Heatmap | +Add | -Del | Total | 📊 Fig |"
-_dp "|-------|:-------:|-----:|-----:|------:|:------:|"
-for_each_paper _dashboard_heatmap
-_dp ""
-_dp "---"
-_dp ""
-
-# --- Per-paper notes (student activity narrative from conference.json) ---
-# Notes field accumulates entries separated by " | " — each entry usually starts
-# with a [MM/DD] timestamp. We split on " | " and render as a bullet list with
-# the date highlighted, so it scans top-to-bottom instead of as a wall of text.
-_dashboard_notes() {
-  local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
-  local notes student_lead authors paper_id status pages
-  notes=$(paper_field $i "notes")
-  student_lead=$(paper_field $i "student_lead")
-  authors=$(paper_field $i "authors")
-  paper_id=$(paper_field $i "paper_id")
-  status=$(paper_field $i "status")
-  pages=$(paper_field $i "pages")
-  [[ "$notes" == "null" || -z "$notes" ]] && return
-
-  local emoji label
-  emoji=$(_status_emoji "$status")
-  label=$(_status_label "$status")
-
-  # Pick GitHub alert-block color by status (renders as colored vertical bar)
-  local alert_kind
-  case "$status" in
-    complete)       alert_kind="TIP" ;;        # green
-    near-complete)  alert_kind="IMPORTANT" ;;  # purple
-    draft)          alert_kind="IMPORTANT" ;;  # purple
-    outline)        alert_kind="WARNING" ;;    # yellow
-    early)          alert_kind="CAUTION" ;;    # red
-    cvpr-reject)    alert_kind="NOTE" ;;       # blue
-    *)              alert_kind="NOTE" ;;
-  esac
-
-  _dp ""
-  _dp "### $emoji $name &nbsp;·&nbsp; \`#${paper_id:--}\` &nbsp;·&nbsp; ${pages:-?}p &nbsp;·&nbsp; *$label*"
-  _dp ""
-  _dp "> [!${alert_kind}]"
-  # GitHub alert callout collapses consecutive '> line' into one paragraph;
-  # insert blank '>' line between fields to force a paragraph break (visible gap).
-  local printed_first=false
-  if [[ -n "$student_lead" && "$student_lead" != "null" ]]; then
-    _dp "> **Student lead:** &nbsp;$student_lead"
-    printed_first=true
-  fi
-  if [[ -n "$authors" && "$authors" != "null" ]]; then
-    [[ "$printed_first" == "true" ]] && _dp ">"
-    _dp "> **Authors:** &nbsp;$authors"
-  fi
-  _dp ""
-  # Render activity log as a 2-column table: Date | Activity.
-  # Split notes on " | ", parse [MM/DD] prefix as Date column, rest as Activity.
-  # Long file lists (>6 commas) get truncated to first 5 files + "…(N more)".
-  _dp "| Date | Activity |"
-  _dp "|:----:|----------|"
-  local rows
-  rows=$(python3 -c "
-import sys, re
-notes = sys.argv[1]
-for entry in notes.split(' | '):
-    entry = entry.strip()
-    if not entry:
-        continue
-    m = re.match(r'^\[(\d{1,2}/\d{1,2})\]\s*(.*)', entry)
-    if m:
-        date, body = m.group(1), m.group(2)
-    else:
-        date, body = '—', entry
-    # Truncate huge file lists for readability
-    fl = re.search(r'更新了 ([\w_\-,]+)', body)
-    if fl and fl.group(1).count(',') > 6:
-        files = fl.group(1).split(',')
-        truncated = ', '.join(files[:5]) + f' ...(+{len(files)-5} more)'
-        body = body.replace(fl.group(1), truncated)
-    fl = re.search(r'Sections: \`([^\`]+)\`', body)
-    if fl and fl.group(1).count(',') > 6:
-        files = fl.group(1).split(',')
-        body = body.replace(fl.group(1), f'{len(files)} files')
-    # Escape pipe chars so they don't break the markdown table
-    body = body.replace('|', '\\\\|')
-    print(f'| \`{date}\` | {body} |')
-" "$notes")
-  while IFS= read -r line; do
-    [[ -n "$line" ]] && _dp "$line"
-  done <<< "$rows"
-}
-
-_dp "## 📝 Per-Paper Notes (Student Activity)"
-_dp ""
-for_each_paper _dashboard_notes
-_dp ""
-_dp "---"
-_dp ""
+# NOTE: Heatmap + Per-Paper Notes were moved out of README into STATUS.md.
+# README is for at-a-glance public landing; STATUS.md is the daily ops dashboard.
+# (See bottom of file for the helper definitions and emission inside STATUS block.)
 
 # --- Key dates ---
 if [[ -n "$DEADLINE" && "$DEADLINE" != "null" ]]; then
@@ -386,6 +239,52 @@ if [[ -n "$DEADLINE" && "$DEADLINE" != "null" ]]; then
   _dp ""
   _dp "---"
   _dp ""
+fi
+
+# --- Documentation links (auto-detect *.md siblings of README.md) ---
+if [[ -n "$DASH_OUTPUT" ]]; then
+  _META_DIR=$(dirname "$DASH_OUTPUT")
+  _has_docs=false
+  for _f in "$_META_DIR"/*.md "$_META_DIR"/guidelines/*.md; do
+    [[ ! -f "$_f" ]] && continue
+    _bn=$(basename "$_f")
+    [[ "$_bn" == "README.md" ]] && continue
+    _has_docs=true
+    break
+  done
+  if $_has_docs; then
+    _dp "## 📚 Documentation"
+    _dp ""
+    _dp "**Daily ops:** [\`STATUS.md\`](STATUS.md) — heatmap, per-paper student activity, compile status"
+    _dp ""
+    # Top-level *.md (excluding README/STATUS)
+    _printed_top=false
+    for _f in "$_META_DIR"/*.md; do
+      [[ ! -f "$_f" ]] && continue
+      _bn=$(basename "$_f")
+      [[ "$_bn" == "README.md" || "$_bn" == "STATUS.md" ]] && continue
+      if ! $_printed_top; then
+        _dp "**Strategy & instructions:**"
+        _dp ""
+        _printed_top=true
+      fi
+      _dp "- [\`$_bn\`]($_bn)"
+    done
+    # guidelines/*.md
+    if [[ -d "$_META_DIR/guidelines" ]]; then
+      _dp ""
+      _dp "**Writing guidelines** (\`guidelines/\`):"
+      _dp ""
+      for _f in "$_META_DIR/guidelines"/*.md; do
+        [[ ! -f "$_f" ]] && continue
+        _bn=$(basename "$_f")
+        _dp "- [\`$_bn\`](guidelines/$_bn)"
+      done
+    fi
+    _dp ""
+    _dp "---"
+    _dp ""
+  fi
 fi
 
 _dp "_Auto-generated by \`paperctl dashboard\` · $(date '+%Y-%m-%d %H:%M')_"
@@ -514,6 +413,137 @@ if [[ -n "$DASH_STATUS" ]]; then
   _stp ""
   _stp "---"
   _stp ""
+
+  # --- Heatmap section (moved from README) ---
+  _HEAT_SINCE="3 days ago"
+
+  _status_heatmap() {
+    local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
+    local since_sha
+    since_sha=$(git -C "$repo_dir" log --until="$_HEAT_SINCE" --format="%H" -1 2>/dev/null || echo "")
+    [[ -z "$since_sha" ]] && since_sha=$(git -C "$repo_dir" rev-list --max-parents=0 HEAD 2>/dev/null | head -1)
+    local total_add=0 total_del=0
+    if [[ -n "$since_sha" ]]; then
+      while IFS= read -r _hl; do
+        [[ -z "$_hl" ]] && continue
+        local _hi _hd _hf
+        _hi=$(echo "$_hl" | awk '{print $1}')
+        _hd=$(echo "$_hl" | awk '{print $2}')
+        _hf=$(echo "$_hl" | awk '{print $3}')
+        [[ "$_hi" == "-" ]] && continue
+        [[ "$_hf" != *.tex && "$_hf" != *.bib ]] && continue
+        total_add=$(( total_add + _hi ))
+        total_del=$(( total_del + _hd ))
+      done < <(git -C "$repo_dir" diff --numstat "$since_sha"..HEAD 2>/dev/null)
+    fi
+    local total=$(( total_add + total_del ))
+    local bar_len=0
+    if [[ "$total" -gt 0 ]]; then
+      bar_len=$(( (total * 15) / 1500 ))
+      [[ "$bar_len" -lt 1 ]] && bar_len=1
+      [[ "$bar_len" -gt 15 ]] && bar_len=15
+    fi
+    local bar="" hi=0
+    while [[ $hi -lt $bar_len ]]; do bar+="█"; hi=$((hi+1)); done
+    while [[ $hi -lt 15 ]]; do bar+="░"; hi=$((hi+1)); done
+    local figs=0
+    if [[ -n "$since_sha" ]]; then
+      figs=$(git -C "$repo_dir" diff --name-only "$since_sha"..HEAD 2>/dev/null \
+        | grep -cE '\.(pdf|png|jpg|jpeg|eps|svg)$' || true)
+      [[ -z "$figs" ]] && figs=0
+    fi
+    local fig_col="-"
+    [[ "$figs" -gt 0 ]] && fig_col="$figs"
+    _stp "| $name | \`$bar\` | +$total_add | -$total_del | **$total** | $fig_col |"
+  }
+
+  _stp "## 🔥 近期活動 (since: $_HEAT_SINCE)"
+  _stp ""
+  _stp "| Paper | Heatmap | +Add | -Del | Total | 📊 Fig |"
+  _stp "|-------|:-------:|-----:|-----:|------:|:------:|"
+  for_each_paper _status_heatmap
+  _stp ""
+  _stp "---"
+  _stp ""
+
+  # --- Per-paper notes (moved from README) ---
+  _status_notes() {
+    local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
+    local notes student_lead authors paper_id status pages
+    notes=$(paper_field $i "notes")
+    student_lead=$(paper_field $i "student_lead")
+    authors=$(paper_field $i "authors")
+    paper_id=$(paper_field $i "paper_id")
+    status=$(paper_field $i "status")
+    pages=$(paper_field $i "pages")
+    [[ "$notes" == "null" || -z "$notes" ]] && return
+
+    local nemoji nlabel
+    nemoji=$(_status_emoji "$status")
+    nlabel=$(_status_label "$status")
+    local alert_kind
+    case "$status" in
+      complete)       alert_kind="TIP" ;;
+      near-complete)  alert_kind="IMPORTANT" ;;
+      draft)          alert_kind="IMPORTANT" ;;
+      outline)        alert_kind="WARNING" ;;
+      early)          alert_kind="CAUTION" ;;
+      cvpr-reject)    alert_kind="NOTE" ;;
+      *)              alert_kind="NOTE" ;;
+    esac
+
+    _stp ""
+    _stp "### $nemoji $name &nbsp;·&nbsp; \`#${paper_id:--}\` &nbsp;·&nbsp; ${pages:-?}p &nbsp;·&nbsp; *$nlabel*"
+    _stp ""
+    _stp "> [!${alert_kind}]"
+    local printed_first=false
+    if [[ -n "$student_lead" && "$student_lead" != "null" ]]; then
+      _stp "> **Student lead:** &nbsp;$student_lead"
+      printed_first=true
+    fi
+    if [[ -n "$authors" && "$authors" != "null" ]]; then
+      [[ "$printed_first" == "true" ]] && _stp ">"
+      _stp "> **Authors:** &nbsp;$authors"
+    fi
+    _stp ""
+    _stp "| Date | Activity |"
+    _stp "|:----:|----------|"
+    local rows
+    rows=$(python3 -c "
+import sys, re
+notes = sys.argv[1]
+for entry in notes.split(' | '):
+    entry = entry.strip()
+    if not entry:
+        continue
+    m = re.match(r'^\[(\d{1,2}/\d{1,2})\]\s*(.*)', entry)
+    if m:
+        date, body = m.group(1), m.group(2)
+    else:
+        date, body = '—', entry
+    fl = re.search(r'更新了 ([\w_\-,]+)', body)
+    if fl and fl.group(1).count(',') > 6:
+        files = fl.group(1).split(',')
+        body = body.replace(fl.group(1), ', '.join(files[:5]) + f' ...(+{len(files)-5} more)')
+    fl = re.search(r'Sections: \`([^\`]+)\`', body)
+    if fl and fl.group(1).count(',') > 6:
+        files = fl.group(1).split(',')
+        body = body.replace(fl.group(1), f'{len(files)} files')
+    body = body.replace('|', '\\\\|')
+    print(f'| \`{date}\` | {body} |')
+" "$notes")
+    while IFS= read -r line; do
+      [[ -n "$line" ]] && _stp "$line"
+    done <<< "$rows"
+  }
+
+  _stp "## 📝 Per-Paper Notes (Student Activity)"
+  _stp ""
+  for_each_paper _status_notes
+  _stp ""
+  _stp "---"
+  _stp ""
+
   _stp "_Auto-generated by \`paperctl dashboard --status\` · $(date '+%Y-%m-%d %H:%M')_"
 
   echo "$_st" > "$DASH_STATUS"
