@@ -29,14 +29,27 @@ load_config
 
 # --- Status emoji mapping ---
 _status_emoji() {
+  # 5 distinct levels for clarity (was 3)
   case "$1" in
-    complete)       echo "🟢" ;;
-    near-complete)  echo "🟡" ;;
+    complete)       echo "✅" ;;
+    near-complete)  echo "🟢" ;;
     draft)          echo "🟡" ;;
-    outline)        echo "🔴" ;;
+    outline)        echo "🟠" ;;
     early)          echo "🔴" ;;
-    cvpr-reject)    echo "🟡" ;;
+    cvpr-reject)    echo "♻️ " ;;
     *)              echo "⚪" ;;
+  esac
+}
+
+_status_label() {
+  case "$1" in
+    complete)       echo "Complete" ;;
+    near-complete)  echo "Near-Complete" ;;
+    draft)          echo "Draft" ;;
+    outline)        echo "Outline" ;;
+    early)          echo "Early" ;;
+    cvpr-reject)    echo "CVPR-Reject" ;;
+    *)              echo "Unknown" ;;
   esac
 }
 
@@ -139,7 +152,7 @@ _dp "---"
 _dp ""
 _dp "## 📊 進度總覽"
 _dp ""
-_dp "| # | Paper | OR ID | Domain | Status | Dirty | Overleaf |"
+_dp "| # | Paper | OR ID | Pages | Domain | Status | Dirty | Overleaf |"
 _dp "|:-:|-------|:-----:|--------|:------:|:-----:|:--------:|"
 
 _dashboard_paper() {
@@ -154,16 +167,19 @@ _dashboard_paper() {
     i=$((i + 1))
   done
 
-  local domain paper_id status
+  local domain paper_id status pages
   domain=$(paper_field $i "domain")
   paper_id=$(paper_field $i "paper_id")
   status=$(paper_field $i "status")
+  pages=$(paper_field $i "pages")
   [[ "$domain" == "null" ]] && domain="-"
   [[ "$paper_id" == "null" ]] && paper_id="-"
   [[ "$status" == "null" ]] && status="-"
+  [[ "$pages" == "null" || "$pages" == "0" ]] && pages="-"
 
-  local emoji
+  local emoji label
   emoji=$(_status_emoji "$status")
+  label=$(_status_label "$status")
 
   # Dirty check
   local dirty=""
@@ -193,14 +209,14 @@ _dashboard_paper() {
   # Row number (using global counter)
   _dash_row=$((_dash_row + 1))
 
-  _dp "| $_dash_row | $fork_icon$gh_link | $paper_id | $domain | $emoji | $dirty | $ol_link |"
+  _dp "| $_dash_row | $fork_icon$gh_link | $paper_id | $pages | $domain | $emoji $label | $dirty | $ol_link |"
 }
 
 _dash_row=0
 for_each_paper _dashboard_paper
 
 _dp ""
-_dp "> 🟢 Complete / Review　🟡 In Progress / Near-Complete　🔴 Early / Outline　🔱 Fork"
+_dp "> ✅ Complete　🟢 Near-Complete　🟡 Draft　🟠 Outline　🔴 Early　♻️ CVPR-Reject　🔱 Fork"
 _dp ""
 _dp "---"
 _dp ""
@@ -261,6 +277,33 @@ _dp ""
 _dp "| Paper | Heatmap | +Add | -Del | Total | 📊 Fig |"
 _dp "|-------|:-------:|-----:|-----:|------:|:------:|"
 for_each_paper _dashboard_heatmap
+_dp ""
+_dp "---"
+_dp ""
+
+# --- Per-paper notes (student activity narrative from conference.json) ---
+_dashboard_notes() {
+  local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
+  local notes student_lead authors
+  notes=$(paper_field $i "notes")
+  student_lead=$(paper_field $i "student_lead")
+  authors=$(paper_field $i "authors")
+  [[ "$notes" == "null" || -z "$notes" ]] && return
+  _dp ""
+  _dp "### $name"
+  if [[ -n "$student_lead" && "$student_lead" != "null" ]]; then
+    _dp "**Student lead:** $student_lead"
+  fi
+  if [[ -n "$authors" && "$authors" != "null" ]]; then
+    _dp "  "
+    _dp "**Authors:** $authors"
+  fi
+  _dp ""
+  _dp "$notes"
+}
+
+_dp "## 📝 Per-Paper Notes (Student Activity)"
+for_each_paper _dashboard_notes
 _dp ""
 _dp "---"
 _dp ""

@@ -118,7 +118,10 @@ print(len(matches))
       done
       local tmp
       tmp=$(mktemp)
-      jq ".papers[$i].pages = $pages" "$CONF_FILE" > "$tmp" && mv "$tmp" "$CONF_FILE"
+      # Use cat-redirect (not mv) to preserve symlink: CONF_FILE may be a symlink
+      # to <conf>-meta/conference.json; mv would replace the symlink with a
+      # regular file, breaking the single-source-of-truth pattern.
+      jq ".papers[$i].pages = $pages" "$CONF_FILE" > "$tmp" && cat "$tmp" > "$CONF_FILE" && rm -f "$tmp"
     else
       python3 -c "
 import json, sys

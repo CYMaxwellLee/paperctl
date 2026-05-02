@@ -146,7 +146,9 @@ _autostatus_paper() {
       if command -v jq &>/dev/null; then
         local tmp
         tmp=$(mktemp)
-        jq ".papers[$i].status = \"$detected\"" "$CONF_FILE" > "$tmp" && mv "$tmp" "$CONF_FILE"
+        # Use cat-redirect (not mv) to preserve symlink: CONF_FILE may be a symlink
+        # to <conf>-meta/conference.json; mv would replace the symlink with a regular file.
+        jq ".papers[$i].status = \"$detected\"" "$CONF_FILE" > "$tmp" && cat "$tmp" > "$CONF_FILE" && rm -f "$tmp"
       else
         python3 -c "
 import json, sys
