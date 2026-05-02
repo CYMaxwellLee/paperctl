@@ -153,7 +153,7 @@ _dp ""
 _dp "## 📊 進度總覽"
 _dp ""
 _dp "| # | Paper | OR ID | Pages | Domain | Status | Dirty | Overleaf |"
-_dp "|:-:|-------|:-----:|--------|:------:|:-----:|:--------:|"
+_dp "|:-:|-------|:-----:|:-----:|--------|:------:|:-----:|:--------:|"
 
 _dashboard_paper() {
   local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
@@ -282,27 +282,86 @@ _dp "---"
 _dp ""
 
 # --- Per-paper notes (student activity narrative from conference.json) ---
+# Notes field accumulates entries separated by " | " — each entry usually starts
+# with a [MM/DD] timestamp. We split on " | " and render as a bullet list with
+# the date highlighted, so it scans top-to-bottom instead of as a wall of text.
 _dashboard_notes() {
   local repo="$1" name="$2" overleaf="$3" upstream="$4" repo_dir="$5"
-  local notes student_lead authors
+  local notes student_lead authors paper_id status pages
   notes=$(paper_field $i "notes")
   student_lead=$(paper_field $i "student_lead")
   authors=$(paper_field $i "authors")
+  paper_id=$(paper_field $i "paper_id")
+  status=$(paper_field $i "status")
+  pages=$(paper_field $i "pages")
   [[ "$notes" == "null" || -z "$notes" ]] && return
+
+  local emoji label
+  emoji=$(_status_emoji "$status")
+  label=$(_status_label "$status")
+
+  # Pick GitHub alert-block color by status (renders as colored vertical bar)
+  local alert_kind
+  case "$status" in
+    complete)       alert_kind="TIP" ;;        # green
+    near-complete)  alert_kind="IMPORTANT" ;;  # purple
+    draft)          alert_kind="IMPORTANT" ;;  # purple
+    outline)        alert_kind="WARNING" ;;    # yellow
+    early)          alert_kind="CAUTION" ;;    # red
+    cvpr-reject)    alert_kind="NOTE" ;;       # blue
+    *)              alert_kind="NOTE" ;;
+  esac
+
   _dp ""
-  _dp "### $name"
+  _dp "### $emoji $name &nbsp;·&nbsp; \`#${paper_id:--}\` &nbsp;·&nbsp; ${pages:-?}p &nbsp;·&nbsp; *$label*"
+  _dp ""
+  _dp "> [!${alert_kind}]"
   if [[ -n "$student_lead" && "$student_lead" != "null" ]]; then
-    _dp "**Student lead:** $student_lead"
+    _dp "> **Student lead:** $student_lead"
   fi
   if [[ -n "$authors" && "$authors" != "null" ]]; then
-    _dp "  "
-    _dp "**Authors:** $authors"
+    _dp "> **Authors:** $authors"
   fi
   _dp ""
-  _dp "$notes"
+  # Render activity log as a 2-column table: Date | Activity.
+  # Split notes on " | ", parse [MM/DD] prefix as Date column, rest as Activity.
+  # Long file lists (>6 commas) get truncated to first 5 files + "…(N more)".
+  _dp "| Date | Activity |"
+  _dp "|:----:|----------|"
+  local rows
+  rows=$(python3 -c "
+import sys, re
+notes = sys.argv[1]
+for entry in notes.split(' | '):
+    entry = entry.strip()
+    if not entry:
+        continue
+    m = re.match(r'^\[(\d{1,2}/\d{1,2})\]\s*(.*)', entry)
+    if m:
+        date, body = m.group(1), m.group(2)
+    else:
+        date, body = '—', entry
+    # Truncate huge file lists for readability
+    fl = re.search(r'更新了 ([\w_\-,]+)', body)
+    if fl and fl.group(1).count(',') > 6:
+        files = fl.group(1).split(',')
+        truncated = ', '.join(files[:5]) + f' ...(+{len(files)-5} more)'
+        body = body.replace(fl.group(1), truncated)
+    fl = re.search(r'Sections: \`([^\`]+)\`', body)
+    if fl and fl.group(1).count(',') > 6:
+        files = fl.group(1).split(',')
+        body = body.replace(fl.group(1), f'{len(files)} files')
+    # Escape pipe chars so they don't break the markdown table
+    body = body.replace('|', '\\\\|')
+    print(f'| \`{date}\` | {body} |')
+" "$notes")
+  while IFS= read -r line; do
+    [[ -n "$line" ]] && _dp "$line"
+  done <<< "$rows"
 }
 
 _dp "## 📝 Per-Paper Notes (Student Activity)"
+_dp ""
 for_each_paper _dashboard_notes
 _dp ""
 _dp "---"
@@ -429,7 +488,7 @@ if [[ -n "$DASH_STATUS" ]]; then
   for_each_paper _status_row
 
   _stp ""
-  _stp "> 🟢 Complete　🟡 Near-Complete / Draft / Outline　🔴 Early　🔱 Fork"
+  _stp "> ✅ Complete　🟢 Near-Complete　🟡 Draft　🟠 Outline　🔴 Early　♻️ CVPR-Reject　🔱 Fork"
 
   # Checklist: Claude project count
   _cp_count=0; _kn_count=0
