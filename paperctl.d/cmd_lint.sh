@@ -28,9 +28,11 @@ load_config
 . "$PAPERCTL_LIB/lib_check.sh"
 
 SCAN_ALL=false
+INTRO_ONLY=false
 while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --all) SCAN_ALL=true; shift ;;
+    --intro) INTRO_ONLY=true; SCAN_ALL=true; shift ;;
     *) break ;;
   esac
 done
@@ -82,6 +84,53 @@ RULE_SEVERITY+=("warn")
 # Skips lines that look like code/url/path/comment
 RULE_PATTERNS+=('(^|[^\\=>:_/])"[A-Za-z]')
 RULE_DESCS+=("Straight quote -- use \\\`\\\`...'' instead")
+
+# --- INTRO-ONLY rules (added when --intro flag is set) ---
+# These are stricter rules per intro_guideline_v4.md, applied only to introduction.tex
+if $INTRO_ONLY; then
+  # R8: casual conjunctions banned by intro guideline
+  RULE_PATTERNS+=('(, yet [a-z]|, but [a-z]|, so [a-z]|; however,|; [a-z])')
+  RULE_DESCS+=("Casual conjunction (yet/but/so/; <lower>) -- use however/while/although/period")
+  RULE_SEVERITY+=("fail")
+
+  # R9: comma + V-ing (banned across guideline)
+  # Whitelist participial prepositions (including/regarding/concerning/etc.)
+  # which legitimately introduce parenthetical phrases, not the banned construction.
+  RULE_PATTERNS+=(', (?!including|regarding|concerning|involving|containing|given|considering|excluding|notwithstanding|owing|using)[a-z]+ing\b')
+  RULE_DESCS+=("Comma + V-ing -- split into two clauses or use 'and V-s'")
+  RULE_SEVERITY+=("fail")
+
+  # R10: 'because' (any position) -- use since/as/given that
+  RULE_PATTERNS+=('\b[Bb]ecause\b')
+  RULE_DESCS+=("'because' -- use 'since'/'as'/'given that'")
+  RULE_SEVERITY+=("fail")
+
+  # R11: display math \[ ... \] in body (formulas belong to Method/Theory, not Intro)
+  RULE_PATTERNS+=('\\\[')
+  RULE_DESCS+=("Display math \\\\[...\\\\] -- formulas belong to Method/Theory, not Intro body")
+  RULE_SEVERITY+=("fail")
+
+  # R12: figure refs in body (Intro should not depend on figures that may move)
+  RULE_PATTERNS+=('\\(c|C)ref\{fig:')
+  RULE_DESCS+=("Figure ref in Intro -- consider moving figure or describing without ref")
+  RULE_SEVERITY+=("warn")
+
+  # R13: undefined notation in Intro (\Delta, \tau, \epsilon, \delta, c4/c8/c2)
+  # These commonly leak from Method/abstract into Intro and confuse readers
+  RULE_PATTERNS+=('\$\\(Delta|tau|epsilon|delta)\$|\b(c4|c8|c2)\b')
+  RULE_DESCS+=("Undefined notation in Intro (\\\\Delta/\\\\tau/\\\\epsilon/\\\\delta/c4/c8/c2)")
+  RULE_SEVERITY+=("warn")
+
+  # R14: 'In this paper, we' -- intro should not have this template phrase
+  RULE_PATTERNS+=('In this paper, we|In this work, we propose')
+  RULE_DESCS+=("Template phrase 'In this paper, we' -- restructure")
+  RULE_SEVERITY+=("warn")
+
+  # R15: bullet points outside contributions (intro should be paragraphs)
+  RULE_PATTERNS+=('^\s*\\item\b')
+  RULE_DESCS+=("\\\\item bullet -- only allowed in contributions block")
+  RULE_SEVERITY+=("warn")
+fi
 RULE_SEVERITY+=("warn")
 
 # ============================================================
@@ -151,12 +200,25 @@ _lint_paper() {
 
   local total_violations=0
 
-  # Find all .tex files
+  # Find all .tex files (or just introduction.tex if --intro mode)
   local tex_files=()
-  while IFS= read -r f; do
-    [[ -z "$f" ]] && continue
-    tex_files+=("$f")
-  done < <(find "$tex_dir" -name "*.tex" -not -path "*/_clean/*" -not -path "*/.git/*" 2>/dev/null | sort)
+  if $INTRO_ONLY; then
+    # Look for introduction.tex specifically (per ECCV-style sections/ layout)
+    while IFS= read -r f; do
+      [[ -z "$f" ]] && continue
+      tex_files+=("$f")
+    done < <(find "$tex_dir" -iname "introduction.tex" -not -path "*/_clean/*" -not -path "*/.git/*" 2>/dev/null | sort)
+    if [[ ${#tex_files[@]} -eq 0 ]]; then
+      echo "  No introduction.tex found in $repo_dir (--intro requires sections/introduction.tex)"
+      echo ""
+      return
+    fi
+  else
+    while IFS= read -r f; do
+      [[ -z "$f" ]] && continue
+      tex_files+=("$f")
+    done < <(find "$tex_dir" -name "*.tex" -not -path "*/_clean/*" -not -path "*/.git/*" 2>/dev/null | sort)
+  fi
 
   for tex_file in "${tex_files[@]}"; do
     local rel_path="${tex_file#$repo_dir/}"
