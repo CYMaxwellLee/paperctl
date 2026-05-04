@@ -25,8 +25,13 @@ _count_content_lines() {
     echo 0
     return
   fi
-  # Count non-blank, non-comment lines
-  grep -cvE '^\s*(%|$)' "$file" 2>/dev/null || echo 0
+  # Count non-blank, non-comment lines.
+  # Note: `grep -c` always prints a number, but exits 1 when count is 0.
+  # A naive `grep -c ... || echo 0` would emit "0\n0" in that case and break
+  # arithmetic downstream. Capture once and default to 0 on any error.
+  local count
+  count=$(grep -cvE '^\s*(%|$)' "$file" 2>/dev/null) || count=0
+  echo "${count:-0}"
 }
 
 _detect_status() {
