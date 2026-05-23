@@ -4,11 +4,28 @@
 
 `paperctl` is a bash CLI tool for managing multiple academic paper submissions to a single conference. It handles git sync with GitHub + Overleaf, status tracking, quality checks, and dashboard generation.
 
+**This repo is the single source of truth for all paper management knowledge.** Clone this repo on any machine to get the full CLI + skills + templates.
+
+### Skills (Knowledge Base)
+
+All reusable writing knowledge, operational procedures, and lessons learned are in `skills/`. See `skills/README.md` for the full index.
+
+| Skill | Description |
+|-------|-------------|
+| `skills/academic-paper-writing/` | 論文撰寫全套系統（style guide, section writing, QA, editing discipline, Overleaf ops） |
+| `skills/rebuttal/` | Rebuttal 寫作系統（strategy, response writing, style guide, checklist） |
+| `skills/conference-ops/` | paperctl 工作流程（conference setup, venue reference, Overleaf git patterns） |
+
 ### Directory Structure
 
 ```
 paperctl/
   paperctl              # Main entry point (bash script)
+  skills/               # Knowledge base (writing, rebuttal, operations)
+    README.md           # Full index — start here
+    academic-paper-writing/   # 8 modules
+    rebuttal/                 # 4 modules
+    conference-ops/           # 3 modules
   paperctl.d/
     lib.sh              # Core library (config, iterators, state management)
     cmd_start.sh        # Pre-session sync (saves state, then pulls)
