@@ -6,9 +6,19 @@
 
 **This repo is the single source of truth for all paper management knowledge.** Clone this repo on any machine to get the full CLI + skills + templates.
 
+### New Machine Setup
+
+```bash
+git clone https://github.com/CYMaxwellLee/paperctl.git
+ln -sf $(pwd)/paperctl/paperctl /usr/local/bin/paperctl
+paperctl setup              # check environment
+paperctl setup --claude     # symlink Claude Code skills (paper-editing trigger)
+```
+
 ### Skills (Knowledge Base)
 
 All reusable writing knowledge, operational procedures, and lessons learned are in `skills/`. See `skills/README.md` for the full index.
+Claude Code skills trigger files are in `claude-integration/skills/` — run `paperctl setup --claude` to symlink them to `~/.claude/skills/`.
 
 | Skill | Description |
 |-------|-------------|
@@ -26,6 +36,9 @@ paperctl/
     academic-paper-writing/   # 8 modules
     rebuttal/                 # 4 modules
     conference-ops/           # 3 modules
+  claude-integration/   # Claude Code trigger skills (symlinked by `paperctl setup --claude`)
+    skills/
+      paper-editing/    # Auto-triggers on 改稿/patch/rewrite/\cyl
   paperctl.d/
     lib.sh              # Core library (config, iterators, state management)
     cmd_start.sh        # Pre-session sync (saves state, then pulls)

@@ -5,7 +5,19 @@
 
 ---
 
-## 零、最高原則：絕不道歉
+## 零、最高原則
+
+### 0.1 Rebuttal 是 Sales Pitch，不是中性學術文件
+
+**Rebuttal 的核心目的是說服 reviewer。** Paper writing 的精簡/中性原則不能照搬。
+
+- **銷售詞保留**：consistently, optimal balance, excellent, seamless, further validating, plug-and-play — rebuttal 該用就用，不要為了精簡而砍
+- **Reviewer 健忘假設**：每段 rebuttal 要 self-contained — 不要假設 reviewer 還記得 paper 上下文，重複講 context、claim、results
+- **Supp/appendix evidence 早提**：第一句就提「as already detailed in Sec. X / Tab. Y of the supplementary material」— 強調「我們本來就有」
+- **滿頁正好，不要省字**：1 頁 two-column 正好填滿就是合適長度。寧可詳細展示 evidence，不要為了 brevity 砍解釋。OpenReview 無字數限制時更要寫充分
+- **部分 banned words 可接受**：「It is worth noting that」在 rebuttal 場合可用（教授明示）。真正不能用的紅線不變（見下方）
+
+### 0.2 絕不道歉
 
 **Rebuttal 中不出現任何形式的道歉、認錯、自我否定。** 以理服人，不被 reviewer 嚇到。
 

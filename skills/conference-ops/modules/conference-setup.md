@@ -8,7 +8,7 @@
 
 ```bash
 CONF="corl2026"
-BASE="/Users/cymaxwelllee/Project/Papers"
+BASE="$HOME/Project/Papers"   # 依你的實際路徑調整
 
 mkdir -p $BASE/$CONF/$CONF-meta/templates
 mkdir -p $BASE/$CONF/.claude
@@ -64,10 +64,30 @@ cat > $BASE/$CONF/.claude/settings.local.json << 'EOF'
 EOF
 ```
 
-## Step 5: 建立初始 STATUS.md + README.md
+## Step 5: 建立初始 STATUS.md + README.md + Meta 文件
 
-STATUS.md 包含 timeline、papers table、day-by-day log。
 README.md 由 `paperctl dashboard` 自動生成。
+
+STATUS.md 為手寫敘事文件，包含：
+- Timeline（重要日期和戰略節點）
+- Papers table（每篇狀態摘要）
+- Day-by-day log（每天完成事項紀錄）
+
+### Meta 目錄標準文件清單
+
+```
+<conf>-meta/
+  conference.json              # 單一 source of truth（papers, deadlines, status）
+  README.md                    # paperctl dashboard 自動生成
+  STATUS.md                    # 手寫戰況儀表板
+  <conf>_battle_plan.md        # 作戰計畫（天數分配、優先序）
+  <conf>_dashboard.md          # 投稿前手寫進度追蹤
+  <conf>_project_instructions.md   # Claude project 設定指引
+  <conf>_reviewer_instructions.md  # Reviewer response 指引
+  <conf>_knowledge_template.md     # Knowledge upload 範本
+  templates/
+    supp_template.tex          # Supplementary material 模板
+```
 
 ## Step 6: Bootstrap Paper Repos
 

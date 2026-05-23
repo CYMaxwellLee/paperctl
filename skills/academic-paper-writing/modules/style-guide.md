@@ -50,6 +50,7 @@
 | `---` 或 ` --- `（em dash） | 改為逗號、分號，或重新斷句 |
 | `utilize` | 改為 "use" |
 | `leverage`（重複 >2 次） | 部分改為 "use" |
+| `straightforward` | 聽起來居高臨下，改為 "simple" 或 "direct" |
 | `significant improvement` | 改為具體數字描述 |
 | `It is worth noting that` | 刪導語，直接說 |
 | `As expected,` | 刪整句或重寫 |

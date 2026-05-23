@@ -575,6 +575,19 @@ We will improve the writing.
 - 其他 concerns 各 1-3 句
 - Writing issues 合併成一句
 
+### PDF Rebuttal（ECCV 2026 新規）
+
+- **1 頁 PDF**（two-column）→ 滿頁正好，不要省字
+- 與 OpenReview 相反：空間有限時寧可詳細展示 evidence 也不要砍
+
+### Reviewer 健忘原則（所有平台通用）
+
+**每段 rebuttal 必須 self-contained。** Reviewer 審完再看 rebuttal 時已不記得 paper 細節。
+
+- 每段重述：context（我們在做什麼）→ claim（我們的論點）→ evidence（支持數據）
+- Supp/appendix evidence 在第一句就提：「As already detailed in Sec. X of the supplementary material, ...」
+- 不要假設 reviewer 記得任何特定 section、table、figure 的內容
+
 ---
 
 ## 從學生稿到教授稿的常見修改

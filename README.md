@@ -50,6 +50,9 @@ ln -sf ~/Project/paperctl/paperctl /usr/local/bin/paperctl
 # 3. Install jq (recommended, python3 works as fallback)
 brew install jq          # macOS
 # apt install jq         # Ubuntu/Debian
+
+# 4. (Optional) Set up Claude Code integration
+paperctl setup --claude   # symlinks skill triggers to ~/.claude/skills/
 ```
 
 > **Note:** paperctl resolves its own install location via symlinks at runtime -- you can clone it anywhere and the tool will find its `paperctl.d/` directory automatically.

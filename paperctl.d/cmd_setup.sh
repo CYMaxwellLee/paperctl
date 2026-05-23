@@ -12,6 +12,7 @@ MODE="check"
 while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --install) MODE="install"; shift ;;
+    --claude)  MODE="claude"; shift ;;
     *) break ;;
   esac
 done
@@ -185,6 +186,55 @@ else
   echo "    sudo bash $PAPERCTL_ROOT/setup-texlive.sh"
 fi
 echo ""
+
+# --- Claude integration mode ---
+if [[ "$MODE" == "claude" ]]; then
+  _bold "=== Claude Code Integration ==="
+  echo ""
+
+  CLAUDE_SKILLS="$HOME/.claude/skills"
+  INTEGRATION_DIR="$PAPERCTL_ROOT/claude-integration/skills"
+
+  if [[ ! -d "$INTEGRATION_DIR" ]]; then
+    _red "❌ claude-integration/skills/ not found in paperctl repo"
+    exit 1
+  fi
+
+  # Symlink each skill
+  for skill_dir in "$INTEGRATION_DIR"/*/; do
+    skill_name=$(basename "$skill_dir")
+    target="$CLAUDE_SKILLS/$skill_name"
+
+    if [[ -L "$target" ]]; then
+      existing=$(readlink "$target")
+      if [[ "$existing" == "$skill_dir" || "$existing" == "${skill_dir%/}" ]]; then
+        _green "  ✅ $skill_name → already linked"
+      else
+        _yellow "  ⚠️  $skill_name → linked elsewhere: $existing"
+        echo "      To fix: rm '$target' && paperctl setup --claude"
+      fi
+    elif [[ -d "$target" ]]; then
+      _yellow "  ⚠️  $skill_name → exists as directory (not symlink)"
+      echo "      Backing up to ${target}.bak and relinking..."
+      mv "$target" "${target}.bak"
+      mkdir -p "$CLAUDE_SKILLS"
+      ln -sf "$skill_dir" "$target"
+      _green "  ✅ $skill_name → linked (old dir backed up)"
+    else
+      mkdir -p "$CLAUDE_SKILLS"
+      ln -sf "$skill_dir" "$target"
+      _green "  ✅ $skill_name → linked"
+    fi
+  done
+
+  echo ""
+  _green "Claude Code skills are now symlinked to paperctl repo."
+  echo "  Skills source: $INTEGRATION_DIR"
+  echo "  Symlink target: $CLAUDE_SKILLS"
+  echo ""
+  echo "  On a new machine, just run: paperctl setup --claude"
+  exit 0
+fi
 
 # --- Install mode ---
 if [[ "$MODE" == "install" ]]; then

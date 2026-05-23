@@ -46,14 +46,31 @@
 
 ## Step 2：優先順序
 
-### 2.1 Reviewer 排序
+### 2.0 跨論文排序（Paper-level Triage）
 
-**從最低分到最高分處理。** 低分 reviewer 是翻盤的唯一機會。
+**同時管多篇投稿時，從高分 paper 先改，不是低分。**
+
+| Paper 類型 | 優先級 | 策略 |
+|-----------|--------|------|
+| avg ≥ 4，有 champion（≥5 分） | 🔴 最高 | 勝算大，守成投資報酬最高。推一下就上去 |
+| avg 3-4，concern 可回應 | 🟡 中等 | 認真回，用 evidence 拉分 |
+| avg < 2.5，min=1 | 🟢 務實 | 做 rebuttal 但不過度投入，改分機率低 |
+
+決策因素：
+- 有 champion（≥5 分）→ 高優先，給 champion 彈藥在 discussion 推
+- 學生實驗未到位 → 不勉強排前面，等實驗到了再改
+- 極低分（avg < 2.5）→ 務實認知，即使想救 reviewer 改分機率很低
+
+> **注意**：2.0 是跨論文 scope，2.1 是單篇內 scope，兩層共存不衝突。
+
+### 2.1 單篇內 Reviewer 排序
+
+**進入單篇後，從最低分到最高分處理。** 低分 reviewer 是該篇翻盤的唯一機會。
 
 排序規則：
-1. 最低分的 reviewer 最先處理
+1. 最低分的 reviewer 最先處理，用最多篇幅和最強 evidence
 2. 同分時，有致命 concern 的先處理
-3. 高分 reviewer 最後處理（但不能敷衍）
+3. 高分 reviewer 最後處理（但不能敷衍，他是 champion 要給彈藥）
 
 ### 2.2 每位 Reviewer 內的 Concern 排序
 
