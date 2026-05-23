@@ -8,9 +8,10 @@ Built for research labs juggling multiple paper submissions across conferences (
 
 - **Bidirectional sync** — GitHub ↔ Local ↔ Overleaf in one command
 - **Fork-aware** — auto-merge from upstream student repos
-- **Format compliance checker** — pluggable per-conference templates (ECCV, CVPR, NeurIPS)
+- **Format compliance checker** — pluggable per-conference templates (ECCV, CVPR, NeurIPS, CoRL)
 - **Config-driven** — one `conference.json` per conference, zero hardcoded paths
 - **Fully portable** — works on any machine, any directory layout
+- **Knowledge base** — reusable writing skills, operational procedures, and lessons learned in `skills/`
 
 ## Data Flow
 
@@ -254,6 +255,7 @@ Multiple conferences coexist side-by-side — just `cd` to the right directory (
 | `eccv` | ECCV (llncs + eccv.sty) | 13 checks |
 | `cvpr` | CVPR / ICCV (cvpr.sty) | 10 checks |
 | `neurips` | NeurIPS (neurips.sty) | 8 checks |
+| `corl` | CoRL (corl_20XX.sty) | 8 checks |
 
 Set the `template` field in `conference.json` to match.
 
@@ -343,6 +345,41 @@ run_checks() {
 ```
 
 Set `"template": "{name}"` in your `conference.json` and `paperctl check` will use it.
+
+## Skills (Knowledge Base)
+
+paperctl includes a structured knowledge base in `skills/` covering academic paper writing, rebuttal strategy, and conference operations. Clone this repo = get the full CLI + all accumulated knowledge.
+
+```
+skills/
+  README.md                          # Master index — start here
+  academic-paper-writing/            # 8 modules
+    SKILL.md                         # Overview + usage flow
+    modules/
+      style-guide.md                 # Writing rules, banned words
+      section-writing.md             # Per-section guidelines
+      qa-checklist.md                # Quality assurance checklist
+      editing-discipline.md          # Edit conventions, prohibited behaviors
+      overleaf-ops.md                # Overleaf push flow, merge checks
+      intro-guideline.md             # Introduction writing
+      experiment-guideline.md        # Experiments writing
+      method-guideline.md            # Methods writing
+  rebuttal/                          # 4 modules
+    SKILL.md                         # Overview + priority strategy
+    modules/
+      rebuttal-strategy.md           # Cross-paper prioritization
+      response-writing.md            # Per-reviewer response patterns
+      rebuttal-style-guide.md        # Rebuttal-specific style rules
+      rebuttal-checklist.md          # Submission checklist
+  conference-ops/                    # 3 modules
+    SKILL.md                         # paperctl workflow overview
+    modules/
+      conference-setup.md            # New conference bootstrap steps
+      venue-reference.md             # All venues: pages, deadlines, rules
+      overleaf-git-patterns.md       # Dual-remote git operations
+```
+
+See [`skills/README.md`](skills/README.md) for the full index and scenario-based lookup.
 
 ## Requirements
 
