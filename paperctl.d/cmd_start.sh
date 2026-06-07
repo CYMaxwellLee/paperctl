@@ -7,6 +7,10 @@ echo "🚀 Starting work session — syncing all repos..."
 echo "   Conference: $CONF_NAME $CONF_YEAR ($CONF_SLUG)"
 echo ""
 
+# Seed git credentials once so the pulls below (and later pushes) never prompt for a
+# password. Idempotent and near-instant in --quiet mode (seed only, no remote probe).
+"$PAPERCTL_ROOT/paperctl" auth --quiet --dir "$CONF_DIR" 2>/dev/null || true
+
 # Save pre-sync state for later comparison (used by `paperctl report`)
 save_pre_sync_state
 echo ""

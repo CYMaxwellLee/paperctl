@@ -1,6 +1,6 @@
 ---
 name: paper-editing
-description: 論文改稿 skill。當教授要求修改 LaTeX 論文（patch、rewrite、\cyl 藍字、comment out 學生文、更新 section）時觸發。包含所有改稿規則、禁忌、Overleaf 推送流程。
+description: 論文改稿 skill。當教授要求修改 LaTeX 論文（patch、rewrite、\cyl 藍字、comment out 學生文、更新 section、補 appendix/附錄/supplementary）時觸發。包含所有改稿規則、Appendix 改寫鐵則、禁忌、Overleaf 推送流程。
 triggers:
   - "改稿"
   - "patch"
@@ -14,6 +14,10 @@ triggers:
   - "更新.*experiment"
   - "修改.*tex"
   - "append"
+  - "appendix"
+  - "附錄"
+  - "補充材料"
+  - "supplementary"
 ---
 
 # Paper Editing Skill
@@ -36,7 +40,9 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 ### 2. 確認範圍
 - 哪個 section？哪些檔案？
-- 有沒有 equation 要保留（不重複）？
+- 有沒有 equation 要保留？
+  - **正文 / Rebuttal**：已有 label 的 equation 用 `\cref{}` 引用，不重複 typeset（省版面）。
+  - **Appendix 改寫**：藍字版**必須把每個 equation 重新 display**（見下方 Appendix 鐵則 D）。不可只 `\cref` 引用、更不可攤平成 inline。這條跟正文相反，別搞混。
 
 ---
 
@@ -50,6 +56,30 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 6. ❌ `thereby` / `utilize` / `numerous`
 
 **注意**：`--` (en-dash) 用於 `accuracy--speed` → **保留不動**
+
+---
+
+## 📐 Appendix 改寫鐵則（append 模式專用 — 違反就是反覆來回幾小時的那個坑）
+
+> 觸發：補 appendix／附錄／supplementary。藍字版是**完整、獨立的教授版**，不是 note、不是 summary。
+> 學生原文保留在上，藍字版 append 在下。`paperctl verify-appendix` 會逐條擋。
+
+寫每個 subsection 的藍字版時逐條自檢：
+
+- **A 不准 summarize**：藍字字數 **≥ 學生版**。是要擴寫、補論證、講 impact，不是濃縮。
+- **B 段數對齊**：學生幾段，藍字就 **≥ 幾段**。不可把多段壓成一段。
+- **C 元素全覆蓋**：學生版裡每個 equation／table／figure／數字，藍字版**全部都要出現**，一個都不能掉。
+- **D 公式照 display**：學生的 displayed equation（`\begin{equation}` / `align`）在藍字裡**仍要 displayed**，不准攤平成 inline 或散文。含 display math 的藍字區塊用 `{\color{blue} ... }`，**不要**用 `\textcolor{blue}{}` 去包 display math（會壞）。
+- **E 表圖當主詞**：`Table~\ref{} reports...`、`\Cref{fig:} shows...`。**不要**寫成括號式 `(Table 9)`，也**不要** `As shown in Table 9`。
+- **F 開頭直接破題**：每節第一句要**接正文**（`\cref{sec:...}` 點出主題從哪來），或**以表圖／專有名詞當主詞**。**禁止** `This sweep...` / `This ablation...` / `These tables...` 這種假設讀者已知 context 的 narrative 開頭。要 argument，不要 narrative。
+- **G 不准 casual**：`so` / `but` / `give(s)` / `As shown in` / `As can be seen from` 一律不用。
+- **I 引用資料不算禁忌**：失敗描述等 `\textit{``...''}` 逐字引用內的 but／分號／破折號是**資料**，不是你的文字，不要被它觸發禁忌（也不要去改它）。
+- **N append 慣例**：學生原文**保留不動**，藍字是完整教授版 append 在後。
+
+**🚫 禁止把 appendix 改寫外包給 editing subagent** — subagent 不遵守上述鐵則。在主執行緒自己寫。
+**✅ 推之前一定跑 `paperctl verify-appendix --paper <name>`，全綠才推**（summarize／掉表圖／攤平公式／narrative 開頭都會被擋）。
+
+> 為什麼要特別寫這條：memory 的 `editing_discipline`（最小修改）和 `edit_convention` 的「不要重複 equation」是**正文/rebuttal** 的規則，套到 appendix 改寫會變成「叫你濃縮、叫你別重抄公式」的反向指令。Appendix 改寫**以本鐵則為準**。
 
 ---
 
@@ -69,13 +99,18 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 # Compile
 /Library/TeX/texbin/pdflatex -interaction=nonstopmode main.tex
 
-# Push GitHub
+# Appendix 改寫的話：推之前一定要過結構驗證（全綠才推）
+paperctl verify-appendix --paper <name>   # summarize / 掉表圖 / 攤平公式 / narrative 開頭都會擋
+
+# Push GitHub（push 已內建 gate；--force 可略過驗證）
 git add <files> && git commit -m "..." && git push origin main
 
 # Push Overleaf（不可省略）
 git pull overleaf master --no-rebase --no-edit
 git push overleaf main:master
 ```
+
+> 認證一次永久免密：新機器跑 `paperctl auth`（或 `paperctl start` 會自動跑）。
 
 ---
 

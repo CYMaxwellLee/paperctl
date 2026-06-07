@@ -2,6 +2,10 @@
 
 > 繼承 `style-guide.md` 的所有規範。本模組專注於 §4 Experiments。
 
+> ⚠️ **適用範圍：正文 §4（頁數有限，故「不重抄 Table 數字、insight 先於數字、細節移 Supp、壓縮」）。**
+> **Appendix / Supplementary 的改寫相反**：藍字版是完整獨立版，要**覆蓋每個 table/figure/數字、≥ 學生長度、不可壓縮**。
+> 補 appendix 時以 memory `appendix_rules.md` 為準，`paperctl verify-appendix` 會擋掉「只 highlight 1-2 個數字」這種正文寫法。
+
 ---
 
 ## 核心精神：Experiments 不是報數字，是結辯

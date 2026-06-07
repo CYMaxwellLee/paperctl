@@ -3,6 +3,15 @@
 
 load_config
 
+# Quality-gate flags (must precede the commit message)
+while [[ "${1:-}" == --* ]]; do
+  case "$1" in
+    --force|--no-verify) export PAPERCTL_NO_VERIFY=true; shift ;;
+    --compile)           export PAPERCTL_GATE_COMPILE=true; shift ;;
+    *) break ;;
+  esac
+done
+
 MSG="${1:-chore: batch update}"
 
 echo "📤 Pushing changes: \"$MSG\""
@@ -16,6 +25,11 @@ _push_paper() {
 
   if [[ -n "$(git -C "$repo_dir" status --porcelain)" ]]; then
     echo "=== Pushing $repo ==="
+    if ! prepush_gate "$repo_dir" "$name"; then
+      echo "⏭️  $repo: push blocked by quality gate"
+      echo ""
+      return
+    fi
     git -C "$repo_dir" add -A
     git -C "$repo_dir" commit -m "$MSG"
     git -C "$repo_dir" push origin "$branch"

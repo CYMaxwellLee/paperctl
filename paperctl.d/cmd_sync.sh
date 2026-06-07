@@ -8,6 +8,8 @@ while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --parallel) PARALLEL=true; shift ;;
     --auto-resolve) AUTO_RESOLVE=true; shift ;;
+    --force|--no-verify) export PAPERCTL_NO_VERIFY=true; shift ;;
+    --compile) export PAPERCTL_GATE_COMPILE=true; shift ;;
     --paper) PAPERCTL_PAPER="$2"; export PAPERCTL_PAPER; shift 2 ;;
     --dir) PAPERCTL_DIR="$2"; export PAPERCTL_DIR; shift 2 ;;
     *) echo "Unknown flag: $1" >&2; exit 1 ;;
@@ -104,9 +106,13 @@ _sync_paper() {
   _try_merge "$repo_dir" "overleaf pull" \
     git -C "$repo_dir" pull "$CONF_OVERLEAF_REMOTE" "$CONF_OVERLEAF_BRANCH" --no-rebase || true
 
-  # Push to origin + overleaf
-  git -C "$repo_dir" push origin "$branch" 2>/dev/null
-  git -C "$repo_dir" push "$CONF_OVERLEAF_REMOTE" "$branch:$CONF_OVERLEAF_BRANCH" 2>/dev/null
+  # Push to origin + overleaf (gated: a summarized/broken appendix is not pushed)
+  if prepush_gate "$repo_dir" "$name"; then
+    git -C "$repo_dir" push origin "$branch" 2>/dev/null
+    git -C "$repo_dir" push "$CONF_OVERLEAF_REMOTE" "$branch:$CONF_OVERLEAF_BRANCH" 2>/dev/null
+  else
+    echo "  ⏭️  $repo: push skipped by quality gate"
+  fi
 
   # Check for large figure files
   _check_large_figures "$repo_dir" "$name"

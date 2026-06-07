@@ -13,6 +13,7 @@ COMMANDS
   validate           Static LaTeX validation (refs, cites, files, pages)
   strip              Strip \cyl{}/\tingru{} to _clean/ (originals untouched)
   lint               Writing-style lint (BAN rules)
+  verify-appendix    Structural appendix verifier (anti-summarize, table-as-subject, openers)
   preflight          Submission preflight (anonymity, TODOs, conflicts)
   heatmap            Per-section change heatmap (student activity)
   init               Bootstrap repos from conference.json
@@ -32,6 +33,7 @@ COMMANDS
   supp-check         Validate supplementary material structure & naming
   setup              Check environment & guide TeX Live installation
   setup --claude     Symlink Claude Code skills from paperctl repo
+  auth               Seed git credentials into keychain (no password prompts)
   help               Show this help
 
 GLOBAL FLAGS
@@ -110,6 +112,12 @@ EXAMPLES
 
   # Writing quality
   paperctl lint --paper textnav           # check BAN rules
+  paperctl verify-appendix                # structural appendix check (all papers)
+  paperctl verify-appendix --paper textnav    # single paper
+  paperctl verify-appendix --file sections/appendix.tex  # explicit file
+
+  # Git credentials (run once per machine; also run by `paperctl start`)
+  paperctl auth                           # gh setup-git + seed keychain (github + overleaf)
 
   # Submission preflight
   paperctl preflight                      # full checklist (anonymity, TODOs, etc.)

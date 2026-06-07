@@ -1,6 +1,11 @@
 #!/bin/bash
 # paperctl.d/lib.sh -- Core library for paperctl
 
+# Never hang on an interactive credential prompt: background/parallel pushes have no TTY,
+# so an un-seeded credential should fail fast (run `paperctl auth` to seed). Override by
+# exporting GIT_TERMINAL_PROMPT=1 before invoking paperctl.
+export GIT_TERMINAL_PROMPT="${GIT_TERMINAL_PROMPT:-0}"
+
 # --- Universal --help handler ---
 # If any remaining arg is --help or -h, show command usage and exit
 for _arg in "$@"; do
@@ -289,4 +294,32 @@ for_each_paper() {
     "$callback" "$repo" "$name" "$overleaf" "$upstream" "$repo_dir"
     i=$((i + 1))
   done
+}
+
+# --- Pre-push quality gate ---
+# Returns 0 to allow the push, 1 to block it. The point is to make a summarized/broken
+# appendix structurally unpushable. Honors:
+#   PAPERCTL_NO_VERIFY=true   skip the gate entirely (set by `--force` / `--no-verify`)
+#   PAPERCTL_GATE_COMPILE=true  also require a clean `compile --strict` (set by `--compile`)
+# By default it runs only the fast read-only appendix verifier (no compile), so normal
+# pushes stay quick.
+prepush_gate() {
+  local repo_dir="$1" name="$2"
+  [[ "${PAPERCTL_NO_VERIFY:-false}" == "true" ]] && return 0
+  local rc=0 glog
+  glog=$(mktemp "/tmp/paperctl_gate_${name}.XXXXXX")
+  if ! "$PAPERCTL_ROOT/paperctl" verify-appendix --paper "$name" --dir "$CONF_DIR" > "$glog" 2>&1; then
+    echo "  ❌ appendix verifier FAILED for $name -- push blocked"
+    grep -E 'FAIL' "$glog" | sed 's/^/     /' | head -20
+    rc=1
+  fi
+  rm -f "$glog"
+  if [[ "${PAPERCTL_GATE_COMPILE:-false}" == "true" ]]; then
+    if ! "$PAPERCTL_ROOT/paperctl" compile --paper "$name" --strict --dir "$CONF_DIR" >/dev/null 2>&1; then
+      echo "  ❌ compile --strict FAILED for $name -- push blocked"
+      rc=1
+    fi
+  fi
+  [[ $rc -ne 0 ]] && echo "     → override with: paperctl push --force   (or PAPERCTL_NO_VERIFY=true)"
+  return $rc
 }

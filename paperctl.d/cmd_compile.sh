@@ -16,12 +16,14 @@ load_config
 PARALLEL=false
 CLEAN=false
 VERBOSE=false
+STRICT=false
 while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --parallel) PARALLEL=true; shift ;;
     --clean) CLEAN=true; shift ;;
     --verbose|-v) VERBOSE=true; shift ;;
-    --help|-h) echo "Usage: paperctl compile [--parallel] [--clean] [--verbose]"; exit 0 ;;
+    --strict) STRICT=true; PARALLEL=false; shift ;;
+    --help|-h) echo "Usage: paperctl compile [--parallel] [--clean] [--verbose] [--strict]"; exit 0 ;;
     *) break ;;
   esac
 done
@@ -32,6 +34,8 @@ _COMPILE_OK=0
 _COMPILE_WARN=0
 _COMPILE_FAIL=0
 _COMPILE_TOTAL_PAGES=0
+_COMPILE_ERR_SUM=0
+_COMPILE_UNDEF_SUM=0
 
 # --- Resolve TeX binaries (version-agnostic) ---
 PDFLATEX=""
@@ -160,6 +164,8 @@ _compile_one() {
     errors=$(grep -c "^!" "$compile_log" 2>/dev/null) || errors=0
     warnings=$(grep -c "^LaTeX Warning:" "$compile_log" 2>/dev/null) || warnings=0
     undef_refs=$(grep -c "undefined" "$compile_log" 2>/dev/null) || undef_refs=0
+    _COMPILE_ERR_SUM=$((_COMPILE_ERR_SUM + errors))
+    _COMPILE_UNDEF_SUM=$((_COMPILE_UNDEF_SUM + undef_refs))
 
     local status_icon="✅"
     [[ "$errors" -gt 0 ]] && status_icon="⚠️ "
@@ -255,3 +261,15 @@ echo "  ────────────────────────
 printf "  📊 %d papers: ✅ %d ok  ⚠️  %d warn  ❌ %d fail  |  %d total pages\n" \
   "$_COMPILE_TOTAL" "$_COMPILE_OK" "$_COMPILE_WARN" "$_COMPILE_FAIL" "$_COMPILE_TOTAL_PAGES"
 echo ""
+
+# --strict: nonzero exit if anything failed to compile, errored, or has undefined refs.
+# This is what lets `compile` act as a pre-push gate (see prepush_gate in lib.sh).
+if $STRICT; then
+  if [[ $_COMPILE_FAIL -gt 0 || $_COMPILE_ERR_SUM -gt 0 || $_COMPILE_UNDEF_SUM -gt 0 ]]; then
+    echo "  ❌ --strict: not clean (fail=$_COMPILE_FAIL  errors=$_COMPILE_ERR_SUM  undef=$_COMPILE_UNDEF_SUM)"
+    echo ""
+    exit 1
+  fi
+  echo "  ✅ --strict: all papers compiled clean (0 errors, 0 undefined refs)"
+  echo ""
+fi

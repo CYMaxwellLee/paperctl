@@ -12,6 +12,8 @@
 #   validate        Static LaTeX validation (cross-refs, citations, figures)
 #   strip           Strip \cyl{}/\tingru{} to _clean/ directory
 #   lint            Writing-style lint (BAN rules, em dash, openers)
+#   verify-appendix Structural appendix verifier (anti-summarize, table-as-subject)
+#   auth            Seed git credentials (no more password prompts)
 #   init            Bootstrap repos from conference.json
 #   status          Show conference & paper status
 #   autostatus      Auto-detect paper status from section content
@@ -84,6 +86,7 @@ case "$COMMAND" in
   validate)       . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_validate.sh" "$@" ;;
   strip)          . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_strip.sh" "$@" ;;
   lint)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_lint.sh" "$@" ;;
+  verify-appendix) . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_verify_appendix.sh" "$@" ;;
   preflight)      . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_preflight.sh" "$@" ;;
   heatmap)        . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_heatmap.sh" "$@" ;;
   init)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_init.sh" "$@" ;;
@@ -101,6 +104,7 @@ case "$COMMAND" in
   overview)       . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_overview.sh" "$@" ;;
   scaffold-supp)  . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_scaffold_supp.sh" "$@" ;;
   supp-check)     . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_supp_check.sh" "$@" ;;
+  auth)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_auth.sh" "$@" ;;
   setup)          . "$PAPERCTL_LIB/cmd_setup.sh" "$@" ;;
   help|--help|-h) cat "$PAPERCTL_LIB/help.txt" ;;
   *)              echo "Unknown command: $COMMAND. Run 'paperctl help'." >&2; exit 1 ;;

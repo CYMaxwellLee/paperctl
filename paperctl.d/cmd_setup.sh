@@ -200,6 +200,21 @@ if [[ "$MODE" == "claude" ]]; then
     exit 1
   fi
 
+  SKILL_BACKUPS="$HOME/.claude/.paperctl-skill-backups"
+
+  # One-time cleanup: older paperctl versions left "<skill>.bak" directories INSIDE the
+  # skills dir. Claude scans that dir for skills, so a .bak is a duplicate triggerable skill
+  # with a byte-identical description -- the model can load the stale copy by mistake.
+  # Move any such leftovers OUT of the skills dir.
+  if compgen -G "$CLAUDE_SKILLS/*.bak" >/dev/null 2>&1; then
+    mkdir -p "$SKILL_BACKUPS"
+    for _bak in "$CLAUDE_SKILLS"/*.bak; do
+      _yellow "  🧹 moving stale skill backup out of skills dir: $(basename "$_bak")"
+      rm -rf "$SKILL_BACKUPS/$(basename "$_bak")"
+      mv "$_bak" "$SKILL_BACKUPS/" 2>/dev/null || rm -rf "$_bak"
+    done
+  fi
+
   # Symlink each skill
   for skill_dir in "$INTEGRATION_DIR"/*/; do
     skill_name=$(basename "$skill_dir")
@@ -215,11 +230,15 @@ if [[ "$MODE" == "claude" ]]; then
       fi
     elif [[ -d "$target" ]]; then
       _yellow "  ⚠️  $skill_name → exists as directory (not symlink)"
-      echo "      Backing up to ${target}.bak and relinking..."
-      mv "$target" "${target}.bak"
+      # Back up OUTSIDE the skills dir so Claude never sees it as a duplicate skill.
+      backup_dir="$SKILL_BACKUPS/$skill_name"
+      mkdir -p "$SKILL_BACKUPS"
+      rm -rf "$backup_dir"
+      echo "      Backing up to $backup_dir and relinking..."
+      mv "$target" "$backup_dir"
       mkdir -p "$CLAUDE_SKILLS"
       ln -sf "$skill_dir" "$target"
-      _green "  ✅ $skill_name → linked (old dir backed up)"
+      _green "  ✅ $skill_name → linked (old dir backed up outside skills dir)"
     else
       mkdir -p "$CLAUDE_SKILLS"
       ln -sf "$skill_dir" "$target"

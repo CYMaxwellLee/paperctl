@@ -3,6 +3,9 @@
 > 適用階段：所有主要 section 初稿完成後。
 > 建議順序：Pass 0 → 1A → 1B → 3 → 5A → 2 → 4 → 1C/1D → 5B–5E → 6
 
+> ⚠️ **本 checklist 是「正文」的頁數/冗餘 QA**：PASS 2「細節移 Supp」、PASS 4「table 移 Supp」是把內容**搬進** appendix。
+> 所以**寫 appendix/supplementary 本身時，不要套用這套壓縮邏輯**——appendix 藍字版要完整、覆蓋每個式/表/圖/數字、≥ 學生長度（見 memory `appendix_rules.md`，`paperctl verify-appendix` 會擋）。
+
 ---
 
 ## 完整 Checklist
