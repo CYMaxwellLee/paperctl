@@ -96,6 +96,9 @@ def strip_words(t):
     t = re.sub(r'\\begin\{(equation|align|gather|multline)\*?\}.*?\\end\{\1\*?\}', ' ', t, flags=re.DOTALL)
     t = re.sub(r'\$[^$]+\$', ' M ', t)
     t = re.sub(r'\\begin\{(figure|table|tabular|algorithm)\*?\}.*?\\end\{\1\*?\}', ' ', t, flags=re.DOTALL)
+    # Keep the TEXT of formatting commands (drop only the wrapper), same as cmd_wordcount.sh,
+    # so \textbf{key point} still counts its words instead of vanishing.
+    t = re.sub(r'\\(textbf|textit|emph|underline|textsc|texttt|mbox)\{', ' ', t)
     t = re.sub(r'\\[a-zA-Z]+(\[[^\]]*\])?(\{[^}]*\})?', ' ', t)
     t = re.sub(r'[{}~\\&%#_^]', ' ', t)
     return t

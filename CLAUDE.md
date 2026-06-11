@@ -50,6 +50,8 @@ paperctl/
     cmd_validate.sh     # Static LaTeX validation
     cmd_strip.sh        # Strip professor macros for camera-ready
     cmd_lint.sh         # Writing-style lint (BAN rules)
+    cmd_verify_appendix.sh  # Read-only structural appendix verifier (anti-summarize gate)
+    cmd_auth.sh         # Seed git credentials (gh + keychain, no password prompts)
     cmd_preflight.sh    # Submission preflight checks
     cmd_heatmap.sh      # Per-section change heatmap
     cmd_init.sh         # Bootstrap repos from conference.json
@@ -59,8 +61,24 @@ paperctl/
     cmd_digest.sh       # Recent Overleaf/upstream changes
     cmd_report.sh       # Student activity report (pre/post sync diff)
     cmd_dashboard.sh    # Auto-generate README + STATUS.md dashboards
+    tests/              # Self-contained fixture tests (no conference/network needed)
     help.txt            # CLI help text
 ```
+
+### Knowledge Placement Rule
+
+Where a piece of knowledge lives determines whether it survives and generalizes:
+
+| Knowledge | Lives in | Why |
+|---|---|---|
+| General writing/editing doctrine (bans, appendix rewrite rules, QA) | `skills/` + `claude-integration/skills/` (this repo) | Applies to every conference; skills auto-trigger |
+| Rules that must be enforced, not remembered | `paperctl.d/cmd_*.sh` (lint, verify-appendix, pre-push gates) | Code never forgets |
+| Conference-specific facts (paper list, deadlines, per-paper LaTeX dialect) | that conference's `conference.json` / directory | Scoped to one venue |
+
+Never write general rules into a single conference's folder (they die with that conference), and
+never use Claude memory as the carrier for rules (memory only injects a one-line index across
+sessions). If a rule must hold, encode it twice: in a skill (guides authoring) and in a command
+(enforces at push).
 
 ### Core Concepts
 
@@ -144,6 +162,9 @@ Scans `.tex` files in `sections/`, `Sections/`, or `ECCV_submission/sections/`:
 ### Testing
 
 ```bash
+# Fixture tests for verify-appendix (fully self-contained, run from anywhere)
+bash paperctl.d/tests/test_verify_appendix.sh
+
 # Test individual commands
 paperctl status --dir /path/to/conference
 paperctl autostatus --dir /path/to/conference
