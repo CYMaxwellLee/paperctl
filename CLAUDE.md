@@ -80,6 +80,13 @@ never use Claude memory as the carrier for rules (memory only injects a one-line
 sessions). If a rule must hold, encode it twice: in a skill (guides authoring) and in a command
 (enforces at push).
 
+Two provenance rules (2026-06-12 professor rulings, learned the hard way):
+1. A rule found in code or a guideline is NOT professor doctrine — only his attested statements
+   are. Cite the provenance next to every rule; unattested rules get removed, not rationalized.
+2. Encode stylistic principles as principles (文采 — vary word choice and sentence shape), never
+   as invented numeric quotas ("max N per paragraph", "X pages", ">2 times"). Fake precision is
+   how contamination happens: a full set of fabricated page budgets and count caps was removed.
+
 ### Core Concepts
 
 1. **conference.json**: Central config file in the conference directory. Contains:

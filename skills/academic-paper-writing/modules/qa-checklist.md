@@ -26,7 +26,6 @@ PASS 2 — 冗餘刪減
 [ ] §3 Overview 無提前洩漏各 subsection 細節
 [ ] §4.1 已壓縮，細節移 Supp
 [ ] §4.2 無「數字搬運」段落（每段有 insight）
-[ ] §4.4 ablation 不超過 10 行
 
 PASS 3 — 縮寫
 [ ] 縮寫首次定義表已建立

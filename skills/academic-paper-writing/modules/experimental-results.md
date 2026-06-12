@@ -48,8 +48,6 @@ Reviewer 自己會看 Table 裡的數字。**你的文字要做的事是：告�
 - **Baselines**：必須包含最新 SOTA（2024-2025），簡述選擇邏輯
 - **Implementation Details**：只寫最重要的，複雜設定放 Supplementary
 
-**篇幅**：0.5–1.0 頁。
-
 ---
 
 ### §4.2 — Quantitative Results
@@ -74,7 +72,6 @@ Our method achieves XX.X% on Metric A, YY.Y% on Metric B, surpassing
 all compared methods.
 ```
 
-**篇幅**：1.0–1.5 頁（文字）+ Tables。
 
 ---
 
@@ -90,7 +87,6 @@ all compared methods.
 - 用視覺標注（箭頭、框、zoom-in）引導差異
 - 正文不描述 figure layout
 
-**篇幅**：0.5–0.75 頁（文字）+ Figure(s)。
 
 ---
 
@@ -105,7 +101,7 @@ all compared methods.
 2. **Design Choice Ablation**（中等）：比較同功能的不同實現方式。
 3. **Analysis Ablation**（最高）：揭示方法的行為特性。
 
-**一篇好的 ablation 至少要有 Level 1 + Level 2。**
+**一篇好的 ablation 至少要有 Level 1 + Level 2。**（行數沒有上限規定——教授 2026-06-12）
 
 **Insight-first 寫法（正確）**：
 ```
@@ -117,8 +113,6 @@ in §3.2] is essential for handling [the challenge in ¶1].
 **與 Methodology 的對應**：
 - §3 的每個 module 至少要有一個 ablation entry
 - §3.2 的每個理論 claim 至少要有一個 ablation result 作為 empirical validation
-
-**篇幅**：0.75–1.0 頁。
 
 ---
 
@@ -132,7 +126,7 @@ in §3.2] is essential for handling [the challenge in ¶1].
 | **Failure Case Analysis** | 所有論文都建議 |
 | **Sensitivity Analysis** | 方法有 key hyperparameters |
 
-每個額外分析最多 0.3–0.5 頁。寧可做精一個，不要蜻蜓點水做三個。
+寧可做精一個，不要蜻蜓點水做三個。
 
 ---
 
@@ -171,15 +165,8 @@ in §3.2] is essential for handling [the challenge in ¶1].
 
 ---
 
-## 頁數預算
+## 超頁時的壓縮優先順序
 
-| Section | 建議頁數 |
-|---------|---------|
-| §4.1 Experimental Setups | 0.5–1.0 |
-| §4.2 Quantitative Results (text + tables) | 1.0–1.5 |
-| §4.3 Qualitative Results (text + figures) | 0.5–0.75 |
-| §4.4 Ablation Studies (text + tables) | 0.75–1.0 |
-| §4.5 Additional Analysis (optional) | 0–0.5 |
-| **§4 Total** | **~3.0–4.0** |
+> **沒有頁數配額表**（教授 2026-06-12：「沒這回事，這種規則不應該存在」）。篇幅由內容與會議頁限決定。
 
 壓縮優先順序：Implementation Details > 額外分析 > 部分 ablation entries > Qualitative（減少例子）。Quantitative main results 和 core ablation 不能壓縮。

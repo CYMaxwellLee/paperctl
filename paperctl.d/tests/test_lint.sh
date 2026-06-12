@@ -76,6 +76,8 @@ Specifically, the Specifically opener stays allowed.
 \cyl{The "fast" mode label uses straight quotes here.}
 \cyl{The interval \(x+1\) sits inline in this sentence.}
 \cyl{The gap widened --- the dash must be flagged.}
+\cyl{Yet the model held steady on the harder split.}
+\cyl{These results underscore the value of the design choices.}
 \cyl{Table~\ref{tab:q} must be flagged on a cleveref paper.}
 \begin{table}[H]
 \end{table}
@@ -108,6 +110,8 @@ assert_has "bare Table~\\ref fires (cleveref paper)" 'Bare' "$OUT"
 assert_has "float [H] fires"                  'Float placement' "$OUT"
 assert_has "straight quote fires"             'Straight quote' "$OUT"
 assert_has "inline \\(...\\) fires"           'Inline math' "$OUT"
+assert_has "sentence-initial Yet fires"       "Sentence-initial 'Yet'" "$OUT"
+assert_has "underscore (verb) fires"          'underscore.+verb' "$OUT"
 assert_not "', including' whitelisted"        'L2 .*Comma' "$OUT"
 assert_not "', nothing' whitelisted"          'L3 .*Comma' "$OUT"
 assert_not "'It is worth noting' stays OK (ruled 2026-06-12)" 'It is worth noting' "$OUT"

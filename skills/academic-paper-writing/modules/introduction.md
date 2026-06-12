@@ -33,12 +33,12 @@
 **第一句話定調整篇論文的主題。** 必須精準對應本文的核心問題。
 
 - 用 1-2 句說明為什麼這個問題重要
-- **重頭戲是痛點**：痛點佔這段 50% 以上篇幅。不是泛泛說 "it is challenging"，而是具體拆解 2-3 個 technical challenges
+- **重頭戲是痛點**：痛點是 ¶1 的主題重心（教授 2026-06-12：是主題沒錯，但**沒有**佔多少 % 的硬性規定）。不是泛泛說 "it is challenging"，而是具體拆解 technical challenges
 - **列完 challenges 後要有一句收尾**，把痛點收攏回來
 
 **自我檢查**：
 - [ ] 第一句主題詞與全文一致？
-- [ ] 痛點是否佔 50%+ 篇幅？
+- [ ] 痛點是否是這段的主題重心？
 - [ ] 痛點是否具體到 reviewer 能感受到棘手？
 - [ ] 是否有收尾句？
 - [ ] 一個不中斷的連續段落？
@@ -113,7 +113,7 @@
 
 **⚠️ 賣點檢測**：如果超過 3 句連續在描述 workflow（A → B → C），那就是在寫 Methodology preview。
 
-**Bullets 部分：Contributions（3-4 個）**
+**Bullets 部分：Contributions（3–5 個，端看情況）**
 
 ⚠️ **每個 bullet 第一句就直接挑明亮點。** Reviewer 掃 bullets 很快，第一句沒抓住就跳過了。
 
@@ -137,7 +137,7 @@ state-of-the-art performance is achieved.
 - 每個 bullet 傳達一個有深度的 insight
 - 避免跟散文重複
 - 避免純功能描述和空話
-- 3 個就夠，4 個是上限
+- 個數 3–5 個端看情況（教授 2026-06-12）。重要的是講清楚**為什麼 significant、為什麼有 impact、帶來什麼重要 insight**，不是淪為列舉數字的報告
 
 ---
 

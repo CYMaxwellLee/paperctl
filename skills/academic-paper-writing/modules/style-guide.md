@@ -21,7 +21,7 @@
 
 | 禁止項 | 說明 | 替代方案 |
 |--------|------|---------|
-| **We... We... We... 連發** | 每段最多 1-2 句以 We 開頭 | 被動式、nominalization、"This enables..."、"By doing X, ..." 交替 |
+| **We... We... We... 連發** | 文采問題：同一句式不要過度重複（**不是數字上限**） | 被動式、nominalization、"This enables..."、"By doing X, ..." 交替 |
 | **Comma + V-ing** | ❌ 「X is proposed, achieving Y」 | ✅ 拆成兩句或用 and 連接 |
 | **Em-dash（—）** | 禁止 | 用句號拆句或逗號 |
 | **", yet"** | ❌ 「X works, yet fails」 | ✅ 「Although X works, it fails」 |
@@ -32,10 +32,12 @@
 | **give / gives** | ❌ casual（教授 2026-06：「give等」） | ✅ provides / yields / produces |
 | **because** | ❌ 整篇禁用（教授 2026-06-12：「整篇我都不想because」，不限句首） | ✅ 「Since X, ...」「As X, ...」「Given that X, ...」 |
 | **自問自答 / 反問句** | ❌ 「How can we address this?」 | ✅ 陳述句或直接給答案 |
-| **However 連用** | 同一段或相鄰段出現 2 次以上 | ✅ 混搭 nevertheless / nonetheless / yet / still |
+| **However 連用** | 文采問題：同一轉折詞不要過度重複（**不是次數上限**） | ✅ 交替 nevertheless / nonetheless / still / in contrast |
 | **句首副詞+逗號** | ❌ 「Equally, ...」「Additionally, ...」 | ✅ 副詞嵌入句中，或換成子句結構 |
 | **縮寫先於全名** | ❌ 首次出現就用 ELSA | ✅ 先全名再縮寫 |
 | **分號連接句子** | 盡量避免 | ✅ 句號拆開，或用連接詞 |
+
+> ⚠️ **文采原則就寫成文采原則，不要翻譯成數字配額**（「每段最多 N 句」「>2 次」這種）。教授 2026-06-12：「不是列數字什麼的禁，這個本身就是大錯誤的方向」。同理：沒有頁數配額、沒有 ablation 行數上限、沒有 proof 行數門檻。
 
 ---
 
@@ -45,11 +47,11 @@
 |---------|---------|
 | `thereby` | 刪除或改寫句子結構 |
 | `numerous` | 改為 "many" 或具體數字 |
-| `Yet`（句首） | 改為 "However," 或 "Nevertheless," |
-| `underscore`（動詞） | 改為 "highlight", "demonstrate", "emphasize" |
+| `Yet`（句首） | 改為 "However," 或 "Nevertheless,"（教授 2026-06-12：「我確實很討厭Yet放句首」） |
+| `underscore`（動詞） | 改為 "highlight", "demonstrate", "emphasize"（教授 2026-06-12 同意） |
 | `---` 或 ` --- `（em dash） | 改為逗號、分號，或重新斷句 |
 | `utilize` | 改為 "use" |
-| `leverage`（重複 >2 次） | 部分改為 "use" |
+| `leverage`（過度重複） | 文采：多變化，部分改為 "use"（**不是**次數限制——教授 2026-06-12） |
 | `straightforward` | 聽起來居高臨下，改為 "simple" 或 "direct" |
 | `significant improvement` | 改為具體數字描述 |
 | `Notably,`（句首） | 刪導語，讓事實自己說話 |

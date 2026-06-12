@@ -60,9 +60,12 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 10. ❌ 直引號 `"..."` → `` `` ``...'' ``（LaTeX，必須 enforce）
 11. ❌ inline math 用 `\(...\)` → 一律 `$...$`（display math 哪裡都可以放）
 12. ❌ float `[h]/[b]/[H]` → 一律 `[t]` 置頂，放在第一次 mention 的那一頁
+13. ❌ `Yet` 句首 → However / Nevertheless（2026-06-12 同意）
+14. ❌ `underscore`（動詞）→ highlight / demonstrate / emphasize（2026-06-12 同意）
 
 **注意**：`--` (en-dash) 用於 `accuracy--speed` → **保留不動**
 **明確不禁**（2026-06-12 裁決，勿再加回）：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」；Intro 的 `\Delta/\tau` notation 與 figure ref 沒有限制（teaser 在 ¶3 必引）。
+**文采原則 ≠ 數字配額**（2026-06-12）：However/We/leverage 不要過度重複是「多變化」的文采原則，不是「每段 N 句」「>2 次」這種數字禁令；同理沒有頁數配額、ablation 行數、proof 行數門檻。Contributions 3–5 個端看情況，重點講為什麼 significant、有什麼 impact 與 insight。
 
 **強制檢查**：`paperctl lint --paper <name>`（以上全部自動掃，SAGA 類無 cleveref 論文自動跳過 bare-`\ref` 規則）
 

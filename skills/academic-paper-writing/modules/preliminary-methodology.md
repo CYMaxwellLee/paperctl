@@ -63,7 +63,7 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 - Notation 嵌入描述中自然引入
 - 每個 subsection 結尾有一句**銜接句**，點出 baseline 的隱含假設或局限性，自然引向 §3
 - 不評價方法好壞（那是 intro 和 related work 的事）
-- **控制篇幅**：整個 §2 不超過 1 頁
+- **控制篇幅**：§2 只放「§3 缺了它就看不懂」的背景，精簡為上（沒有固定頁數）
 
 ### ❌ 常見錯誤
 
@@ -88,8 +88,6 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 - 點出核心難點在數學上對應什麼
 - 自然引出 §3.2 的理論分析
 
-**篇幅**：0.3–0.5 頁。
-
 ### §3.2 — Theoretical Foundations / Design Analysis
 
 **功能**：整篇論文的 intellectual core。在架構圖之前，先用理論說服 reader「這樣做是對的」。
@@ -103,7 +101,7 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 - 用 LaTeX 定理環境框起來
 - Statement 必須 self-contained
 - 框之後跟 1-2 段 intuition paragraph
-- Proof 太長（>5 行）放 Supplementary
+- 正文的 proof 講重點；proof 太長放 Supplementary（看情況和篇幅判斷，**沒有**固定行數門檻——教授 2026-06-12）
 - 每個命題對應 intro ¶3 的某個 insight
 
 **定理環境選擇指引**：
@@ -124,8 +122,6 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 - 引用 architecture figure
 - **不寫公式**，不寫 engineering details
 
-**篇幅**：0.3–0.5 頁（文字）+ 架構圖（~0.5 頁）。
-
 ### §3.4–§3.N — Module Details
 
 **每個 subsection 內部結構**：
@@ -138,13 +134,10 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 - 公式必須有文字介紹和解釋（前有 setup sentence，後有 interpretation）
 - 每個 module 最後要有一句總結，說明解決了 intro ¶1 中的哪個 challenge
 
-**篇幅**：每個 module 0.5–1.0 頁。
-
 ### §3.N+1 — Training Objectives
 
 - 一個 equation block + 逐項解釋
 - 標準 loss 不需公式定義
-- **篇幅**：0.2–0.4 頁
 
 ---
 
@@ -159,14 +152,4 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 
 ---
 
-## 頁數預算
-
-| Section | 建議頁數 |
-|---------|---------|
-| §2 Preliminary | 0.5–1.0 |
-| §3.1 Problem Formulation | 0.3–0.5 |
-| §3.2 Theoretical Foundations | 0.75–1.25 |
-| §3.3 Framework Overview (text + figure) | 0.75–1.0 |
-| §3.4–§3.N Module Details | 1.5–2.5 (total) |
-| §3.N+1 Training Objectives | 0.2–0.4 |
-| **§2 + §3 Total** | **~4.5–6.0** |
+> **沒有頁數配額表**（教授 2026-06-12：「沒這回事，這種規則不應該存在」）。篇幅由內容需要與會議頁限決定，勿再加回任何 §X = N 頁的配額。

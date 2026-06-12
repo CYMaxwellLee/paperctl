@@ -9,6 +9,7 @@
 #   1.  Em dash (---, —, –)
 #   2.  Adverb+comma sentence openers (Specifically allowed)
 #   3.  thereby / utilize / straightforward / numerous
+#   3b. Sentence-initial "Yet"; "underscore" as a verb
 #   4.  Weak reference phrases: "As shown in", "As can be seen from"
 #   5.  Casual give/gives
 #   6.  Casual conjunctions (, but / , so / , yet) and semicolon clause-joins
@@ -84,6 +85,14 @@ _add_rule '(^[0-9]*:|[{])[[:space:]]*(Notably|Importantly|Crucially|Interestingl
 # Banned words -- straightforward: CLAUDE.md; thereby/utilize/numerous: ruling 2026-06-12 同意
 _add_rule '\b(thereby|utilize|utilizes|utilized|utilizing|straightforward|numerous)\b' \
   "Banned word (thereby/utilize/straightforward/numerous)" fail
+
+# Sentence-initial Yet -- ruling 2026-06-12 (「我確實很討厭Yet放句首」)
+_add_rule '(^[0-9]*:[[:space:]]*|\. |[{][[:space:]]*)Yet\b' \
+  "Sentence-initial 'Yet' -- use However/Nevertheless" fail
+
+# underscore as a verb -- ruling 2026-06-12 (同意, 討厭使用underscore)
+_add_rule '\bunderscor(e|es|ed|ing)\b' \
+  "'underscore' (verb) -- use highlight/demonstrate/emphasize" fail
 
 # Weak reference phrases -- professor 2026-06 appendix session (floats must be the sentence subject).
 # The five other GPT-isms that used to live here were ruled OK on 2026-06-12 and removed.
