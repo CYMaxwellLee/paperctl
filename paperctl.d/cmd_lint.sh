@@ -110,10 +110,8 @@ if $INTRO_ONLY; then
   RULE_DESCS+=("Display math \\\\[...\\\\] -- formulas belong to Method/Theory, not Intro body")
   RULE_SEVERITY+=("fail")
 
-  # R12: figure refs in body (Intro should not depend on figures that may move)
-  RULE_PATTERNS+=('\\(c|C)ref\{fig:')
-  RULE_DESCS+=("Figure ref in Intro -- consider moving figure or describing without ref")
-  RULE_SEVERITY+=("warn")
+  # (R12 figure-ref-in-intro REMOVED 2026-06-12: professor explicitly rejected this
+  #  restriction; it had no professor provenance -- teaser refs in Intro are house style.)
 
   # R13: undefined notation in Intro (\Delta, \tau, \epsilon, \delta, c4/c8/c2)
   # These commonly leak from Method/abstract into Intro and confuse readers
