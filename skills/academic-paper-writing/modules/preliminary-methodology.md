@@ -111,8 +111,6 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 - `\begin{corollary}`：某命題的直接推論
 - `\begin{remark}`：informal 觀察
 
-**篇幅**：0.75–1.25 頁。
-
 ### §3.3 — Framework Overview
 
 **功能**：Bridge — 把 §3.2 的抽象結論對應到具體的 module 設計。
