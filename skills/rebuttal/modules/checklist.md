@@ -31,7 +31,7 @@
 [ ] 無 "constructive feedback" 類模板語言
 [ ] 無 Comma + V-ing
 [ ] 無 Em-dash（—）
-[ ] 無 We/Our 連發（每段最多 1-2 句 We 開頭）
+[ ] 無 We/Our 連發（文采：句式多變化，不是數字上限——教授 2026-06-12）
 [ ] 無 Banned words（thereby, numerous, utilize, etc.）
 [ ] Tone 與 reviewer 分數匹配（低分 → 最謙和，高分 → 感謝 + 補充）
 ```
