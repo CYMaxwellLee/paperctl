@@ -46,16 +46,25 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 ---
 
-## Writing Bans（零容忍）
+## Writing Bans（零容忍，整篇適用——教授 2026-06-12：「general的精神必須共同整篇遵守，不應該歸納為只有 introduction 不該用」）
 
 1. ❌ Em dash (`---` 或 `—`)
 2. ❌ Adverb+comma opener（`Additionally,` `Furthermore,` `Moreover,` `Notably,`）
 3. ❌ "straightforward"
 4. ❌ Semicolons joining clauses
 5. ❌ Comma+V-ing（`..., producing X`）
-6. ❌ `thereby` / `utilize` / `numerous`
+6. ❌ `thereby` / `utilize` / `numerous`（教授 2026-06-12 同意）
+7. ❌ `because`（整篇，不限句首）→ since / as / given that
+8. ❌ casual：`but`、`so`、`give(s)`
+9. ❌ 弱引用：`As shown in`、`As can be seen from`、括號式 `(Table 9)` → 表圖當主詞
+10. ❌ 直引號 `"..."` → `` `` ``...'' ``（LaTeX，必須 enforce）
+11. ❌ inline math 用 `\(...\)` → 一律 `$...$`（display math 哪裡都可以放）
+12. ❌ float `[h]/[b]/[H]` → 一律 `[t]` 置頂，放在第一次 mention 的那一頁
 
 **注意**：`--` (en-dash) 用於 `accuracy--speed` → **保留不動**
+**明確不禁**（2026-06-12 裁決，勿再加回）：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」；Intro 的 `\Delta/\tau` notation 與 figure ref 沒有限制（teaser 在 ¶3 必引）。
+
+**強制檢查**：`paperctl lint --paper <name>`（以上全部自動掃，SAGA 類無 cleveref 論文自動跳過 bare-`\ref` 規則）
 
 ---
 

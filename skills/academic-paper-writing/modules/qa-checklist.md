@@ -39,11 +39,10 @@ PASS 4 — Supp 候補
 [ ] 所有移入 Supp 的內容在 main 有 "see supplementary" 句
 
 PASS 5 — GPT 語法
-[ ] Banned words 全文搜尋完成（14 個詞/詞組）
+[ ] Banned words 全文搜尋完成（以 paperctl lint 清單為準）
 [ ] Comma + V-ing 全文清除
 [ ] We/Our 連發已打散
-[ ] "demonstrates the effectiveness" 類空話已替換
-[ ] "As can be seen from Table X" 類句首已改寫
+[ ] "As shown in / As can be seen from" 弱引用已改寫（表圖當主詞）
 [ ] 段落內句子邏輯流動性已 check
 
 PASS 6 — LaTeX 格式

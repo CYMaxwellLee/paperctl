@@ -10,7 +10,6 @@
 - **前後主題一致**：¶1 的主題詞、¶2 的主題詞、¶3¶4 必須是同一個東西。寫完後從頭檢查一次
 - **Specific over generic**：每句話都要有資訊量
 - **數字勝過形容詞**：用 "+6.4% SR" 不用 "significantly improves"
-- 避免 "In this paper, we propose..." 出現超過一次
 - 避免過度使用 "novel", "significantly", "state-of-the-art"
 - **慎用 "empirical"**：reviewer 會反問 theoretical justification
 - **少用 "principle"**：太教條
@@ -28,9 +27,10 @@
 | **", yet"** | ❌ 「X works, yet fails」 | ✅ 「Although X works, it fails」 |
 | **"; however,"** | ❌ 分號 + however | ✅ 「X works. However, Y fails.」 |
 | **小括號補充** | ❌ 「X (which is important for Y)」 | ✅ 逗號子句或獨立句 |
-| **but** | 盡量少用，口語感太重 | ✅ however / although / while / nevertheless / yet（句首） |
+| **but** | ❌ 禁止（教授 2026-06：casual 用詞整篇禁） | ✅ however / although / while / nevertheless |
 | **So** | ❌ 太 casual | ✅ therefore / thus / accordingly / as a result |
-| **Because 開頭** | ❌ 太 casual | ✅ 「Since X, ...」「As X, ...」「Given that X, ...」 |
+| **give / gives** | ❌ casual（教授 2026-06：「give等」） | ✅ provides / yields / produces |
+| **because** | ❌ 整篇禁用（教授 2026-06-12：「整篇我都不想because」，不限句首） | ✅ 「Since X, ...」「As X, ...」「Given that X, ...」 |
 | **自問自答 / 反問句** | ❌ 「How can we address this?」 | ✅ 陳述句或直接給答案 |
 | **However 連用** | 同一段或相鄰段出現 2 次以上 | ✅ 混搭 nevertheless / nonetheless / yet / still |
 | **句首副詞+逗號** | ❌ 「Equally, ...」「Additionally, ...」 | ✅ 副詞嵌入句中，或換成子句結構 |
@@ -52,12 +52,13 @@
 | `leverage`（重複 >2 次） | 部分改為 "use" |
 | `straightforward` | 聽起來居高臨下，改為 "simple" 或 "direct" |
 | `significant improvement` | 改為具體數字描述 |
-| `It is worth noting that` | 刪導語，直接說 |
-| `As expected,` | 刪整句或重寫 |
 | `Notably,`（句首） | 刪導語，讓事實自己說話 |
-| `In this paper, we`（§1 以外） | 改寫主語 |
-| `demonstrates the effectiveness of` | 換成具體 insight |
-| `As can be seen from` | 直接說結果 |
+| `because` | 整篇禁用 → "since" / "as" / "given that" |
+| `As can be seen from` | 弱引用，表圖要當主詞 |
+| `As shown in` | 弱引用，表圖要當主詞（教授 2026-06） |
+| `give` / `gives` | casual → provides / yields / produces |
+
+> ⚠️ **2026-06-12 教授裁決——以下「不禁」，不要再加回禁字表**：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」。這幾條是先前 session 自己發明寫進 lint 的，教授明示這些用法 OK／沒這種規定。同裁決：display math 哪裡都可以放（inline math 一律 `$...$`）、float 一律 `[t]` 置頂並放在第一次 mention 的那一頁、直引號必須 enforce（LaTeX）。
 
 ---
 

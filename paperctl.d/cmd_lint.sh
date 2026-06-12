@@ -5,20 +5,26 @@
 # Scans only \cyl{} regions (professor-written text) by default.
 # Use --all to scan entire tex content.
 #
-# BAN rules enforced:
-#   1. No em dashes (---, —, –) anywhere
-#   2. No adverb+comma sentence openers (Specifically is allowed)
-#      (Notably, Importantly, Crucially, Interestingly,
-#       Essentially, Fundamentally, Consequently, Additionally, Furthermore,
-#       Remarkably, Significantly, Particularly, Ultimately, Accordingly)
-#   3. Banned single words: thereby, utilize, straightforward, numerous
-#   4. Banned GPT-isms (sentence-initial or mid):
-#      "It is worth noting that", "As expected,", "As can be seen from",
-#      "demonstrates the effectiveness of", "has gained significant attention",
-#      "Recently, many works"
-#   5. Bare \ref{} for Figure/Table/Eq./Section (must be \cref or \Cref)
-#   6. Float placement [h], [b], [H] (must be [t])
-#   7. Straight quotes "..." in prose (must be ``...'')
+# BAN rules enforced (always-on, WHOLE paper -- the professor's general bans):
+#   1.  Em dash (---, —, –)
+#   2.  Adverb+comma sentence openers (Specifically allowed)
+#   3.  thereby / utilize / straightforward / numerous
+#   4.  Weak reference phrases: "As shown in", "As can be seen from"
+#   5.  Casual give/gives
+#   6.  Casual conjunctions (, but / , so / , yet) and semicolon clause-joins
+#   7.  Comma + V-ing (participial-preposition + -ing-noun whitelist)
+#   8.  because (use since / as / given that)
+#   9.  Bare \ref{} (use \cref; auto-skipped for papers without cleveref, e.g. SAGA)
+#  10.  Float placement must be [t] (top of the page of first mention)
+#  11.  Straight quotes "..." (must be ``...'')
+#  12.  Inline math \(...\) (must be $...$; display math is allowed anywhere)
+# Intro-only (--intro):
+#  I1.  \item bullets outside the contributions block
+#
+# Provenance discipline (2026-06-12 professor ruling): every rule cites the
+# professor's statement next to its definition. Unattested rules were removed
+# (five GPT-ism phrases, intro display-math/notation/c4-c8-c2/"In this paper"/
+# figure-ref bans). Do not add rules without provenance.
 #
 # Usage:
 #   paperctl lint [--paper <name>]       # lint \cyl{} regions only
@@ -46,90 +52,93 @@ done
 declare -a RULE_PATTERNS=()
 declare -a RULE_DESCS=()
 declare -a RULE_SEVERITY=()
+declare -a RULE_EXCLUDES=()
 
-# --- RULE 1: Em dashes ---
-RULE_PATTERNS+=('---|—|–')
-RULE_DESCS+=("Em dash (--- or — or –)")
-RULE_SEVERITY+=("fail")
+# _add_rule <pattern> <desc> <severity> [exclude-ERE]
+# One call appends all four arrays so they can never fall out of alignment
+# (the old per-array appends left RULE 7 with no severity entry, which silently
+# shifted every --intro rule's severity by one slot).
+# exclude-ERE: matched lines are dropped (false-positive guard, e.g. -ing nouns).
+_add_rule() {
+  RULE_PATTERNS+=("$1"); RULE_DESCS+=("$2"); RULE_SEVERITY+=("$3"); RULE_EXCLUDES+=("${4:-}")
+}
 
-# --- RULE 2: Adverb+comma sentence openers ---
-# Match at start of line (after optional whitespace) or after { (inside \cyl{})
-RULE_PATTERNS+=('(^|[{])\s*(Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Furthermore|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),')
-RULE_DESCS+=("Adverb+comma sentence opener (except Specifically)")
-RULE_SEVERITY+=("fail")
+# ============================================================
+# ALWAYS-ON RULES -- the professor's general bans, WHOLE paper.
+# Provenance discipline (2026-06-12 ruling): every rule cites where the professor
+# stated it. Rules that existed only in code with no professor provenance were
+# removed. Do NOT add a rule here without a citation.
+# 2026-06-12: 「有一些general的精神是必須要共同整篇遵守的，例如comma+V-ing...以及but
+# 這類的用詞。不應該歸納為有些用詞只有在introduction不該用」-- casual/V-ing/because
+# were wrongly intro-gated before and are now global.
+# ============================================================
 
-# --- RULE 3: Banned single words ---
-RULE_PATTERNS+=('\b(thereby|utilize|utilizes|utilized|utilizing|straightforward|numerous)\b')
-RULE_DESCS+=("Banned word (thereby/utilize/straightforward/numerous)")
-RULE_SEVERITY+=("fail")
+# Em dash -- conference CLAUDE.md ABSOLUTE BANS + memory writing_bans #1
+_add_rule '---|—|–' "Em dash (--- or — or –)" fail
 
-# --- RULE 4: Banned GPT-isms / phrases ---
-RULE_PATTERNS+=('(It is worth noting that|As expected,|As can be seen from|demonstrates the effectiveness of|has gained significant attention|Recently, many works)')
-RULE_DESCS+=("GPT-ism phrase")
-RULE_SEVERITY+=("fail")
+# Adverb+comma openers, Specifically allowed -- CLAUDE.md + memory #2
+# Anchors: line start (content carries a "N:" line-number prefix) or after { (inside \cyl{)
+_add_rule '(^[0-9]*:|[{])[[:space:]]*(Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Furthermore|Moreover|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),' \
+  "Adverb+comma sentence opener (except Specifically)" fail
 
-# --- RULE 5: Bare \ref{} for Figure/Table/Eq./Section ---
-# Must be \cref{} or \Cref{} -- catches "Figure~\ref{...}", "Table \ref{...}", etc.
-RULE_PATTERNS+=('(Figure|Table|Eq\.|Equation|Section|Sec\.|Fig\.)[~ ]*\\ref\{')
-RULE_DESCS+=("Bare \\\\ref{} -- use \\\\cref{} or \\\\Cref{}")
-RULE_SEVERITY+=("fail")
+# Banned words -- straightforward: CLAUDE.md; thereby/utilize/numerous: ruling 2026-06-12 同意
+_add_rule '\b(thereby|utilize|utilizes|utilized|utilizing|straightforward|numerous)\b' \
+  "Banned word (thereby/utilize/straightforward/numerous)" fail
 
-# --- RULE 6: Float placement [h]/[b]/[H] (must be [t]) ---
-RULE_PATTERNS+=('\\begin\{(figure|table|figure\*|table\*)\}\[(h|b|H|ht|hb|tb|bt|hbt|tbh|htbp)\]')
-RULE_DESCS+=("Float placement -- use [t] only")
-RULE_SEVERITY+=("warn")
+# Weak reference phrases -- professor 2026-06 appendix session (floats must be the sentence subject).
+# The five other GPT-isms that used to live here were ruled OK on 2026-06-12 and removed.
+_add_rule '(As can be seen from|[Aa]s shown in)' \
+  "Weak reference phrase (As shown in / As can be seen from) -- make the table/figure the subject" fail
 
-# --- RULE 7: Straight quotes in prose (heuristic) ---
-# Matches "word..." or "...word" patterns that look like prose quotes
-# Skips lines that look like code/url/path/comment
-RULE_PATTERNS+=('(^|[^\\=>:_/])"[A-Za-z]')
-RULE_DESCS+=("Straight quote -- use \\\`\\\`...'' instead")
+# Casual give/gives -- professor 2026-06 (「避免casual用詞像是so, but, 這邊還有give等」)
+_add_rule '\b[Gg]ives?\b' "Casual 'give/gives' -- use provides/yields/produces" fail
 
-# --- INTRO-ONLY rules (added when --intro flag is set) ---
-# These are stricter rules per intro_guideline_v4.md, applied only to introduction.tex
+# Casual conjunctions + semicolon clause-joins -- memory #4 (FLORA 明確禁止) + 2026-06 session (so/but)
+_add_rule '(, yet [a-z]|, but [a-z]|, so [a-z]|; however,|; [a-z])' \
+  "Casual conjunction / semicolon join -- use however/while/although or a period" fail
+
+# Comma + V-ing -- memory #5 (FLORA methodology rewrite 明確禁止), whole paper per 2026-06-12.
+# ERE-safe rewrite: the old pattern used a PCRE lookahead (?!...) which grep -E rejects,
+# so this rule NEVER fired. Whitelist participial prepositions and -ing nouns instead.
+_add_rule ', [a-z]+ing\b' "Comma + V-ing -- split into two clauses or use 'and V-s'" fail \
+  ', (including|regarding|concerning|involving|containing|given|considering|excluding|notwithstanding|owing|using|during|nothing|something|anything|everything|morning|evening|string|ceiling|spring)\b'
+
+# because -- ruling 2026-06-12 (「整篇我都不想because」)
+_add_rule '\b[Bb]ecause\b' "'because' -- use 'since'/'as'/'given that'" fail
+
+# Bare \ref -- CLAUDE.md \cref convention. Auto-skipped for manual-ref papers (no cleveref,
+# e.g. SAGA house style Table~\ref / Eq.~\eqref) -- see dialect detection in _lint_paper.
+_add_rule '(Figure|Table|Eq\.|Equation|Section|Sec\.|Fig\.)[~ ]*\\ref\{' \
+  "Bare \\\\ref{} -- use \\\\cref{} or \\\\Cref{}" fail
+
+# Float placement -- ruling 2026-06-12 (「圖片、Table都置頂，放在第一次mention的那一頁」).
+# [t] is the lintable half; same-page-as-first-mention needs a visual pass on the PDF.
+_add_rule '\\begin\{(figure|table|figure\*|table\*)\}\[(h|b|H|ht|hb|tb|bt|hbt|tbh|htbp)\]' \
+  "Float placement -- use [t] only (top of the page of first mention)" fail
+
+# Straight quotes -- ruling 2026-06-12 (「一定要enforce 這是LaTeX」); was effectively warn
+# via the severity-misalignment bug, now an explicit fail.
+_add_rule '(^|[^\\=>:_/])"[A-Za-z]' "Straight quote -- use \\\`\\\`...'' instead" fail
+
+# Inline math -- ruling 2026-06-12: display math is fine ANYWHERE (the old intro ban was
+# fabricated); the real rule is inline math must use $...$, not \(...\).
+_add_rule '\\\(' "Inline math \\(...\\) -- use \$...\$" fail
+
+# --- INTRO-ONLY rules (--intro): section-role rules for the Introduction ---
+# 2026-06-12 provenance ruling:
+#   KEPT    bullets-outside-contributions (professor: 同意; Intro is four prose paragraphs)
+#   REMOVED display-math ban (「沒這種事情，數學應該要哪裡都可以展示」-- the real rule,
+#           inline math must use $...$, is now an always-on rule above)
+#   REMOVED notation \Delta/\tau/... + c4/c8/c2 ban (「莫名其妙，沒這種規定」; c4/c8/c2
+#           was one old paper's notation hardcoded into a general tool)
+#   REMOVED "In this paper, we" ban (「沒這種事」)
+#   REMOVED figure-ref-in-intro (professor rejected; teaser ref in ¶3 is house style)
+#   PROMOTED casual conjunctions / comma+V-ing / because to the always-on set above
 if $INTRO_ONLY; then
-  # R8: casual conjunctions banned by intro guideline
-  RULE_PATTERNS+=('(, yet [a-z]|, but [a-z]|, so [a-z]|; however,|; [a-z])')
-  RULE_DESCS+=("Casual conjunction (yet/but/so/; <lower>) -- use however/while/although/period")
-  RULE_SEVERITY+=("fail")
-
-  # R9: comma + V-ing (banned across guideline)
-  # Whitelist participial prepositions (including/regarding/concerning/etc.)
-  # which legitimately introduce parenthetical phrases, not the banned construction.
-  RULE_PATTERNS+=(', (?!including|regarding|concerning|involving|containing|given|considering|excluding|notwithstanding|owing|using)[a-z]+ing\b')
-  RULE_DESCS+=("Comma + V-ing -- split into two clauses or use 'and V-s'")
-  RULE_SEVERITY+=("fail")
-
-  # R10: 'because' (any position) -- use since/as/given that
-  RULE_PATTERNS+=('\b[Bb]ecause\b')
-  RULE_DESCS+=("'because' -- use 'since'/'as'/'given that'")
-  RULE_SEVERITY+=("fail")
-
-  # R11: display math \[ ... \] in body (formulas belong to Method/Theory, not Intro)
-  RULE_PATTERNS+=('\\\[')
-  RULE_DESCS+=("Display math \\\\[...\\\\] -- formulas belong to Method/Theory, not Intro body")
-  RULE_SEVERITY+=("fail")
-
-  # (R12 figure-ref-in-intro REMOVED 2026-06-12: professor explicitly rejected this
-  #  restriction; it had no professor provenance -- teaser refs in Intro are house style.)
-
-  # R13: undefined notation in Intro (\Delta, \tau, \epsilon, \delta, c4/c8/c2)
-  # These commonly leak from Method/abstract into Intro and confuse readers
-  RULE_PATTERNS+=('\$\\(Delta|tau|epsilon|delta)\$|\b(c4|c8|c2)\b')
-  RULE_DESCS+=("Undefined notation in Intro (\\\\Delta/\\\\tau/\\\\epsilon/\\\\delta/c4/c8/c2)")
-  RULE_SEVERITY+=("warn")
-
-  # R14: 'In this paper, we' -- intro should not have this template phrase
-  RULE_PATTERNS+=('In this paper, we|In this work, we propose')
-  RULE_DESCS+=("Template phrase 'In this paper, we' -- restructure")
-  RULE_SEVERITY+=("warn")
-
-  # R15: bullet points outside contributions (intro should be paragraphs)
-  RULE_PATTERNS+=('^\s*\\item\b')
-  RULE_DESCS+=("\\\\item bullet -- only allowed in contributions block")
-  RULE_SEVERITY+=("warn")
+  # Bullets only in the contributions block -- Intro body is prose paragraphs.
+  # (content lines carry a "N:" line-number prefix, hence the anchor)
+  _add_rule '^[0-9]*:[[:space:]]*\\item\b' "\\\\item bullet -- only allowed in contributions block" warn
 fi
-RULE_SEVERITY+=("warn")
 
 # ============================================================
 
@@ -196,6 +205,14 @@ _lint_paper() {
   local tex_dir
   tex_dir=$(dirname "$main_tex")
 
+  # Cross-ref dialect: a paper that never loads cleveref (e.g. SAGA) legitimately
+  # writes Table~\ref{} / Eq.~\eqref{} -- the bare-ref rule must not fire there.
+  local crossref="cleveref"
+  if ! grep -rqE --include='*.tex' --include='*.sty' --exclude-dir=_clean --exclude-dir=.git \
+      '^[^%]*\\(usepackage|RequirePackage)(\[[^]]*\])?\{[^}]*cleveref' "$repo_dir" 2>/dev/null; then
+    crossref="manual-ref"
+  fi
+
   local total_violations=0
 
   # Find all .tex files (or just introduction.tex if --intro mode)
@@ -242,9 +259,22 @@ _lint_paper() {
       local pattern="${RULE_PATTERNS[$rule_idx]}"
       local desc="${RULE_DESCS[$rule_idx]}"
       local severity="${RULE_SEVERITY[$rule_idx]}"
+      local exclude="${RULE_EXCLUDES[$rule_idx]}"
+
+      # Manual-ref papers (no cleveref) use Table~\ref{} by design -- skip the bare-ref rule.
+      if [[ "$crossref" == "manual-ref" && "$desc" == "Bare"* ]]; then
+        rule_idx=$((rule_idx + 1))
+        continue
+      fi
 
       local matches
-      matches=$(echo "$content" | grep -nE "$pattern" 2>/dev/null || true)
+      # '--' terminates option parsing: the em-dash pattern starts with '-' and was
+      # silently parsed as a grep OPTION before (error eaten by 2>/dev/null), so the
+      # em-dash rule never fired at all until this fix.
+      matches=$(echo "$content" | grep -nE -- "$pattern" 2>/dev/null || true)
+      if [[ -n "$matches" && -n "$exclude" ]]; then
+        matches=$(echo "$matches" | grep -vE -- "$exclude" 2>/dev/null || true)
+      fi
 
       if [[ -n "$matches" ]]; then
         if ! $file_header_printed; then
