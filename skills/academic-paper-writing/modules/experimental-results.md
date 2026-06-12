@@ -43,8 +43,8 @@ Reviewer 自己會看 Table 裡的數字。**你的文字要做的事是：告�
 讓 reviewer 快速理解實驗的 scope 和 fairness。以散文寫成。
 
 **包含**：
-- **Benchmarks / Datasets**：每個附 1-2 句 characterization + 為什麼選它（必須跟 intro claims 呼應）
-- **Metrics**：每個 1 句話說明（標準 metrics 不需公式）
+- **Benchmarks / Datasets**：每個附簡短 characterization + 為什麼選它（必須跟 intro claims 呼應）
+- **Metrics**：每個簡要說明（標準 metrics 不需公式）
 - **Baselines**：必須包含最新 SOTA（2024-2025），簡述選擇邏輯
 - **Implementation Details**：只寫最重要的，複雜設定放 Supplementary
 
@@ -53,7 +53,7 @@ Reviewer 自己會看 Table 裡的數字。**你的文字要做的事是：告�
 ### §4.2 — Quantitative Results
 
 **每段的寫法模式**：
-1. 引用 Table → 一句話 high-level takeaway（不只說 "outperforms all"）
+1. 引用 Table → 開頭先給 high-level takeaway（不只說 "outperforms all"）
 2. 最重要的 insight：為什麼贏？對應 Methodology 的哪個設計？
 3. 最接近的 competitor 分析：差多少？差在哪？為什麼？
 4. [可選] 邊界條件觀察：差距特別大/小的情況
@@ -79,7 +79,7 @@ all compared methods.
 
 - **按 capability / challenge 組織，不是按 sample 組織**
 - 每個例子展示一個特定的 capability 或 advantage
-- **必須包含 failure case 分析**（至少 1-2 句）
+- **必須包含 failure case 分析**
 - Qualitative improvement 應 trace back 到 Methodology 的某個 module
 
 **Figure 要求**：

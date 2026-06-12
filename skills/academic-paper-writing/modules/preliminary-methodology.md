@@ -100,7 +100,7 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 **寫法要求**：
 - 用 LaTeX 定理環境框起來
 - Statement 必須 self-contained
-- 框之後跟 1-2 段 intuition paragraph
+- 框之後跟 intuition 段落（用直覺解釋 statement 在說什麼）
 - 正文的 proof 講重點；proof 太長放 Supplementary（看情況和篇幅判斷，**沒有**固定行數門檻——教授 2026-06-12）
 - 每個命題對應 intro ¶3 的某個 insight
 
@@ -116,14 +116,14 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 **功能**：Bridge — 把 §3.2 的抽象結論對應到具體的 module 設計。
 
 - 開頭必須有 **bridging sentence**
-- 用一段散文（6-10 句）鳥瞰整個架構
+- 用一段散文鳥瞰整個架構
 - 引用 architecture figure
 - **不寫公式**，不寫 engineering details
 
 ### §3.4–§3.N — Module Details
 
 **每個 subsection 內部結構**：
-1. 一句 recap：連回 §3.2 的哪個命題 → 不超過一句
+1. 開頭簡短 recap：連回 §3.2 的哪個命題，點到為止
 2. 設計描述：散文 + 公式
 3. 設計理由：為什麼忠於理論，或做了什麼 practical adaptation
 

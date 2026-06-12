@@ -7,8 +7,8 @@
 # Checks:
 #   1. supp.tex exists (standard filename, no alternatives)
 #   2. Standalone document (own \documentclass)
-#   3. Float package loaded (for [H] specifier)
-#   4. Notation table present with [H] placement
+#   3. No [H] floats (圖表置頂 [t]，正文與 supp 一致 -- ruling 2026-06-12)
+#   4. Notation table present with [t] placement
 #   5. Standard section labels used
 #   6. Main paper doesn't append supplementary
 #   7. Bibliography present
@@ -62,19 +62,22 @@ _check_supp() {
     check_fail "Not a standalone document — must have its own \\documentclass"
   fi
 
-  # === CHECK 3: Float package ===
-  if echo "$supp_content" | grep -q '\\usepackage.*{float}'; then
-    check_pass "float package loaded"
+  # === CHECK 3: No [H] floats ===
+  # Professor ruling 2026-06-12: 圖表 always 置頂（[t]），不管正文或 supp，
+  # 放在第一次 mention 的那一頁。The old [H] requirement here was fabricated
+  # and conflicted with the lint float rule.
+  if echo "$supp_content" | grep -qE '\\begin\{(figure|table)\*?\}\[[^]]*H[^]]*\]'; then
+    check_fail "[H] float placement found -- use [t] (top of page, also in supp)"
   else
-    check_warn "float package not loaded (needed for [H] table placement)"
+    check_pass "No [H] float placement"
   fi
 
-  # === CHECK 4: Notation table with [H] ===
+  # === CHECK 4: Notation table with [t] ===
   if echo "$supp_content" | grep -q 'tab:notation'; then
-    if echo "$supp_content" | grep -q '\\begin{table\*\?\}\[H\]'; then
-      check_pass "Notation table with [H] placement"
+    if echo "$supp_content" | grep -q '\\begin{table\*\?\}\[!\?t!\?\]'; then
+      check_pass "Notation table with [t] placement"
     elif echo "$supp_content" | grep -q '\\begin{table'; then
-      check_warn "Notation table found but not using [H] placement"
+      check_warn "Notation table found but not using [t] placement"
     fi
   else
     check_warn "No notation table (\\label{tab:notation})"

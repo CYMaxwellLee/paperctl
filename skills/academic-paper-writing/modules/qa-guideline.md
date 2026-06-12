@@ -96,7 +96,7 @@
 
 - Preliminary 是否搬了 Related Work 的描述？→ 刪
 - §2 結尾和 §3.1 開頭是否重複同一個 gap？→ 合一
-- Overview 是否提前詳述了後面 subsection 的細節？→ 每 module 最多一句
+- Overview 是否提前詳述了後面 subsection 的細節？→ 點到為止，細節留給各 subsection
 - §4.1 和 §3 是否有相同超參描述？→ 刪其中一處
 
 ### 4B — 頁數壓縮優先順序

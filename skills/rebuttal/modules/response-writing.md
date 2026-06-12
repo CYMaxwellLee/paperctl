@@ -600,4 +600,4 @@ We will improve the writing.
 | "We will add this experiment" | 空洞承諾 | 具體說明做了什麼、結果是什麼 |
 | "The reviewer is correct that..." | 過度附和 | "We appreciate this question. [直接進入我們的論點]" |
 | 只用文字辯論，沒有數據 | 缺乏 evidence | 每個 concern 都附 table/figure/reference |
-| 回覆太短（1-2 句） | 不夠重視 | 完整回應，包含 evidence + implication |
+| 回覆太短草率 | 不夠重視 | 完整回應，包含 evidence + implication |

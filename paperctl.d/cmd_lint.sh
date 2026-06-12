@@ -13,7 +13,8 @@
 #   4.  Weak reference phrases: "As shown in", "As can be seen from"
 #   4b. Parenthetical table/figure references "(Table 9)" -- float must be the subject
 #   5.  Casual give/gives
-#   6.  Casual conjunctions (, but / , so / , yet) and semicolon clause-joins
+#   6.  Casual conjunctions (, but / , so) and semicolon clause-joins (fail);
+#       mid-sentence ', yet' is WARN (很不 prefer, not a hard fail -- 2026-06-12)
 #       (formal ', but also/rather/not' and purposive ', so that' allowed)
 #   6b. Sentence-initial "But" / "So"
 #   7.  Comma + V-ing (participial-preposition + -ing-noun whitelist; per-match filtered)
@@ -120,9 +121,14 @@ _add_rule '\b[Gg]ives?\b' "Casual 'give/gives' -- use provides/yields/produces" 
 # Casual conjunctions + semicolon clause-joins -- memory #4 (FLORA 明確禁止) + 2026-06 session (so/but).
 # Tails are [a-z]+ so the per-match exclude can see the following word; formal correlatives
 # (not only..., but also/rather/not) and purposive ', so that' are allowed.
-_add_rule '(, yet [a-z]+|, but [a-z]+|, so [a-z]+|; [Hh]owever,|; [a-z]+)' \
+_add_rule '(, but [a-z]+|, so [a-z]+|; [Hh]owever,|; [a-z]+)' \
   "Casual conjunction / semicolon join -- use however/while/although or a period" fail \
   ', but (also|rather|not)\b|, so that\b'
+
+# Mid-sentence ', yet' -- ruling 2026-06-12: 「其實我不喜歡yet...就當作很不prefer的用詞吧」.
+# Strongly dispreferred but NOT a hard fail (sentence-initial Yet stays fail below).
+_add_rule ', yet [a-z]+' \
+  "', yet' -- strongly dispreferred; prefer although/while" warn
 
 # Sentence-initial But/So -- style-guide ❌ (太 casual) + 2026-06 session so/but family
 _add_rule '(^[0-9]*:[[:space:]]*|[.?!] |[{][[:space:]]*)(But|So)[ ,]' \
@@ -147,7 +153,8 @@ _add_rule '\b[Bb]ecause\b' "'because' -- use 'since'/'as'/'given that'" fail
 _add_rule '\\ref\{' \
   "Bare \\\\ref{} -- use \\\\cref{} or \\\\Cref{}" fail
 
-# Float placement -- ruling 2026-06-12 (「圖片、Table都置頂，放在第一次mention的那一頁」).
+# Float placement -- ruling 2026-06-12 (「圖片、Table都置頂，放在第一次mention的那一頁」,
+# 「always置頂，不管正文或者supp」-- applies to supplementary too; supp-check agrees).
 # [t] is the lintable half; same-page-as-first-mention needs a visual pass on the PDF.
 # INVERTED check: flag every bracketed spec, allow only t / t! / !t via the exclude
 # (the old blacklist missed [htb], [tbp], [p] and every !-variant).

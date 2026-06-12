@@ -24,7 +24,7 @@
 | **We... We... We... 連發** | 文采問題：同一句式不要過度重複（**不是數字上限**） | 被動式、nominalization、"This enables..."、"By doing X, ..." 交替 |
 | **Comma + V-ing** | ❌ 「X is proposed, achieving Y」 | ✅ 拆成兩句或用 and 連接 |
 | **Em-dash（—）** | 禁止 | 用句號拆句或逗號 |
-| **", yet"** | ❌ 「X works, yet fails」 | ✅ 「Although X works, it fails」 |
+| **", yet"** | ⚠️ 很不 prefer（教授 2026-06-12：「不喜歡yet，偶爾就算了」；lint 以 warn 提示，句首 Yet 仍是 fail） | ✅ 「Although X works, it fails」 |
 | **"; however,"** | ❌ 分號 + however | ✅ 「X works. However, Y fails.」 |
 | **小括號補充** | ❌ 「X (which is important for Y)」 | ✅ 逗號子句或獨立句 |
 | **but** | ❌ 禁止（教授 2026-06：casual 用詞整篇禁） | ✅ however / although / while / nevertheless |

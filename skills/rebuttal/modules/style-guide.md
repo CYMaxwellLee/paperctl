@@ -303,7 +303,7 @@ discussion to address any additional questions.
 
 - **Em-dash（—）禁止**：用句號拆句或逗號
 - **"; however," 禁止**：改為 "X works. However, Y fails."
-- **", yet" 禁止**：改為 "Although X works, it fails"
+- **", yet" 很不 prefer**（warn 級，教授 2026-06-12；句首 Yet 仍禁）：改為 "Although X works, it fails"
 - **So 開頭禁止**：用 therefore / thus / accordingly
 - **because 禁止（整篇，不限句首——教授 2026-06-12：「整篇我都不想because」）**：用 Since / As / Given that
 - **自問自答禁止**：直接陳述

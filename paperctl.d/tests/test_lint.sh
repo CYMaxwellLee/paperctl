@@ -124,10 +124,12 @@ Our contributions are as follows:
 \item this stray bullet gets flagged in intro mode
 EOF
 
-# paper-y (NO cleveref): house-style \ref allowed; commented \cyl graveyard is dead text.
+# paper-y (NO cleveref): house-style \ref allowed; commented \cyl graveyard is dead text;
+# mid-sentence ', yet' is a WARN (很不 prefer) and must NOT trip the exit-1 gate.
 cat > "$TMP/paper-y/sections/body.tex" <<'EOF'
 \section{Test}
 \cyl{Table~\ref{tab:q} is the correct house style on this paper.}
+\cyl{The probe ran, yet the cache stayed cold.}
 % \cyl{This commented line says because twice because it is dead text.}
 EOF
 
@@ -179,9 +181,10 @@ assert_rc  "default mode exits 1 too"               "$RC" 1
 assert_has "multi-line \\cyl closing line scanned"  'straightforward claim' "$OUT"
 assert_has "cyl-mode catches casual conjunction"    'Casual conjunction' "$OUT"
 
-echo "── paper-y default: dialect skip + commented \\cyl graveyard silent ──"
+echo "── paper-y default: dialect skip + graveyard silent + ', yet' warns without gating ──"
 OUT=$("$PAPERCTL" lint --dir "$TMP" --paper paper-y 2>&1); RC=$?
-assert_rc  "clean manual-ref paper exits 0"         "$RC" 0
+assert_rc  "warn-only paper still exits 0 (', yet' must not gate)" "$RC" 0
+assert_has "', yet' warns as strongly dispreferred"  'dispreferred' "$OUT"
 assert_not "Table~\\ref not flagged without cleveref" 'Bare' "$OUT"
 assert_not "commented '% \\cyl{...because...}' silent" 'dead text' "$OUT"
 
