@@ -28,10 +28,11 @@
 # However/We/leverage variety (文采), 慎用 empirical / principle.
 # Exit contract: exit 1 if any fail-severity hit (lint can gate a push).
 #
-# Provenance discipline (2026-06-12 professor ruling): every rule cites the
-# professor's statement next to its definition. Unattested rules were removed
-# (five GPT-ism phrases, intro display-math/notation/c4-c8-c2/"In this paper"/
-# figure-ref bans). Do not add rules without provenance.
+# Provenance discipline (2026-06-12 professor ruling): every rule cites its source
+# next to its definition (professor statements; the bare-\ref rule is the project
+# \cref convention). Unattested rules were removed (five GPT-ism phrases, intro
+# display-math/notation/c4-c8-c2/"In this paper"/figure-ref bans). Do not add
+# rules without provenance.
 #
 # Usage:
 #   paperctl lint [--paper <name>]       # lint \cyl{} regions only

@@ -111,7 +111,8 @@ EXAMPLES
   paperctl strip --remove-comments        # also remove comment blocks
 
   # Writing quality
-  paperctl lint --paper textnav           # check BAN rules
+  paperctl lint --paper textnav           # check BAN rules (exit 1 on fail-severity hits)
+  paperctl push --lint "msg"              # also gate the push on a clean lint (opt-in)
   paperctl verify-appendix                # structural appendix check (all papers)
   paperctl verify-appendix --paper textnav    # single paper
   paperctl verify-appendix --file sections/appendix.tex  # explicit file

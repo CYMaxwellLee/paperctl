@@ -69,6 +69,7 @@ The student paragraph one describes the ablation protocol in detail, listing the
 \begin{equation}
 y = f(x) + b
 \end{equation}
+\includegraphics[width=\linewidth]{figs/window_sweep.pdf}
 
 The student paragraph three interprets the trend and argues that the medium window gives the best balance between accuracy and latency for deployment on real robots under the standard evaluation protocol.
 EOF
@@ -78,7 +79,7 @@ EOF
 {
   printf '%s\n\n' "$STUDENT"
   cat <<'EOF'
-\cyl{This sweep varies the window size to test sensitivity. Accuracy reaches 97.8 (Table~\cref{tab:window}).}
+\cyl{This sweep varies the window size to test sensitivity. Accuracy reaches 97.8 (Table~\cref{tab:window}). The trend is shown in \cref{tab:window} as well.}
 EOF
 } > "$TMP/paper-bad/sections/appendix.tex"
 
@@ -94,6 +95,7 @@ The ablation protocol in \cref{sec:eval} fixes the evaluation settings before an
 \begin{equation}
 y = f(x) + b
 \end{equation}
+\includegraphics[width=\linewidth]{figs/window_sweep.pdf}
 
 The medium window therefore provides the best balance between accuracy and latency, and the trend across the full sweep supports deploying that setting on real robots without further tuning of the window size or the evaluation protocol described above.
 }
@@ -124,6 +126,9 @@ assert_has "C fires on dropped table"                   'FAIL: \[C\].*tab:latenc
 assert_has "C warns on dropped numbers"                 'WARN: \[C\].*90\.1' "$OUT"
 assert_has "D fires (equation flattened)"               'FAIL: \[D\]' "$OUT"
 assert_has "E fires (parenthetical table ref)"          'FAIL: \[E\]' "$OUT"
+assert_has "E fires on weak 'shown in' ref"             "weak 'shown in'" "$OUT"
+assert_has "E warns when float never the subject"       'WARN: \[E\].*tab:window' "$OUT"
+assert_has "C warns on includegraphics dropped"         'WARN: \[C\].*window_sweep' "$OUT"
 assert_has "F fires (This sweep... opener)"             'FAIL: \[F\]' "$OUT"
 assert_not "J stays silent (dialect is fine)"           'FAIL: \[J\]' "$OUT"
 

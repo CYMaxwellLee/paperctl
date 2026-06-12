@@ -320,6 +320,14 @@ prepush_gate() {
       rc=1
     fi
   fi
+  # Opt-in (push/sync --lint): also require a clean writing lint. Off by default so
+  # papers with known legacy violations are not blocked mid-deadline.
+  if [[ "${PAPERCTL_GATE_LINT:-false}" == "true" ]]; then
+    if ! "$PAPERCTL_ROOT/paperctl" lint --paper "$name" --dir "$CONF_DIR" >/dev/null 2>&1; then
+      echo "  ❌ lint FAILED for $name -- push blocked (paperctl lint --paper $name to see)"
+      rc=1
+    fi
+  fi
   [[ $rc -ne 0 ]] && echo "     → override with: paperctl push --force   (or PAPERCTL_NO_VERIFY=true)"
   return $rc
 }

@@ -10,6 +10,7 @@ while [[ "${1:-}" == --* ]]; do
     --auto-resolve) AUTO_RESOLVE=true; shift ;;
     --force|--no-verify) export PAPERCTL_NO_VERIFY=true; shift ;;
     --compile) export PAPERCTL_GATE_COMPILE=true; shift ;;
+    --lint) export PAPERCTL_GATE_LINT=true; shift ;;
     --paper) PAPERCTL_PAPER="$2"; export PAPERCTL_PAPER; shift 2 ;;
     --dir) PAPERCTL_DIR="$2"; export PAPERCTL_DIR; shift 2 ;;
     *) echo "Unknown flag: $1" >&2; exit 1 ;;

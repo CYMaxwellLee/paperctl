@@ -8,6 +8,7 @@ while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --force|--no-verify) export PAPERCTL_NO_VERIFY=true; shift ;;
     --compile)           export PAPERCTL_GATE_COMPILE=true; shift ;;
+    --lint)              export PAPERCTL_GATE_LINT=true; shift ;;
     *) break ;;
   esac
 done
