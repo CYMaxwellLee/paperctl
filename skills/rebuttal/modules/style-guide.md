@@ -236,7 +236,7 @@ We would like to respectfully highlight that our primary contribution
 indeed addresses [X], rather than [reviewer's characterization].
 
 We respectfully note that [fact]. This distinction represents more
-than a modeling choice — it constitutes a necessity for [reason].
+than a modeling choice. It constitutes a necessity for [reason].
 
 We respectfully submit that the [X] represents a significantly more
 challenging evaluation than [Y], as it encompasses [reasons].
@@ -305,12 +305,12 @@ discussion to address any additional questions.
 - **"; however," 禁止**：改為 "X works. However, Y fails."
 - **", yet" 禁止**：改為 "Although X works, it fails"
 - **So 開頭禁止**：用 therefore / thus / accordingly
-- **Because 開頭禁止**：用 Since / As / Given that
+- **because 禁止（整篇，不限句首——教授 2026-06-12：「整篇我都不想because」）**：用 Since / As / Given that
 - **自問自答禁止**：直接陳述
-- **Banned words**：thereby, numerous, utilize, leverage (>2), underscore (verb), "As expected,", "Notably," (句首), "demonstrates the effectiveness of", "As can be seen from"
-- **Rebuttal 場合可接受**（雖然 paper 寫作仍 banned）："It is worth noting that" — rebuttal 是 sales pitch，這個強調語在說服場合可用
-- **We/Our 連發**：連續三句以 We/Our 開頭是 GPT 訊號
-- **but**：盡量少用，改 however / although / while
+- **Banned words**：thereby, numerous, utilize, underscore（任何用法）, "Notably," (句首), "As can be seen from", "As shown in"（弱引用，表圖當主詞）, Yet（句首）
+- **明確不禁**（教授 2026-06-12 裁決，paper 與 rebuttal 都不禁，勿再加回）："It is worth noting that"、"As expected,"、"demonstrates the effectiveness of"；leverage 是文采問題（多變化），不是次數限制
+- **We/Our 連發**：文采問題——句式多變化（被動式、"This formulation…"、"The proposed…" 交替），不是數字上限
+- **but**：❌ 整篇禁（教授 2026-06-12），改 however / although / while
 - **小括號補充**：改為逗號子句或獨立句
 - **分號連接句子**：盡量避免（教授個人偏好：rebuttal 中**完全不用** `;`，分號連接句子全改 `.` 拆成兩句）
 - **數字 ≤ 10 寫英文**：`divisible by 8` → `divisible by eight`、`three backbones` 而非 `3 backbones`。**例外**：scale factor 數學式（`×4`、`×8`）、reference 編號（`Tab.~3`）、metrics 數字（`30.65 dB`）保留數字

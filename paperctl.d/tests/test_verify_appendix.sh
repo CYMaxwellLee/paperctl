@@ -88,14 +88,14 @@ EOF
   printf '%s\n\n' "$STUDENT"
   cat <<'EOF'
 {\color{blue}
-The ablation protocol in \cref{sec:eval} fixes the evaluation settings before any window comparison, restating the number of random seeds and the exact benchmark splits used for every reported run, so this appendix section stands alone for a reader arriving from the main text.
+The ablation protocol in \cref{sec:eval} fixes the evaluation settings before any window comparison and restates the number of random seeds and the exact benchmark splits used for every reported run. This appendix section therefore stands alone for a reader arriving from the main text.
 
 \Cref{tab:window} reports success rates across window sizes, and accuracy climbs from 90.1 to 97.8 over the sweep while latency stays near 4.2 milliseconds per query. \Cref{tab:latency} isolates the per-query cost and confirms the overhead stays flat across every window size tested under the same protocol.
 \begin{equation}
 y = f(x) + b
 \end{equation}
 
-The medium window therefore gives the best balance between accuracy and latency, and the trend across the full sweep supports deploying that setting on real robots without further tuning of the window size or the evaluation protocol described above.
+The medium window therefore provides the best balance between accuracy and latency, and the trend across the full sweep supports deploying that setting on real robots without further tuning of the window size or the evaluation protocol described above.
 }
 EOF
 } > "$TMP/paper-good/sections/appendix.tex"

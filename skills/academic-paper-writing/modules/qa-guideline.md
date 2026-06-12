@@ -101,15 +101,15 @@
 
 ### 4B — 頁數壓縮優先順序
 
-**不得削減 core contribution 的闘述**：
+**不得削減 core contribution 的闘述**。這是「先壓誰」的順序，**沒有任何頁數/行數配額**（教授 2026-06-12：「沒這回事，這種規則不應該存在」）：
 
 1. §4.1 Implementation Details → 移 Supp
 2. §4.5 Additional Analysis → 問是否可移 Supp
-3. §3.x Training Objectives → 壓縮到 3–5 行
-4. §2 Preliminary → 控制在 0.5 頁
+3. §3.x Training Objectives → 壓縮講重點
+4. §2 Preliminary → 只留「§3 缺它看不懂」的背景
 5. §4.4 非核心 ablation → 移 Supp
-6. Related Work → ~0.75 頁
-7. Conclusion → 最多 0.5 頁
+6. Related Work → 精簡
+7. Conclusion → 精簡
 
 ---
 
@@ -125,8 +125,8 @@
 
 額外檢查：
 - 段落流動性自查
-- We/Our 連發
-- 被動語態過度使用（一段超過 3 個被動句，改掉 2 個）
+- We/Our 連發（文采：句式多變化，不是數字上限）
+- 被動語態過度使用（文采：主動/被動交替，不是數句子）
 
 ---
 

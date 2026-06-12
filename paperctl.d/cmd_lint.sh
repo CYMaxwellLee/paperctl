@@ -8,19 +8,25 @@
 # BAN rules enforced (always-on, WHOLE paper -- the professor's general bans):
 #   1.  Em dash (---, —, –)
 #   2.  Adverb+comma sentence openers (Specifically allowed)
-#   3.  thereby / utilize / straightforward / numerous
-#   3b. Sentence-initial "Yet"; "underscore" as a verb
+#   3.  thereby / utilize / straightforward / numerous (case-proof)
+#   3b. Sentence-initial "Yet"; "underscore" (any use)
 #   4.  Weak reference phrases: "As shown in", "As can be seen from"
+#   4b. Parenthetical table/figure references "(Table 9)" -- float must be the subject
 #   5.  Casual give/gives
 #   6.  Casual conjunctions (, but / , so / , yet) and semicolon clause-joins
-#   7.  Comma + V-ing (participial-preposition + -ing-noun whitelist)
+#       (formal ', but also/rather/not' and purposive ', so that' allowed)
+#   6b. Sentence-initial "But" / "So"
+#   7.  Comma + V-ing (participial-preposition + -ing-noun whitelist; per-match filtered)
 #   8.  because (use since / as / given that)
-#   9.  Bare \ref{} (use \cref; auto-skipped for papers without cleveref, e.g. SAGA)
-#  10.  Float placement must be [t] (top of the page of first mention)
+#   9.  Any bare \ref{} (use \cref; auto-skipped for papers without cleveref, e.g. SAGA)
+#  10.  Float placement: only [t] / [t!] / [!t] allowed (top of page of first mention)
 #  11.  Straight quotes "..." (must be ``...'')
 #  12.  Inline math \(...\) (must be $...$; display math is allowed anywhere)
 # Intro-only (--intro):
-#  I1.  \item bullets outside the contributions block
+#  I1.  \item bullets outside the contributions block (the contributions itemize is exempt)
+# NOT lintable (manual judgment): parenthetical asides, rhetorical questions,
+# However/We/leverage variety (文采), 慎用 empirical / principle.
+# Exit contract: exit 1 if any fail-severity hit (lint can gate a push).
 #
 # Provenance discipline (2026-06-12 professor ruling): every rule cites the
 # professor's statement next to its definition. Unattested rules were removed
@@ -36,6 +42,7 @@ load_config
 
 SCAN_ALL=false
 INTRO_ONLY=false
+GLOBAL_FAILS=0
 while [[ "${1:-}" == --* ]]; do
   case "$1" in
     --all) SCAN_ALL=true; shift ;;
@@ -75,63 +82,88 @@ _add_rule() {
 # ============================================================
 
 # Em dash -- conference CLAUDE.md ABSOLUTE BANS + memory writing_bans #1
-_add_rule '---|—|–' "Em dash (--- or — or –)" fail
+# (source '--' for compounds like accuracy--speed is fine; a pasted Unicode en dash
+#  should be CONVERTED to '--', not deleted)
+_add_rule '---|—|–' "Em dash / Unicode dash (convert en dash to --)" fail
 
 # Adverb+comma openers, Specifically allowed -- CLAUDE.md + memory #2
-# Anchors: line start (content carries a "N:" line-number prefix) or after { (inside \cyl{)
-_add_rule '(^[0-9]*:|[{])[[:space:]]*(Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Furthermore|Moreover|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),' \
+# Anchors: line start ("N:" prefix), after { (inside \cyl{), or mid-line after '. '
+_add_rule '(^[0-9]*:|[{]|\. )[[:space:]]*(Equally|Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Furthermore|Moreover|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),' \
   "Adverb+comma sentence opener (except Specifically)" fail
 
 # Banned words -- straightforward: CLAUDE.md; thereby/utilize/numerous: ruling 2026-06-12 同意
-_add_rule '\b(thereby|utilize|utilizes|utilized|utilizing|straightforward|numerous)\b' \
+_add_rule '\b([Tt]hereby|[Uu]tiliz(e|es|ed|ing)|[Ss]traightforward|[Nn]umerous)\b' \
   "Banned word (thereby/utilize/straightforward/numerous)" fail
 
 # Sentence-initial Yet -- ruling 2026-06-12 (「我確實很討厭Yet放句首」)
-_add_rule '(^[0-9]*:[[:space:]]*|\. |[{][[:space:]]*)Yet\b' \
+_add_rule '(^[0-9]*:[[:space:]]*|[.?!:] |[{][[:space:]]*)Yet\b' \
   "Sentence-initial 'Yet' -- use However/Nevertheless" fail
 
-# underscore as a verb -- ruling 2026-06-12 (同意, 討厭使用underscore)
+# underscore -- ruling 2026-06-12 (「我確實很討厭...使用underscore」-- any use, not only verbs)
 _add_rule '\bunderscor(e|es|ed|ing)\b' \
-  "'underscore' (verb) -- use highlight/demonstrate/emphasize" fail
+  "'underscore' (any use) -- use highlight/demonstrate/emphasize" fail
 
 # Weak reference phrases -- professor 2026-06 appendix session (floats must be the sentence subject).
 # The five other GPT-isms that used to live here were ruled OK on 2026-06-12 and removed.
-_add_rule '(As can be seen from|[Aa]s shown in)' \
+# \b guards against 'was shown in' / 'has shown in' passives; [Aa] covers mid-sentence forms
+_add_rule '([Aa]s can be seen from|\b[Aa]s shown in)' \
   "Weak reference phrase (As shown in / As can be seen from) -- make the table/figure the subject" fail
+
+# Parenthetical table/figure reference -- professor 2026-06 (表圖當主詞，不要括號式 "(Table 9)")
+_add_rule '\([[:space:]]*(Table|Figure|Fig\.|Tab\.)[~ ]' \
+  "Parenthetical table/figure reference -- make the float the sentence subject" fail
 
 # Casual give/gives -- professor 2026-06 (「避免casual用詞像是so, but, 這邊還有give等」)
 _add_rule '\b[Gg]ives?\b' "Casual 'give/gives' -- use provides/yields/produces" fail
 
-# Casual conjunctions + semicolon clause-joins -- memory #4 (FLORA 明確禁止) + 2026-06 session (so/but)
-_add_rule '(, yet [a-z]|, but [a-z]|, so [a-z]|; however,|; [a-z])' \
-  "Casual conjunction / semicolon join -- use however/while/although or a period" fail
+# Casual conjunctions + semicolon clause-joins -- memory #4 (FLORA 明確禁止) + 2026-06 session (so/but).
+# Tails are [a-z]+ so the per-match exclude can see the following word; formal correlatives
+# (not only..., but also/rather/not) and purposive ', so that' are allowed.
+_add_rule '(, yet [a-z]+|, but [a-z]+|, so [a-z]+|; [Hh]owever,|; [a-z]+)' \
+  "Casual conjunction / semicolon join -- use however/while/although or a period" fail \
+  ', but (also|rather|not)\b|, so that\b'
+
+# Sentence-initial But/So -- style-guide ❌ (太 casual) + 2026-06 session so/but family
+_add_rule '(^[0-9]*:[[:space:]]*|[.?!] |[{][[:space:]]*)(But|So)[ ,]' \
+  "Sentence-initial 'But'/'So' -- use However/Therefore" fail
 
 # Comma + V-ing -- memory #5 (FLORA methodology rewrite 明確禁止), whole paper per 2026-06-12.
 # ERE-safe rewrite: the old pattern used a PCRE lookahead (?!...) which grep -E rejects,
-# so this rule NEVER fired. Whitelist participial prepositions and -ing nouns instead.
+# so this rule NEVER fired. Whitelist = participial prepositions + -ing NOUNS/ADJECTIVES
+# common in robotics prose (', training data', ', lighting', ', grasping', ', streaming').
+# 'using' was removed from the whitelist: ', using the solver' is the textbook violation.
+# Known irreducible FP class: gerund SUBJECTS after an introductory clause
+# ('Unfortunately, aligning X remains hard') -- rare; rewrite or ignore case-by-case.
 _add_rule ', [a-z]+ing\b' "Comma + V-ing -- split into two clauses or use 'and V-s'" fail \
-  ', (including|regarding|concerning|involving|containing|given|considering|excluding|notwithstanding|owing|using|during|nothing|something|anything|everything|morning|evening|string|ceiling|spring)\b'
+  ', (including|regarding|concerning|involving|containing|given|considering|excluding|notwithstanding|owing|during|nothing|something|anything|everything|morning|evening|string|ceiling|spring|training|learning|sampling|planning|lighting|grasping|streaming|embedding|modeling|encoding|decoding)\b'
 
 # because -- ruling 2026-06-12 (「整篇我都不想because」)
 _add_rule '\b[Bb]ecause\b' "'because' -- use 'since'/'as'/'given that'" fail
 
-# Bare \ref -- CLAUDE.md \cref convention. Auto-skipped for manual-ref papers (no cleveref,
-# e.g. SAGA house style Table~\ref / Eq.~\eqref) -- see dialect detection in _lint_paper.
-_add_rule '(Figure|Table|Eq\.|Equation|Section|Sec\.|Fig\.)[~ ]*\\ref\{' \
+# Bare \ref -- project \cref convention (CLAUDE.md; a convention, not a worded professor ban).
+# Catches ANY \ref{...} including unprefixed 'see \ref{}' (\cref/\Cref/\eqref/\pageref unaffected).
+# Auto-skipped for manual-ref papers (no cleveref, e.g. SAGA house style Table~\ref).
+_add_rule '\\ref\{' \
   "Bare \\\\ref{} -- use \\\\cref{} or \\\\Cref{}" fail
 
 # Float placement -- ruling 2026-06-12 (「圖片、Table都置頂，放在第一次mention的那一頁」).
 # [t] is the lintable half; same-page-as-first-mention needs a visual pass on the PDF.
-_add_rule '\\begin\{(figure|table|figure\*|table\*)\}\[(h|b|H|ht|hb|tb|bt|hbt|tbh|htbp)\]' \
-  "Float placement -- use [t] only (top of the page of first mention)" fail
+# INVERTED check: flag every bracketed spec, allow only t / t! / !t via the exclude
+# (the old blacklist missed [htb], [tbp], [p] and every !-variant).
+_add_rule '\\begin\{(figure\*?|table\*?)\}\[[^]]*\]' \
+  "Float placement -- use [t] only (top of the page of first mention)" fail \
+  '\[!?t!?\]'
 
 # Straight quotes -- ruling 2026-06-12 (「一定要enforce 這是LaTeX」); was effectively warn
-# via the severity-misalignment bug, now an explicit fail.
-_add_rule '(^|[^\\=>:_/])"[A-Za-z]' "Straight quote -- use \\\`\\\`...'' instead" fail
+# via the severity-misalignment bug, now an explicit fail. The '^[0-9]+:' branch lets a
+# quote at CONTENT start fire (the ':' in the exclusion class otherwise eats the line-number
+# prefix); ':' stays excluded mid-line to skip URLs/paths.
+_add_rule '(^[0-9]+:|^|[^\\=>:_/])"[A-Za-z]' "Straight quote -- use \\\`\\\`...'' instead" fail
 
 # Inline math -- ruling 2026-06-12: display math is fine ANYWHERE (the old intro ban was
 # fabricated); the real rule is inline math must use $...$, not \(...\).
-_add_rule '\\\(' "Inline math \\(...\\) -- use \$...\$" fail
+# Leading (^|[^\\]) so a literal '\\(' (linebreak + paren) does not false-fire.
+_add_rule '(^|[^\\])\\\(' "Inline math \\(...\\) -- use \$...\$" fail
 
 # --- INTRO-ONLY rules (--intro): section-role rules for the Introduction ---
 # 2026-06-12 provenance ruling:
@@ -166,6 +198,12 @@ depth = 0
 cyl_lines = []
 
 for lineno, line in enumerate(lines, 1):
+    # Commented-out lines are dead text under the comment-out+replace convention --
+    # skip them (mirrors the --all path's comment filter; without this, every
+    # editing pass grows noise from '% \cyl{...}' graveyard lines).
+    if line.lstrip().startswith('%'):
+        continue
+    was_in_cyl = in_cyl
     i = 0
     while i < len(line):
         if not in_cyl:
@@ -185,10 +223,11 @@ for lineno, line in enumerate(lines, 1):
                     i += 1
                     continue
         i += 1
-    if in_cyl or line.find('\\\\cyl{') >= 0:
-        cyl_lines.append((lineno, line))
-    # Also include lines that are fully inside an open \cyl block
-    elif in_cyl:
+    # Include lines that open a \cyl, lines inside an open block, and the CLOSING
+    # line of a multi-line block (was_in_cyl is true there even though in_cyl just
+    # flipped off -- the old 'elif in_cyl' was unreachable and closing lines were
+    # never scanned).
+    if was_in_cyl or in_cyl or line.find('\\\\cyl{') >= 0:
         cyl_lines.append((lineno, line))
 
 for lineno, line in cyl_lines:
@@ -254,6 +293,27 @@ _lint_paper() {
       # Scan all non-comment lines (filter must be applied AFTER line-numbering;
       # grep -n produces "N:content" so comment regex needs N: prefix)
       content=$(grep -n '' "$tex_file" | grep -v '^[0-9]*:[[:space:]]*%')
+      if $INTRO_ONLY; then
+        # The contributions block legitimately uses \item (ruling 2026-06-12: bullets
+        # allowed ONLY there). Mask \item lines inside an itemize whose nearby preceding
+        # text mentions contributions, so only STRAY bullets get flagged.
+        content=$(printf '%s\n' "$content" | python3 -c "
+import sys, re
+out, recent, in_contrib = [], [], False
+for l in sys.stdin.read().split('\n'):
+    body = l.split(':', 1)[1] if ':' in l else l
+    if re.search(r'\\\\begin\{itemize\}', body):
+        in_contrib = 'contribution' in ' '.join(recent[-3:]).lower()
+    elif re.search(r'\\\\end\{itemize\}', body):
+        in_contrib = False
+    if in_contrib and re.match(r'\s*\\\\item\b', body):
+        continue
+    if body.strip():
+        recent.append(body)
+    out.append(l)
+print('\n'.join(out))
+")
+      fi
     else
       # Scan only \cyl{} regions
       content=$(_extract_cyl_regions "$tex_file")
@@ -282,7 +342,14 @@ _lint_paper() {
       # em-dash rule never fired at all until this fix.
       matches=$(echo "$content" | grep -nE -- "$pattern" 2>/dev/null || true)
       if [[ -n "$matches" && -n "$exclude" ]]; then
-        matches=$(echo "$matches" | grep -vE -- "$exclude" 2>/dev/null || true)
+        # Per-MATCH filtering: keep a line only if at least one OCCURRENCE of the
+        # pattern survives the exclude. A line-level drop would let a whitelisted
+        # ', including X' mask a real ', producing Y' on the same line.
+        matches=$(echo "$matches" | while IFS= read -r _ml; do
+          if printf '%s\n' "$_ml" | grep -oE -- "$pattern" 2>/dev/null | grep -vE -- "$exclude" 2>/dev/null | grep -q .; then
+            printf '%s\n' "$_ml"
+          fi
+        done)
       fi
 
       if [[ -n "$matches" ]]; then
@@ -295,6 +362,7 @@ _lint_paper() {
         while IFS= read -r match_line; do
           [[ -z "$match_line" ]] && continue
           file_violations=$((file_violations + 1))
+          [[ "$severity" == "fail" ]] && GLOBAL_FAILS=$((GLOBAL_FAILS + 1))
           local icon="❌"
           [[ "$severity" == "warn" ]] && icon="⚠️ "
           # Extract line number (format: outer_grep_n:file_lineno:content)
@@ -334,3 +402,11 @@ echo "=========================================="
 echo ""
 
 for_each_paper _lint_paper
+
+# Exit contract: nonzero when any fail-severity violation was found, so lint can act
+# as a gate (per the 2026-06-12 「一定要enforce」 ruling). Warn-only findings exit 0.
+if [[ $GLOBAL_FAILS -gt 0 ]]; then
+  echo "❌ $GLOBAL_FAILS fail-severity violation(s) -- exit 1"
+  exit 1
+fi
+exit 0

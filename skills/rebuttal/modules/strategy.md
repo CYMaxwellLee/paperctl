@@ -40,7 +40,7 @@
 - 認為 contribution 太 incremental（核心質疑）
 - 認為另一個 component 比我們的 contribution 更重要（confound）
 
-每位 reviewer 的致命 concern 最多 1-2 個。**80% 的篇幅應該花在解決致命 concerns。**
+每位 reviewer 的致命 concern 通常只有一兩個。**篇幅的大頭花在解決致命 concerns、給最強的 evidence**；小 concern 簡短回應（沒有百分比配額——文采與配置看情況）。
 
 ---
 

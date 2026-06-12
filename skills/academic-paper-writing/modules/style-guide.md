@@ -35,7 +35,7 @@
 | **However 連用** | 文采問題：同一轉折詞不要過度重複（**不是次數上限**） | ✅ 交替 nevertheless / nonetheless / still / in contrast |
 | **句首副詞+逗號** | ❌ 「Equally, ...」「Additionally, ...」 | ✅ 副詞嵌入句中，或換成子句結構 |
 | **縮寫先於全名** | ❌ 首次出現就用 ELSA | ✅ 先全名再縮寫 |
-| **分號連接句子** | 盡量避免 | ✅ 句號拆開，或用連接詞 |
+| **分號連接句子** | ❌ 禁止（FLORA methodology rewrite 明確禁止） | ✅ 句號拆開，或用連接詞 |
 
 > ⚠️ **文采原則就寫成文采原則，不要翻譯成數字配額**（「每段最多 N 句」「>2 次」這種）。教授 2026-06-12：「不是列數字什麼的禁，這個本身就是大錯誤的方向」。同理：沒有頁數配額、沒有 ablation 行數上限、沒有 proof 行數門檻。
 
@@ -49,7 +49,7 @@
 | `numerous` | 改為 "many" 或具體數字 |
 | `Yet`（句首） | 改為 "However," 或 "Nevertheless,"（教授 2026-06-12：「我確實很討厭Yet放句首」） |
 | `underscore`（動詞） | 改為 "highlight", "demonstrate", "emphasize"（教授 2026-06-12 同意） |
-| `---` 或 ` --- `（em dash） | 改為逗號、分號，或重新斷句 |
+| `---` 或 ` --- `（em dash；Unicode – 轉成 `--`） | 改為逗號或重新斷句（不要用分號——分號連句也是禁的） |
 | `utilize` | 改為 "use" |
 | `leverage`（過度重複） | 文采：多變化，部分改為 "use"（**不是**次數限制——教授 2026-06-12） |
 | `straightforward` | 聽起來居高臨下，改為 "simple" 或 "direct" |
@@ -106,7 +106,7 @@
 
 ## 六、We / Our 連發檢查
 
-連續三句以 We / Our 開頭是 GPT 訊號。每三句最多一個 We 開頭，其他改用：
+連續以 We / Our 開頭是 GPT 訊號。文采問題：句式多變化（**不是「每 N 句最多一個」的數字配額**——教授 2026-06-12），交替改用：
 - "The proposed framework…"
 - "This formulation…"
 - "Experimental results on X indicate…"

@@ -570,10 +570,8 @@ We will improve the writing.
 
 ### CMT（ECCV / CVPR / ICCV）
 
-- **5000 字元限制** → 必須極度精簡
-- 致命 concern 用 60% 篇幅
-- 其他 concerns 各 1-3 句
-- Writing issues 合併成一句
+- **5000 字元限制** → 必須極度精簡（這是平台硬限制，不是寫作配額）
+- 致命 concern 佔篇幅大頭、給最強 evidence；其他 concerns 簡短回應；writing issues 合併處理（沒有百分比/句數配額）
 
 ### PDF Rebuttal（ECCV 2026 新規）
 

@@ -67,7 +67,8 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 **明確不禁**（2026-06-12 裁決，勿再加回）：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」；Intro 的 `\Delta/\tau` notation 與 figure ref 沒有限制（teaser 在 ¶3 必引）。
 **文采原則 ≠ 數字配額**（2026-06-12）：However/We/leverage 不要過度重複是「多變化」的文采原則，不是「每段 N 句」「>2 次」這種數字禁令；同理沒有頁數配額、ablation 行數、proof 行數門檻。Contributions 3–5 個端看情況，重點講為什麼 significant、有什麼 impact 與 insight。
 
-**強制檢查**：`paperctl lint --paper <name>`（以上全部自動掃，SAGA 類無 cleveref 論文自動跳過 bare-`\ref` 規則）
+**強制檢查**：`paperctl lint --paper <name>` 自動掃 #1–#14 加括號式表圖引用 `(Table 9)`、句首 But/So（有 fail 會 exit 1 可當 gate；SAGA 類無 cleveref 論文自動跳過 bare-`\ref`；contributions 區塊的 `\item` 不會被 --intro 誤抓）。
+**人工判斷**（lint 掃不了，靠自己）：小括號補充子句、自問自答/反問句、However/We/leverage 文采變化、慎用 empirical/principle、表圖「當主詞」的正向確認（appendix 由 `verify-appendix` 管）。
 
 ---
 

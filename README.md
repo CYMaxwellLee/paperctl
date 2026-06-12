@@ -360,20 +360,20 @@ skills/
     SKILL.md                         # Overview + usage flow
     modules/
       style-guide.md                 # Writing rules, banned words
-      section-writing.md             # Per-section guidelines
+      introduction.md                # Introduction writing
+      preliminary-methodology.md     # Preliminary + Methodology writing
+      experimental-results.md        # Experiments writing
       qa-checklist.md                # Quality assurance checklist
+      qa-guideline.md                # QA pass details
       editing-discipline.md          # Edit conventions, prohibited behaviors
       overleaf-ops.md                # Overleaf push flow, merge checks
-      intro-guideline.md             # Introduction writing
-      experiment-guideline.md        # Experiments writing
-      method-guideline.md            # Methods writing
   rebuttal/                          # 4 modules
     SKILL.md                         # Overview + priority strategy
     modules/
-      rebuttal-strategy.md           # Cross-paper prioritization
+      strategy.md                    # Cross-paper prioritization
       response-writing.md            # Per-reviewer response patterns
-      rebuttal-style-guide.md        # Rebuttal-specific style rules
-      rebuttal-checklist.md          # Submission checklist
+      style-guide.md                 # Rebuttal-specific style rules
+      checklist.md                   # Submission checklist
   conference-ops/                    # 3 modules
     SKILL.md                         # paperctl workflow overview
     modules/
