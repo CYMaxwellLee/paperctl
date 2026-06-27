@@ -114,7 +114,22 @@
 
 ---
 
-## 七、LaTeX 格式規範
+## 七、Claim 與框架策略（solid & strong）
+
+> 教授 2026-06-27 親口（WACV textnav QA + conclusion 改稿）：「專家貪婪又刻薄，攤弱點只會被打。」
+
+1. **Solid and strong，不示弱。原則：不說謊，但也不必什麼都攤給他看。**
+   - 弱的 contribution 不要硬 claim novelty（會被「重組／incremental」打）→ 改賣「統一的設計／策略」這種**真且強**的框架，不賣「我們發明了 X」。
+   - 必要的誠實揭露（如借用某方法的 attribution）放它**該在的地方**（method 內聯引用），不在 contributions 自曝。誠實放對位置，反而先堵掉「未揭露借用」這個更致命的攻擊。
+   - **Limitations 寫不痛不癢**：只談可擴展性、泛化方向；不碰 compute／絕對分數／單一 benchmark／無 variance 等真弱點。**你寫什麼，reviewer 就打什麼。**
+
+2. **沒實驗背書的 generality／transferability claim ＝ 送頭。**
+   - 寫「applies to any…」「generalizes to…」而論文只測一個 setting → reviewer 會說「I want to see」，再以「你沒做」為由打。
+   - claim 一律 **scope 在已展示的範圍**；要講貢獻廣度，改成描述「方法論／設計原則」本身（論文可自證），不承諾跨任務／跨資料集的實證泛化。
+
+---
+
+## 八、LaTeX 格式規範
 
 ### Cross-reference
 - 一律使用 `\cref{}`，不用 `\ref{}`
