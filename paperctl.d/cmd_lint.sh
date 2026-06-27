@@ -88,10 +88,11 @@ _add_rule() {
 #  should be CONVERTED to '--', not deleted)
 _add_rule '---|—|–' "Em dash / Unicode dash (convert en dash to --)" fail
 
-# Adverb+comma openers, Specifically allowed -- CLAUDE.md + memory #2
+# Adverb+comma openers. Specifically allowed always; Moreover/Furthermore
+# ruled allowed by professor 2026-06-27 (were over-flagged), so removed here.
 # Anchors: line start ("N:" prefix), after { (inside \cyl{), or mid-line after '. '
-_add_rule '(^[0-9]*:|[{]|\. )[[:space:]]*(Equally|Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Furthermore|Moreover|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),' \
-  "Adverb+comma sentence opener (except Specifically)" fail
+_add_rule '(^[0-9]*:|[{]|\. )[[:space:]]*(Equally|Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),' \
+  "Adverb+comma sentence opener (except Specifically/Moreover/Furthermore)" fail
 
 # Banned words -- straightforward: CLAUDE.md; thereby/utilize/numerous: ruling 2026-06-12 同意
 _add_rule '\b([Tt]hereby|[Uu]tiliz(e|es|ed|ing)|[Ss]traightforward|[Nn]umerous)\b' \

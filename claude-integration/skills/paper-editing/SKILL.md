@@ -49,7 +49,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 ## Writing Bans（零容忍，整篇適用——教授 2026-06-12：「general的精神必須共同整篇遵守，不應該歸納為只有 introduction 不該用」）
 
 1. ❌ Em dash (`---` 或 `—`)
-2. ❌ Adverb+comma opener（`Additionally,` `Furthermore,` `Moreover,` `Notably,`）
+2. ❌ Adverb+comma opener（`Additionally,` `Notably,` `Crucially,` …）。例外允許：`Specifically,`，以及 `Moreover,` / `Furthermore,`（教授 2026-06-27 親口裁定允許）
 3. ❌ "straightforward"
 4. ❌ Semicolons joining clauses
 5. ❌ Comma+V-ing（`..., producing X`）

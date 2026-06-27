@@ -81,7 +81,8 @@ The study covers not only the cause, but also the timing of failures.
 \cyl{The model was trained, using the solver without tuning.}
 \cyl{The caveat stands, including the edge case, producing drift anyway.}
 \cyl{Notably, the gain was large on the held-out split.}
-\cyl{The setup is simple. Moreover, the cost stays flat.}
+\cyl{The setup is simple. Additionally, the cost stays flat.}
+\cyl{The setup is simple. Moreover, the cost stays flat. Furthermore, it scales.}
 \cyl{The margin model gives a wide buffer on most tasks.}
 \cyl{As shown in the table, accuracy stays high.}
 \cyl{The score rose; the cost stayed flat.}
@@ -144,7 +145,8 @@ OUT=$("$PAPERCTL" lint --dir "$TMP" --paper paper-x --all 2>&1); RC=$?
 assert_rc  "exit 1 on fail-severity hits"          "$RC" 1
 assert_has "em dash fires"                          'Em dash' "$OUT"
 assert_has "adverb opener fires (Notably,)"         'Notably, the gain' "$OUT"
-assert_has "mid-line adverb fires (. Moreover,)"    'Moreover, the cost' "$OUT"
+assert_has "mid-line adverb fires (. Additionally,)" 'Additionally, the cost' "$OUT"
+assert_not "Moreover opener now allowed"            'Moreover, the cost stays flat. Furthermore' "$OUT"
 assert_has "utilize fires"                          'We utilize' "$OUT"
 assert_has "capitalized Numerous/Utilizing fire"    'Numerous prior works' "$OUT"
 assert_has "weak ref fires (As shown in)"           'Weak reference' "$OUT"
