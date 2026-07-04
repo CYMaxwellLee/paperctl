@@ -13,23 +13,39 @@
 | 情境 | 做法 |
 |---|---|
 | 單句修正、換字、教授逐點 line-edit | **不開 pipeline**，主線直接改（快、便宜、教授在等） |
-| 段落級改寫 / 新寫一段 / 學生段落重構 | **開 pipeline** |
-| 整個 section 重寫 | 逐段開 pipeline，段與段之間給教授過目 |
+| 段落級改寫 / 新寫一段 / 學生段落重構 | **開 pipeline**，`sectionText` 必給 |
+| Introduction / Abstract 這類高耦合 section | **建議以 section 為單位跑一次**（`paragraphText` 放整個 section）——跨段冗餘與承先啟後是段落之間的性質，逐段跑治不掉（2026-07-05 教訓） |
+| 低耦合長 section（如 experiments 各小節） | 逐段開 pipeline，段與段之間給教授過目 |
 
 ## 管線結構（與為什麼這樣設計）
 
 ```
 教授:「改 §X 第 N 段,要求 …」
-  ├─ 1. Direction(主線模型):素材盤點 + 方向草稿(骨架、論證招、claim 邊界)
-  ├─ 2. Write(3× Sonnet 5,並行):
-  │      寫手A 論證深度 lens ┐
-  │      寫手B 防審 lens     ├ 各自寫完必須對自己的輸出跑三遍修訂
-  │      寫手C 語域 lens     ┘
+  ├─ 1. Section Editor(主線模型):先讀完整個 section → sectionAudit
+  │      (各段唯一職責、跨段冗餘、過長段落)+ 目標段落計畫
+  │      (逐句標「賣 or 敘述」、所有權標記、claim 邊界)
+  ├─ 2. Write(3× Sonnet 5,並行,都拿到完整 section + GLOBAL RULES):
+  │      寫手A 論證深度 lens ┐ 各自寫完:三遍修訂
+  │      寫手B 防審 lens     ├ + 該 section 模組的自檢表
+  │      寫手C 語域 lens     ┘ (如 introduction.md Anti-Mediocrity Check)
   ├─ 3. Attack(1× Sonnet 5):不寫稿,攻擊 direction + 全部草稿
   ├─ 4. Judge(強模型,繼承主線;effort 可調):
-  │      best-of-breed 合成 + 逐條裁決 critic findings(教授裁決為 binding,防翻案)
+  │      best-of-breed 合成 + 裁決 findings(教授裁決 binding,防翻案)
+  │      + 全局驗收 pass(所有權/賣vs敘述/跨段冗餘/模組自檢表,結果測試驗收)
   └─ 5. 主線:套 .tex → compile → 真跑 paperctl lint → 給教授看 → OK 才推 Overleaf
 ```
+
+### ⚠️ 2026-07-05 ¶4 首戰事故（本結構的由來，不可回退）
+
+第一版 pipeline 的產出**滿足了全部機械約束**（術語鎖定、數字、lint、接棒句、
+「不以 We 開頭」）卻被教授整段駁回：(a) 方法首次出現無所有權標記（「誰知道
+SPD 是我們的還是別人的方法」）；(b) 整段 narrative 敘述機制，沒有在賣
+advantages/impact/significance；(c) 與 ¶3 大量概念重複；(d) contributions
+仍是機制+數字清單。根因不是 guideline 不清楚（introduction.md 每一條都寫了），
+而是：**prompt/brief 層把精神規則降維成表面特徵、且無任何 stage 擁有全 section
+視角**。修正即上圖粗體部分＋style-guide §〇 反降維鐵則（結果測試驗收、
+doctrine 高於 brief）。教訓：**checkable 約束會排擠 uncheckable 的靈魂，
+所以靈魂必須變成明確的驗收 stage，而不是散文提醒。**
 
 **設計依據（2026-07-05 field test，Sonnet 盲寫 vs 教授核可版）**：
 - 寫手要**視角分工**不要同質——3 個 lens 候選各有可取（best-of-breed 合成有效）。
@@ -52,6 +68,7 @@ Workflow({
   args: {
     paperctlRoot: ROOT,          // 換機器必給;doctrine 路徑由它解析
     paragraphText: "<段落原文,LaTeX 原樣>",
+    sectionText: "<該 section 完整現行全文>",  // 全局視角的來源,幾乎必給(缺席會 log 警告)
     editBrief: "<教授指示 + 段落角色,如 intro ¶4: method+contributions>",
     paperFacts: "<數字、模型清單、可用 cite keys、novelty 邊界、LaTeX 慣例(cleveref 有無、\\method{} 等)>",
     moduleFiles: ["skills/academic-paper-writing/modules/introduction.md"],  // 相對 ROOT;選填

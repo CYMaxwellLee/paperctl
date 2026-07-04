@@ -106,12 +106,27 @@
 
 **散文部分**：
 - 承接 ¶3 的 motivation，自然帶出方法
-- **方法名稱首次完整出現**（全名 + 縮寫）
+- **方法名稱首次完整出現**（全名 + 縮寫），且**必須無歧義標示這是我們的方法**
+  （we propose / we introduce / this paper presents）。承接前段的銜接巧思不可犧牲
+  所有權標記——教授 2026-07-05：「誰知道 Speculative Pipeline Decoding 是我們的
+  方法還是別人的方法」。
 - 重點是**亮點、賣點、advantages**，不是 workflow
 - 提到 key results 數字
 - **絕對不寫 technical details**
+- 交棒句以冒號收：「The contributions of this work are as follows:」（教授 2026-07-05）
 
-**⚠️ 賣點檢測**：如果連續在描述 workflow（A → B → C），那就是在寫 Methodology preview，不是在賣 insight。
+**⚠️ 賣點檢測（逐句執行，不是整段印象）**：如果連續在描述 workflow（A → B → C），
+那就是在寫 Methodology preview，不是在賣 insight。**每句過一遍：這句在回答
+「它做什麼」還是「為什麼這很好／很難／很重要」？**前者要嘛升級成賣點句、要嘛砍。
+機制描述整段至多壓縮帶過；篇幅留給 advantages、impact、significance。
+（教授 2026-07-05 對實際產出的批評：「都在 Narrative 敘述方法，並不是在講我們的
+方法的 Advantages、重要的 Impact 或好處、或者 Highlights 我們的 Significance，
+為什麼我們這麼好？」）
+
+**⚠️ 跨段冗餘鐵則（教授 2026-07-05：「第三段和第四段很多句子和概念重複…並沒有
+達到精鍊的目的」）**：¶4 不重新解釋 ¶1–¶3 已建立的概念。引用它們用半句帶過
+（"the two components identified above"），不重跑一次論證。寫完把 ¶3+¶4 連讀，
+同一概念出現兩次完整解釋 → 砍掉一次；並回頭檢查 ¶3 本身是否因鋪墊過度而冗長。
 
 **Bullets 部分：Contributions（3–5 個，端看情況）**
 
@@ -139,6 +154,15 @@ state-of-the-art performance is achieved.
 - 避免純功能描述和空話
 - 個數 3–5 個端看情況（教授 2026-06-12）。重要的是講清楚**為什麼 significant、為什麼有 impact、帶來什麼重要 insight**，不是淪為列舉數字的報告
 
+**⚠️ 遮蓋測試（教授 2026-07-05：「Contributions 最重要的是講我們帶來什麼超重要
+Insights、Impacts、Significance，不是只是列點講一些報告數字的東西」）**：
+把 bullet 裡的方法名和數字全部遮住，剩下的文字還構不構成一個讓領域在意的主張？
+剩空殼（「一個機制」「一組實驗」）就重寫。
+**「不以 We 開頭」只是句式，不是這條規則本身**——句法上避開了 We、內容仍是
+機制清單或數字報告，等於沒改（把精神規則降維成表面特徵，正是 style-guide §〇
+反降維鐵則要擋的）。驗收永遠用結果測試：reviewer 只讀這三條 bullets，他知道
+這篇為什麼重要嗎？
+
 ---
 
 ## 寫完後自我檢視（Anti-Mediocrity Check）
@@ -147,7 +171,10 @@ state-of-the-art performance is achieved.
 |--------|------|
 | **痛點是否鮮明** | ¶1 讀完後 reviewer 能感到「這問題確實不好做」？ |
 | **賣點是否突出** | ¶3+¶4 讀完後 reviewer 能感到「這個想法有意思」？ |
-| **是否 workflow 化** | ¶4 散文是否連續在描述「先 A 再 B 再 C」？ |
+| **是否 workflow 化** | ¶4 散文是否連續在描述「先 A 再 B 再 C」？逐句問：在賣還是在敘述？ |
+| **所有權無歧義** | 方法首次出現有 we propose / we introduce 級的標記？讀者絕不會當成別人的系統？ |
+| **跨段冗餘** | ¶3+¶4 連讀：有沒有同一概念被完整解釋兩次？¶3 有沒有因鋪墊而冗長？ |
+| **Contributions 遮蓋測試** | 遮掉方法名與數字，三條 bullets 還是讓領域在意的主張？ |
 | **主題詞一致性** | ¶1 到 ¶4 核心主題詞是否始終一致？ |
 | **段落完整性** | ¶1 ¶2 ¶3 各自真的只有一段？ |
 | **學生原意** | 是否保留了學生的核心 idea 和 technical contribution？ |

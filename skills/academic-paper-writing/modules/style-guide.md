@@ -22,6 +22,17 @@
 
 一句話的總判準：**把這句放進該領域的 best paper 正文，違和嗎？**
 
+> **反降維鐵則（教授 2026-07-05 第二批定調，para-pipeline ¶4 首戰事故）**：
+> 精神規則不可在任何下游（task brief、pipeline prompt、checklist、subagent 指令）
+> 被壓縮成表面特徵。「bullet 不以 We 開頭」不是「bullet 傳達重要 insight」；
+> 「術語鎖定＋數字齊全＋句式合規」不是「在賣 significance」。事故原型：¶4 產出
+> 滿足了全部機械約束，卻整段 narrative、無所有權標記、與 ¶3 大量重複——「過了
+> checklist 但違反 guideline 精神」與「過了 lint 但整段口語」是同一個病，高一層。
+> **凡把精神規則操作化，必須同時保留它的結果測試**（reviewer 讀完感到 significant
+> 嗎？知道方法是誰的嗎？兩段重複嗎？）**並以結果測試驗收，不以表面特徵驗收。**
+> 同時：**doctrine 高於任何 task brief**——brief 與 doctrine 的結構精神衝突時
+> doctrine 贏，衝突本身要上報，不准默默照 brief 辦。
+
 > 教訓（2026-07-04 ACML intro ¶3）：一整段每個字都通過 lint，教授仍逐句抓出十多處
 > 口語（makes / lets / asks / sit idle / a far lower bar / pull forward / gives way）。
 > 黑名單擋不住語域問題 —— 語域靠判斷，不靠字串比對。

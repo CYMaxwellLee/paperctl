@@ -14,6 +14,9 @@
 //   paperctlRoot   (recommended) paperctl repo 根目錄(用 `paperctl root` 取得)。
 //                  未給時退回本檔提交時的預設路徑,換機器必給。
 //   paragraphText  (required) 要改寫的段落原文(學生稿或現行稿,LaTeX 原樣)
+//   sectionText    (STRONGLY RECOMMENDED) 目標段落所在 section 的完整現行全文。
+//                  沒有它就沒有全局視角:跨段冗餘、承先啟後、各段唯一職責都檢查不了
+//                  (2026-07-05 ¶4 事故的直接教訓)。缺席時 pipeline 會 log 警告。
 //   editBrief      (required) 教授的指示 + 目標段落角色(如「intro ¶4: method+contributions」)
 //   paperFacts     (required) 論文事實包:數字、模型、cite keys、novelty 邊界、LaTeX 慣例
 //   moduleFiles    (optional) 章節專用 doctrine 模組;相對路徑會以 paperctlRoot 為基底解析
@@ -30,7 +33,7 @@ export const meta = {
   name: 'para-pipeline',
   description: 'Paragraph rewrite: direction draft, 3 Sonnet lens-writers + 1 Sonnet critic, strong-model judge synthesis',
   phases: [
-    { title: 'Direction', detail: 'skeleton + argument moves (inherits main-loop model; skipped if provided)' },
+    { title: 'Direction', detail: 'section editor: whole-section audit + paragraph plan (inherits main-loop model; skipped if provided)' },
     { title: 'Write', detail: '3 Sonnet writers with distinct lenses, each self-revised (three-pass)', model: 'sonnet' },
     { title: 'Attack', detail: '1 Sonnet critic attacks the draft and all variants', model: 'sonnet' },
     { title: 'Judge', detail: 'best-of-breed synthesis + finding adjudication against professor rulings' },
@@ -53,26 +56,38 @@ const DOCTRINE = [STYLE_GUIDE, ...(A.moduleFiles || []).map(f => f.startsWith('/
 const readDoctrine = 'FIRST read these doctrine files with the Read tool and obey them (goal function, register audits, argument architecture, three-pass revision, claim strategy, bans):\n' +
   DOCTRINE.map(f => '- ' + f).join('\n') + '\n'
 
+if (!A.sectionText) log('WARNING: no sectionText provided — global checks (cross-paragraph redundancy, handoff, section-level length) will be weak. Provide the full current section.')
+
+const GLOBAL_RULES = '\nGLOBAL RULES (the doctrine outranks this edit brief — if they conflict, follow the doctrine and flag the conflict):\n' +
+  '- READ THE WHOLE SECTION FIRST. The rewritten paragraph must add only NEW information relative to the rest of the section.\n' +
+  '- OWNERSHIP (承先啟後): if this paragraph introduces our method, the first mention must unambiguously mark it as OURS (we propose / we introduce / this paper presents). Clever handoffs never outrank this.\n' +
+  '- NO RE-EXPLANATION: a concept already established in an earlier paragraph is referenced in half a sentence, never re-argued. If you catch yourself restating an earlier paragraph\'s reasoning, cut it.\n' +
+  '- SELLING TEST (when the module says this paragraph sells, e.g. intro P4): for EVERY sentence ask — does it answer WHY this is good/hard/important, or only WHAT it does? Mechanism narration is compressed to a minimum; the space goes to advantages, impact, significance.\n' +
+  '- OUTCOME TESTS, not surface features: satisfying checkable constraints (terminology, numbers, opener syntax) does NOT discharge the spirit requirements above. Verify by outcome: would a reviewer feel the significance? know whose method this is? see no repetition?\n' +
+  '- After the three-pass revision, ALSO run the module file\'s own self-check table (e.g. introduction.md\'s Anti-Mediocrity Check) item by item and fix failures.\n'
+
 const CONTEXT = '\nEDIT BRIEF (the professor\'s instruction — this defines success):\n' + A.editBrief +
   '\n\nPAPER FACTS (do not invent beyond these; keep all \\cite keys / numbers / macros exactly):\n' + A.paperFacts +
-  '\n\nPARAGRAPH TO REWRITE (LaTeX, verbatim):\n' + A.paragraphText + '\n'
+  (A.sectionText ? '\n\nFULL CURRENT SECTION (read END TO END before anything else):\n' + A.sectionText : '') +
+  '\n\nPARAGRAPH TO REWRITE (LaTeX, verbatim):\n' + A.paragraphText + '\n' + GLOBAL_RULES
 
 // ---------- Phase 1: direction draft (main-loop model), skipped when provided ----------
 phase('Direction')
 const DIRECTION_SCHEMA = {
   type: 'object', additionalProperties: false,
-  required: ['skeleton', 'argumentMoves', 'claimBoundaries', 'mustKeep'],
+  required: ['sectionAudit', 'skeleton', 'argumentMoves', 'claimBoundaries', 'mustKeep'],
   properties: {
-    skeleton: { type: 'string', description: 'sentence-level outline of the target paragraph' },
+    sectionAudit: { type: 'string', description: 'whole-section audit: each paragraph\'s unique job; cross-paragraph redundancy (quote the repeated concepts); overlong paragraphs; exactly which established concepts the target paragraph must NOT re-explain' },
+    skeleton: { type: 'string', description: 'sentence-level outline of the target paragraph, marking for each sentence whether it SELLS (why good/important) or informs, and what NEW information it adds' },
     argumentMoves: { type: 'string', description: 'the load-bearing argument moves (e.g. asymmetry arguments, callbacks to earlier paragraphs)' },
     claimBoundaries: { type: 'string', description: 'what may be claimed vs what must be credited/scoped (novelty landscape)' },
-    mustKeep: { type: 'string', description: 'citations, numbers, terms, macros that must survive verbatim' },
+    mustKeep: { type: 'string', description: 'citations, numbers, terms, macros that must survive verbatim; plus the ownership marker if the method debuts here' },
   },
 }
 const direction = A.directionDraft || await agent(
   readDoctrine + CONTEXT +
-  '\nYou are the DIRECTION planner. Do not write the final prose. Produce the plan a strong author would work from: the sentence-level skeleton, the load-bearing argument moves, the claim boundaries (what to credit to prior work, how to scope claims), and the elements that must survive verbatim.',
-  { label: 'direction', phase: 'Direction', schema: DIRECTION_SCHEMA }
+  '\nYou are the SECTION EDITOR. Do not write the final prose. FIRST read the entire section end to end and produce the sectionAudit: what each paragraph uniquely contributes, where paragraphs repeat each other (quote the repetitions), which paragraphs run long, and exactly which established concepts the target paragraph must reference in half a sentence instead of re-explaining. THEN produce the plan for the target paragraph: a sentence-level skeleton where each sentence is marked as selling vs informing and justified by the NEW information it adds, the load-bearing argument moves, the claim boundaries, and the must-keep elements (including the ownership marker if our method debuts here). Any section-level problem you find that lies OUTSIDE the target paragraph (e.g. an earlier paragraph is overlong) goes into sectionAudit for the judge to surface upward.',
+  { label: 'section-editor', phase: 'Direction', schema: DIRECTION_SCHEMA }
 )
 
 // ---------- Phase 2: 3 Sonnet writers (lens diversity) + Phase 3 critic needs all of them (barrier) ----------
@@ -130,10 +145,19 @@ const critique = await agent(
 phase('Judge')
 const JUDGE_SCHEMA = {
   type: 'object', additionalProperties: false,
-  required: ['final', 'provenance', 'adjudications', 'openQuestions'],
+  required: ['final', 'provenance', 'adjudications', 'globalChecks', 'openQuestions'],
   properties: {
     final: { type: 'string', description: 'the single best final paragraph, LaTeX-ready, fluent and correct as a whole' },
     provenance: { type: 'string', description: 'which sentences/moves came from which draft or the direction plan, and why' },
+    globalChecks: { type: 'object', additionalProperties: false,
+      required: ['ownership', 'sellingVsNarrative', 'crossParagraphRedundancy', 'moduleSelfCheck'],
+      properties: {
+        ownership: { type: 'string', description: 'is the method debut unambiguously marked as ours? quote the marker' },
+        sellingVsNarrative: { type: 'string', description: 'sentence-by-sentence verdict: which sentences sell (why-good) vs narrate (what-it-does); overall verdict' },
+        crossParagraphRedundancy: { type: 'string', description: 'every repetition against other paragraphs found and eliminated (quote both sides), or "none found"' },
+        moduleSelfCheck: { type: 'string', description: 'the module checklist (e.g. Anti-Mediocrity Check) run item by item with results' },
+      },
+    },
     adjudications: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['finding', 'verdict', 'action'], properties: {
       finding: { type: 'string' },
       verdict: { type: 'string', enum: ['accepted', 'rejected-relitigation', 'rejected-false-positive'] },
@@ -143,7 +167,7 @@ const JUDGE_SCHEMA = {
   },
 }
 const judgePrompt = readDoctrine + CONTEXT +
-  '\nYou are the JUDGE. Synthesize ONE best-of-breed final paragraph from the direction plan and the candidate drafts: take the strongest argument spine, the safest claims, the most precise register, and make the whole fluent and internally consistent (theme words, referents, terminology locked). Adjudicate every critic finding: accept real ones into the final text; REJECT any that relitigate professor-attested rulings (because->since is mandated; the 2026-06-12 OK-list is protected; approved conventions stand) or that are false positives — say which and why. Then run the full three-pass revision on your own final text, scanning it against the §八 ban list literally. Do NOT return a placeholder or summary — `final` must be the complete paragraph.\n\nDIRECTION PLAN:\n' + JSON.stringify(direction, null, 2) +
+  '\nYou are the JUDGE. Synthesize ONE best-of-breed final paragraph from the direction plan and the candidate drafts: take the strongest argument spine, the safest claims, the most precise register, and make the whole fluent and internally consistent (theme words, referents, terminology locked). Adjudicate every critic finding: accept real ones into the final text; REJECT any that relitigate professor-attested rulings (because->since is mandated; the 2026-06-12 OK-list is protected; approved conventions stand) or that are false positives — say which and why. Then run the full three-pass revision on your own final text, scanning it against the §八 ban list literally. THEN run the GLOBAL ACCEPTANCE PASS (mandatory; verdicts go in globalChecks, and these are OUTCOME tests, not surface features): read your final text as part of the FULL SECTION and verify (1) OWNERSHIP — the method debut carries an unambiguous we-propose-level marker; (2) SELLING vs NARRATIVE — sentence-by-sentence audit; a paragraph that merely narrates mechanism FAILS even with every mechanical constraint satisfied; (3) CROSS-PARAGRAPH REDUNDANCY — list every restatement of content from other paragraphs (quote both sides) and eliminate it from your final text; (4) MODULE SELF-CHECK — run the module file\'s own checklist (e.g. introduction.md Anti-Mediocrity Check) item by item. The doctrine outranks the edit brief: where they conflict, follow the doctrine and record the conflict in openQuestions. Section-level problems OUTSIDE this paragraph (from the sectionAudit or your own reading, e.g. an overlong earlier paragraph) also go into openQuestions for the professor. Do NOT return a placeholder or summary — `final` must be the complete paragraph.\n\nDIRECTION PLAN:\n' + JSON.stringify(direction, null, 2) +
   '\n\nCANDIDATE DRAFTS:\n' + drafts.map((d, i) => 'DRAFT ' + (i + 1) + ' (passNotes: ' + d.passNotes.slice(0, 300) + '):\n' + d.text).join('\n\n') +
   '\n\nCRITIC REPORT:\n' + JSON.stringify(critique, null, 2)
 
