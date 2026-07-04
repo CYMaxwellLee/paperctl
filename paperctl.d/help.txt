@@ -31,6 +31,7 @@ COMMANDS
   overview           Unified dashboard (pages, words, git, activity)
   scaffold-supp      Generate standalone supp.tex from conference template
   supp-check         Validate supplementary material structure & naming
+  root               Print the paperctl repo root (for locating workflows/skills on any machine)
   setup              Check environment & guide TeX Live installation
   setup --claude     Symlink Claude Code skills from paperctl repo
   auth               Seed git credentials into keychain (no password prompts)

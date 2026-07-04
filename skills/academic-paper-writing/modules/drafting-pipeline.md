@@ -43,15 +43,21 @@
 
 ## 怎麼開
 
+```bash
+ROOT=$(paperctl root)   # 任何機器都能定位 repo(setup 時 symlink 已建好)
+```
 ```js
 Workflow({
-  scriptPath: "<paperctl-repo>/claude-integration/workflows/para-pipeline.js",
+  scriptPath: ROOT + "/claude-integration/workflows/para-pipeline.js",
   args: {
+    paperctlRoot: ROOT,          // 換機器必給;doctrine 路徑由它解析
     paragraphText: "<段落原文,LaTeX 原樣>",
     editBrief: "<教授指示 + 段落角色,如 intro ¶4: method+contributions>",
     paperFacts: "<數字、模型清單、可用 cite keys、novelty 邊界、LaTeX 慣例(cleveref 有無、\\method{} 等)>",
-    moduleFiles: ["<paperctl>/skills/academic-paper-writing/modules/introduction.md"],  // 章節專用模組,選填
+    moduleFiles: ["skills/academic-paper-writing/modules/introduction.md"],  // 相對 ROOT;選填
     directionDraft: undefined,   // 主線已有方向草稿就傳入,跳過第一階段
+    judgeModel: undefined,       // 預設繼承主線模型(教授:「反正用 Fable 5 or Opus 最新的」,
+                                 // 主線 /model 選什麼就是什麼);要釘死可給 'fable' | 'opus'
     judgeEffort: "high",         // 最難的段落可 "max"
   },
 })

@@ -106,6 +106,7 @@ case "$COMMAND" in
   supp-check)     . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_supp_check.sh" "$@" ;;
   auth)           . "$PAPERCTL_LIB/lib.sh"; . "$PAPERCTL_LIB/cmd_auth.sh" "$@" ;;
   setup)          . "$PAPERCTL_LIB/cmd_setup.sh" "$@" ;;
+  root)           echo "$PAPERCTL_ROOT" ;;
   help|--help|-h) cat "$PAPERCTL_LIB/help.txt" ;;
   *)              echo "Unknown command: $COMMAND. Run 'paperctl help'." >&2; exit 1 ;;
 esac

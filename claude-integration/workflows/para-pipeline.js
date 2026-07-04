@@ -5,16 +5,22 @@
 // 整段要流暢正確,最後給我看,然後再上傳。」
 // Design rationale + usage: skills/academic-paper-writing/modules/drafting-pipeline.md
 //
-// Invoke from any session:
-//   Workflow({ scriptPath: "<paperctl>/claude-integration/workflows/para-pipeline.js",
-//              args: { paragraphText, editBrief, paperFacts, moduleFiles?, directionDraft?, judgeEffort? } })
+// Invoke from any session / any machine (repo location via `paperctl root`):
+//   ROOT=$(paperctl root)
+//   Workflow({ scriptPath: ROOT + "/claude-integration/workflows/para-pipeline.js",
+//              args: { paperctlRoot: ROOT, paragraphText, editBrief, paperFacts, ... } })
 //
 // args:
+//   paperctlRoot   (recommended) paperctl repo 根目錄(用 `paperctl root` 取得)。
+//                  未給時退回本檔提交時的預設路徑,換機器必給。
 //   paragraphText  (required) 要改寫的段落原文(學生稿或現行稿,LaTeX 原樣)
 //   editBrief      (required) 教授的指示 + 目標段落角色(如「intro ¶4: method+contributions」)
 //   paperFacts     (required) 論文事實包:數字、模型、cite keys、novelty 邊界、LaTeX 慣例
-//   moduleFiles    (optional) 章節專用 doctrine 模組路徑陣列(如 introduction.md);style-guide 永遠自動包含
+//   moduleFiles    (optional) 章節專用 doctrine 模組;相對路徑會以 paperctlRoot 為基底解析
+//                  (如 "skills/academic-paper-writing/modules/introduction.md");style-guide 永遠自動包含
 //   directionDraft (optional) 主線已寫好的方向草稿;缺省時由 pipeline 第一階段(繼承主線模型)產生
+//   judgeModel     (optional) 'fable' | 'opus' 釘死裁決模型;預設繼承主線 session 模型
+//                  (教授 2026-07-05:「反正用 Fable 5 or Opus 最新的」-- 主線選什麼就是什麼,政策變動不用改 code)
 //   judgeEffort    (optional) 裁決 effort,預設 'high'(最難的段落可給 'max')
 //
 // 主線(呼叫方)的責任,pipeline 不代勞:套進 .tex、compile、真跑 paperctl lint、
@@ -35,8 +41,9 @@ if (!args || !args.paragraphText || !args.editBrief || !args.paperFacts) {
   throw new Error('para-pipeline requires args: { paragraphText, editBrief, paperFacts }')
 }
 
-const STYLE_GUIDE = '/Users/cymaxwelllee/Project/Papers/paperctl/skills/academic-paper-writing/modules/style-guide.md'
-const DOCTRINE = [STYLE_GUIDE, ...(args.moduleFiles || [])]
+const ROOT = args.paperctlRoot || '/Users/cymaxwelllee/Project/Papers/paperctl'
+const STYLE_GUIDE = ROOT + '/skills/academic-paper-writing/modules/style-guide.md'
+const DOCTRINE = [STYLE_GUIDE, ...(args.moduleFiles || []).map(f => f.startsWith('/') ? f : ROOT + '/' + f)]
 const readDoctrine = 'FIRST read these doctrine files with the Read tool and obey them (goal function, register audits, argument architecture, three-pass revision, claim strategy, bans):\n' +
   DOCTRINE.map(f => '- ' + f).join('\n') + '\n'
 
@@ -135,6 +142,7 @@ const judgePrompt = readDoctrine + CONTEXT +
   '\n\nCRITIC REPORT:\n' + JSON.stringify(critique, null, 2)
 
 const judgeOpts = { label: 'judge', phase: 'Judge', schema: JUDGE_SCHEMA, effort: args.judgeEffort || 'high' }
+if (args.judgeModel) judgeOpts.model = args.judgeModel
 let judgement = await agent(judgePrompt, judgeOpts)
 
 // Placeholder guard (2026-07-05 lesson: a synthesizer once returned stubs).

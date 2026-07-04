@@ -124,6 +124,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 真跑 lint、**給教授過目後才推**。單句小修不開 pipeline，直接改。
 用法與 args：`skills/academic-paper-writing/modules/drafting-pipeline.md`；
 script：`claude-integration/workflows/para-pipeline.js`。
+**任何機器定位**：`ROOT=$(paperctl root)`，scriptPath 與 args.paperctlRoot 都用它。
 
 ---
 
