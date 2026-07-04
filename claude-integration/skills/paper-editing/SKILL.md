@@ -116,6 +116,17 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 ---
 
+## 段落級改寫：para-pipeline（教授 2026-07-05 核可的多 agent 流程）
+
+段落級（含）以上的改寫，用 paperctl 的 pipeline：Direction（主線模型抓方向）→
+3× Sonnet 5 寫手（論證/防審/語域三 lens，各自自審）→ 1× Sonnet critic 攻擊 →
+強模型 Judge 合成＋裁決（教授 rulings 為 binding，防翻案）→ 主線套稿、compile、
+真跑 lint、**給教授過目後才推**。單句小修不開 pipeline，直接改。
+用法與 args：`skills/academic-paper-writing/modules/drafting-pipeline.md`；
+script：`claude-integration/workflows/para-pipeline.js`。
+
+---
+
 ## 📐 Appendix 改寫鐵則（append 模式專用 — 違反就是反覆來回幾小時的那個坑）
 
 > 觸發：補 appendix／附錄／supplementary。藍字版是**完整、獨立的教授版**，不是 note、不是 summary。

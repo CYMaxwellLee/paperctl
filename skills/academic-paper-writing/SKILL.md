@@ -31,6 +31,7 @@
 | **Experimental Results** | `modules/experimental-results.md` | §4 結辯式寫法、insight-first 原則 |
 | **QA Guideline** | `modules/qa-guideline.md` | 8-pass QA 系統，從數學正確性到 GPT 句式清除 |
 | **QA Checklist** | `modules/qa-checklist.md` | 精簡版 checklist，適合時間緊張時快速 review |
+| **Drafting Pipeline** | `modules/drafting-pipeline.md` | 段落級改寫的多 agent 流程（direction → 3 Sonnet lens 寫手 → critic → 強模型裁決），教授 2026-07-05 核可 |
 | **Overleaf Ops** | `modules/overleaf-ops.md` | Overleaf 推送鐵律、merge 後檢查、compile 流程（NeurIPS 2026 教訓） |
 | **Editing Discipline** | `modules/editing-discipline.md` | 改稿紀律：三種 edit convention、禁止行為、跨 repo 規則（NeurIPS 2026 教訓） |
 
