@@ -37,8 +37,9 @@ PASS 4 — Supp 候補
 [ ] Hyperparameter table 已移 Supp
 [ ] 所有移入 Supp 的內容在 main 有 "see supplementary" 句
 
-PASS 5 — GPT 語法
-[ ] Banned words 全文搜尋完成（以 paperctl lint 清單為準）
+PASS 5 — 語域 + GPT 語法
+[ ] 語域遍完成：動詞審計（口語→學術）＋慣用語審計（隱喻→字面精確）＋術語一致（style-guide §一；lint 抓不到，靠判斷）
+[ ] Banned words 全文搜尋完成（以 paperctl lint 清單為準；lint 是地板不是天花板）
 [ ] Comma + V-ing 全文清除
 [ ] We/Our 連發已打散
 [ ] "As shown in / As can be seen from" 弱引用已改寫（表圖當主詞）
@@ -60,7 +61,7 @@ PASS 6 — LaTeX 格式
 
 1. **Pass 1B**：方程式邊界行為驗證（找 limit behavior 是否與 prose 相反）
 2. **Pass 2A**：Intro promise vs Experiments 數字對齊
-3. **Pass 5A**：Banned words 全文搜尋（10 分鐘）
+3. **Pass 5**：語域快篩（唸出來測試）＋ Banned words 全文搜尋
 4. **Pass 4B**：頁數壓縮優先順序（只做前三項）
 
 ---
@@ -70,7 +71,7 @@ PASS 6 — LaTeX 格式
 1. **Pass 0**：確認頁數缺口
 2. **Pass 1A + 1B**：建 notation table + 數學驗證（最費時，最重要）
 3. **Pass 3**：快速，做完可立刻改
-4. **Pass 5A**：全文搜尋 banned words
+4. **Pass 5A/5B**：語域審計 ＋ 全文搜尋 banned words
 5. **Pass 2**：逐 section 審查冗餘
 6. **Pass 4**：確認 Supp 候補 + 補引用句
 7. **Pass 1C + 1D**：填 consistency table

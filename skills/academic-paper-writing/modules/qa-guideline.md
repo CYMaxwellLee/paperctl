@@ -113,9 +113,16 @@
 
 ---
 
-## PASS 5 — Banned Words 全文搜尋
+## PASS 5 — 語域審計 + Banned Words
 
-見 `style-guide.md` 的 Banned Words 表。零容忍，逐一修改。
+先做判斷題，再做搜尋題（順序不可反 — style-guide §四）：
+
+**5A — 語域遍（判斷題，lint 抓不到）**：逐句三審計 —— 動詞審計（口語動詞 → 精確學術動詞）、
+慣用語審計（口語隱喻 → 字面精確；領域收編術語可用）、術語審計（一個概念一個名字）。
+見 `style-guide.md` §一。快篩：整段唸出來，聽起來像日常對話的句子逐句修。
+
+**5B — Banned Words 全文搜尋（機械題）**：見 `style-guide.md` §八 的 Banned Words 表
+（教授個人禁字，lint 強制）。零容忍，逐一修改。**通過 5B 不代表 5A 過了。**
 
 ---
 

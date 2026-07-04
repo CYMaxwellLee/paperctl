@@ -46,7 +46,50 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 ---
 
-## Writing Bans（零容忍，整篇適用——教授 2026-06-12：「general的精神必須共同整篇遵守，不應該歸納為只有 introduction 不該用」）
+## 寫作目標（教授 2026-07-05 定調；禁字仍由 lint 強制，但只是地板）
+
+> 「那些所謂禁字只是我個人不喜歡的用法，不是說改 paper 要變成一個 regex 任務。
+> 我希望寫的是 Professional 專業的 ML/RL/CV Papers，寫得像個頂級研究學者。」
+
+**品質 = 論證 × 精確 × 語域。lint 只是地板；通過 lint ≠ 寫得好。**
+總判準：這句話放進該領域的 best paper 正文，違和嗎？
+
+### 三遍修訂（每段寫完照做，順序不可反）
+
+1. **論證遍** — 逐句問「這句推進了什麼論證？」不推進就刪或併（刪句只適用自己剛寫
+   的草稿；動學生或既有正文改為標記徵求同意）；claim 不超出證據；transition 反映
+   真實邏輯關係（因果/遞進/對比），不是塞副詞；指涉對齊（The X / This 與前文實體
+   的身分數量對得上 —— 立了兩個 gap 就寫 Both gaps）；跳太快的句子拆開，把中間
+   推理步驟寫出來。
+2. **語域遍** — 逐句四個審計：
+   - **動詞審計**：口語動詞換精確學術動詞（makes→illustrates/demonstrates、
+     lets→permits/allows、asks→requires、gets→obtains/incurs、sit→remain、
+     pull forward→advance、gives way→collapses/is broken、comes down to→reduces to、
+     has tried→has sought）。這是校準樣本不是黑名單 —— 表外的口語動詞一樣換；
+     **不可 grep 替換**（right-hand side、`use` 作為 utilize 替代詞等場合不適用）。
+     數學慣用語（Let $x$ denote / It follows that / holds / yields / admits）
+     不是口語，保留。
+   - **慣用語審計**：口語隱喻（a far lower bar / left on the table / low-hanging fruit）
+     → 改字面精確（a substantially weaker condition / remains unexploited）。
+     領域收編術語（bottleneck / pipeline / greedy / warm start）可用。
+   - **術語審計**：一個概念一個名字全文鎖定（列出技術名詞，同物異名合併）；
+     同義變化只用於論證動詞，不用於術語。
+   - **重複詞審計**：同一句內或相鄰句不重複同一個非術語詞（教授 2026-07-04：
+     「你這句話兩個 already」）。文采原則，無數字配額。
+   - 快篩：整段唸出來，聽起來像日常對話的句子逐句修。
+     2026-06-12 明示 OK 的用法不要「修」：It is worth noting that / As expected, /
+     demonstrates the effectiveness of / has gained significant attention /
+     Recently, many works / In this paper, we。
+3. **機械遍** — 實際執行 `paperctl lint --paper <name>`（無 conference.json 就拿
+   下方禁字清單 grep）。**必須真的跑、看輸出**，不准沒跑就宣稱「已檢查無違規」
+   （2026-07-05 實測：模型自稱 verified 而違規就在最後一句；自我宣稱不可信）。
+
+完整 doctrine：paperctl `skills/academic-paper-writing/modules/style-guide.md` §〇–§四
+（含 2026-07-04 ACML ¶3 的 before/after 校準例）。
+
+---
+
+## Writing Bans（教授個人禁字，lint 機械強制 — 必要非充分；整篇適用——教授 2026-06-12：「general的精神必須共同整篇遵守，不應該歸納為只有 introduction 不該用」）
 
 1. ❌ Em dash (`---` 或 `—`)
 2. ❌ Adverb+comma opener（`Additionally,` `Notably,` `Crucially,` …）。例外允許：`Specifically,`，以及 `Moreover,` / `Furthermore,`（教授 2026-06-27 親口裁定允許）
@@ -66,7 +109,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 **注意**：`--` (en-dash) 用於 `accuracy--speed` → **保留不動**
 **明確不禁**（2026-06-12 裁決，勿再加回）：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」；Intro 的 `\Delta/\tau` notation 與 figure ref 沒有限制（teaser 在 ¶3 必引）。
-**文采原則 ≠ 數字配額**（2026-06-12）：However/We/leverage 不要過度重複是「多變化」的文采原則，不是「每段 N 句」「>2 次」這種數字禁令；同理沒有頁數配額、ablation 行數、proof 行數門檻。Contributions 3–5 個端看情況，重點講為什麼 significant、有什麼 impact 與 insight。
+**文采原則 ≠ 數字配額**（2026-06-12）：However/We/leverage 不要過度重複是「多變化」的文采原則，不是「每段 N 句」「>2 次」這種數字禁令；同理沒有頁數配額、ablation 行數、proof 行數門檻。Contributions 個數「3–5 個端看情況」為教授 2026-06-12 裁決，重點講為什麼 significant、有什麼 impact 與 insight。
 
 **強制檢查**：`paperctl lint --paper <name>` 自動掃 #1–#14 加括號式表圖引用 `(Table 9)`、句首 But/So（有 fail 會 exit 1 可當 gate；SAGA 類無 cleveref 論文自動跳過 bare-`\ref`；contributions 區塊的 `\item` 不會被 --intro 誤抓）。
 **人工判斷**（lint 掃不了，靠自己）：小括號補充子句、自問自答/反問句、However/We/leverage 文采變化、慎用 empirical/principle、表圖「當主詞」的正向確認（appendix 由 `verify-appendix` 管）。
@@ -108,6 +151,8 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 ---
 
 ## 改完必做（最重要）
+
+**先做完三遍修訂（論證 → 語域 → lint，見「寫作目標」節），再進推送流程。**
 
 ```bash
 # Compile

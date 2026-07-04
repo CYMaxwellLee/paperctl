@@ -27,6 +27,14 @@
 #  I1.  \item bullets outside the contributions block (the contributions itemize is exempt)
 # NOT lintable (manual judgment): parenthetical asides, rhetorical questions,
 # However/We/leverage variety (文采), 慎用 empirical / principle.
+#
+# Role (2026-07-05 professor ruling): lint is the FLOOR, not the goal. It enforces
+# the professor's personal dislikes mechanically; passing lint says nothing about
+# prose quality. Register/argument doctrine lives in
+# skills/academic-paper-writing/modules/style-guide.md (§〇-§四: goal function,
+# register audits, three-pass revision). Do NOT add strings here to fix register
+# problems -- casual verbs (makes/lets/asks/sit...) are judgment calls for the
+# register pass (語域遍), not regexes.
 # Exit contract: exit 1 if any fail-severity hit (lint can gate a push).
 #
 # Provenance discipline (2026-06-12 professor ruling): every rule cites its source

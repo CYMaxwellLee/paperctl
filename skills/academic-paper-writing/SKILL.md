@@ -17,6 +17,7 @@
 3. **Theory drives architecture**: 方法的設計應該是理論分析的自然產物，而非先拼架構再硬湊理論。
 4. **Academic, professional, elegant prose**: 頂會論文水準的英文，避免 GPT 痕跡、模板句式、空洞形容詞。
 5. **Specific over generic**: 每句話都要有具體內容。數字勝過形容詞，機制勝過 buzzword。
+6. **品質 = 論證 × 精確 × 語域，lint 只是地板**（教授 2026-07-05）: 禁字表是教授個人偏好的機械閘門，通過 lint ≠ 寫得好。語域靠三審計（動詞/慣用語/術語，style-guide §一），每段寫完走三遍修訂（論證 → 語域 → lint，style-guide §四）。
 
 ### 模組結構
 
@@ -48,11 +49,11 @@
 **投稿期改稿（deadline 前）**：
 1. **必讀** `editing-discipline.md`（確認該篇的 edit convention）
 2. **必讀** `overleaf-ops.md`（推送流程，改完必推 Overleaf）
-3. 讀 `style-guide.md`（writing bans）
-4. 改完 → compile → push GitHub → push Overleaf
+3. 讀 `style-guide.md`（§〇 目標函數 + §一 語域 + §四 三遍修訂；§八 禁字只是地板）
+4. 改完 → 三遍修訂 → compile → push GitHub → push Overleaf
 
 **時間緊張時**：
-1. 只讀 `style-guide.md`（核心禁止項）
+1. 只讀 `style-guide.md`（§〇 目標函數 + §一 語域 + §四 三遍修訂 + §八 禁字）
 2. 只做 QA Checklist 中的「最低限度」四項
 
 ### Venue 差異速查
