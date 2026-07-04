@@ -37,19 +37,25 @@ export const meta = {
   ],
 }
 
-if (!args || !args.paragraphText || !args.editBrief || !args.paperFacts) {
+// Harness footgun guard: some invocation paths deliver args as a JSON-encoded
+// string rather than an object (observed 2026-07-05 on first live run). Normalize.
+let A = args
+if (typeof A === 'string') {
+  try { A = JSON.parse(A) } catch (e) { throw new Error('para-pipeline: args arrived as a non-JSON string') }
+}
+if (!A || !A.paragraphText || !A.editBrief || !A.paperFacts) {
   throw new Error('para-pipeline requires args: { paragraphText, editBrief, paperFacts }')
 }
 
-const ROOT = args.paperctlRoot || '/Users/cymaxwelllee/Project/Papers/paperctl'
+const ROOT = A.paperctlRoot || '/Users/cymaxwelllee/Project/Papers/paperctl'
 const STYLE_GUIDE = ROOT + '/skills/academic-paper-writing/modules/style-guide.md'
-const DOCTRINE = [STYLE_GUIDE, ...(args.moduleFiles || []).map(f => f.startsWith('/') ? f : ROOT + '/' + f)]
+const DOCTRINE = [STYLE_GUIDE, ...(A.moduleFiles || []).map(f => f.startsWith('/') ? f : ROOT + '/' + f)]
 const readDoctrine = 'FIRST read these doctrine files with the Read tool and obey them (goal function, register audits, argument architecture, three-pass revision, claim strategy, bans):\n' +
   DOCTRINE.map(f => '- ' + f).join('\n') + '\n'
 
-const CONTEXT = '\nEDIT BRIEF (the professor\'s instruction — this defines success):\n' + args.editBrief +
-  '\n\nPAPER FACTS (do not invent beyond these; keep all \\cite keys / numbers / macros exactly):\n' + args.paperFacts +
-  '\n\nPARAGRAPH TO REWRITE (LaTeX, verbatim):\n' + args.paragraphText + '\n'
+const CONTEXT = '\nEDIT BRIEF (the professor\'s instruction — this defines success):\n' + A.editBrief +
+  '\n\nPAPER FACTS (do not invent beyond these; keep all \\cite keys / numbers / macros exactly):\n' + A.paperFacts +
+  '\n\nPARAGRAPH TO REWRITE (LaTeX, verbatim):\n' + A.paragraphText + '\n'
 
 // ---------- Phase 1: direction draft (main-loop model), skipped when provided ----------
 phase('Direction')
@@ -63,7 +69,7 @@ const DIRECTION_SCHEMA = {
     mustKeep: { type: 'string', description: 'citations, numbers, terms, macros that must survive verbatim' },
   },
 }
-const direction = args.directionDraft || await agent(
+const direction = A.directionDraft || await agent(
   readDoctrine + CONTEXT +
   '\nYou are the DIRECTION planner. Do not write the final prose. Produce the plan a strong author would work from: the sentence-level skeleton, the load-bearing argument moves, the claim boundaries (what to credit to prior work, how to scope claims), and the elements that must survive verbatim.',
   { label: 'direction', phase: 'Direction', schema: DIRECTION_SCHEMA }
@@ -141,8 +147,8 @@ const judgePrompt = readDoctrine + CONTEXT +
   '\n\nCANDIDATE DRAFTS:\n' + drafts.map((d, i) => 'DRAFT ' + (i + 1) + ' (passNotes: ' + d.passNotes.slice(0, 300) + '):\n' + d.text).join('\n\n') +
   '\n\nCRITIC REPORT:\n' + JSON.stringify(critique, null, 2)
 
-const judgeOpts = { label: 'judge', phase: 'Judge', schema: JUDGE_SCHEMA, effort: args.judgeEffort || 'high' }
-if (args.judgeModel) judgeOpts.model = args.judgeModel
+const judgeOpts = { label: 'judge', phase: 'Judge', schema: JUDGE_SCHEMA, effort: A.judgeEffort || 'high' }
+if (A.judgeModel) judgeOpts.model = A.judgeModel
 let judgement = await agent(judgePrompt, judgeOpts)
 
 // Placeholder guard (2026-07-05 lesson: a synthesizer once returned stubs).
