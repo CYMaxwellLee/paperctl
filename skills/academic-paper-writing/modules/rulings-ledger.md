@@ -58,6 +58,9 @@
   Impacts、Significance，不是只是列點講一些報告數字的東西」；We 開頭一律弱，
   但句法迴避不等於達標（遮蓋測試驗收）。
 - **Contributions 交棒句用冒號**（2026-07-05）：「應該要冒號吧」。
+- **Contributions：We 開頭 OK、每條要短**（2026-07-06）：「Contributions 可以
+  We 開頭沒關係」「每一項都有點太長了」→ 一條一主張、一到兩句；先前「不准 We
+  開頭」是把教授的「內容不能空」過度規則化，撤銷（反降維鐵則的又一案例）。
 - **Transition 累犯檢討**（2026-07-06）：「感覺你一直有 transition 很差的問題，
   反而目前 Rei 用舊版的 paperctl，transition 她做得很好。你需要從 high level 檢討」
   —— 一個 session 內被糾正五次。根因：副詞禁令的寒蟬效應（agents 為避 ban 而少用
