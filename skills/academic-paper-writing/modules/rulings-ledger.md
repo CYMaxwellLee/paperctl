@@ -75,6 +75,11 @@
   （「To this end, we propose X that supplies both components…」優於
   「Both components can be supplied…. We propose X.」）。
 
+- **Conclusion 用過去式**（2026-07-06）：「我習慣 Conclusion 用過去式，因為是
+  回顧我們這篇 Paper 做了什麼」→ 底層目標：結論是回顧。操作化（例證非規則）：
+  動作與測得結果用過去式（identified / introduced / achieved），恆真性質與
+  結果的當下意涵可留現在式（requires / applies / show）。
+
 ## 三、Claim 與防審策略
 
 - **不示弱**（2026-06-27）：「專家貪婪又刻薄，攤弱點只會被打」；Limitations 寫
