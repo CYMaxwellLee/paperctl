@@ -129,6 +129,25 @@ B as …」把前段點名的兩個需求逐一映射到方法元件。機制只
 （安全性、部署性、數字）。Contributions：一條一主張、一到兩句、We 開頭沒問題、
 先 why 再 what 再 evidence、交棒句用冒號。
 
+## 樣本 5：ACML 2026 SPD Related Work ¶1（RW 背景線，2026-07-06 定稿）
+
+> Diffusion language models cast text generation as iterative denoising over
+> discrete tokens, and masked diffusion has become the dominant instantiation of
+> this paradigm. The paradigm has since expanded into a broad family of systems:
+> open-weight models such as LLaDA and Dream address general instruction following
+> and mathematical reasoning, while Gemini Diffusion, Mercury, and Seed Diffusion
+> demonstrate the approach in industrial settings. Dream-Coder and DiffuCoder
+> further specialize this line for code generation. Within this family, our work
+> builds on masked dLLMs: the model architecture, tokenizer, and training objective
+> remain unchanged, and the improvement lies entirely in inference-time decoding.
+
+**可遷移手法（RW 文體）**：漏斗＝範式起源 → 主導變體點名（機制歸 Prelim，這裡
+只定位）→ **有結構的系統版圖**（開源／工業級／特化，引用跟著被點名的系統走，
+不做句尾 citation 堆）→ 「Within this family,」收到我們的定位，句尾刻意落在
+「inference-time decoding」，讓下一段的「A prevalent inference strategy…」
+given-new 接棒。跨 section 冗餘紀律：intro ¶1 講過的（多位置預測、LLaDA/Dream
+的 accuracy claim）此處不重講；§3.1 要形式化的機制此處不預講。
+
 ---
 
 **Voice 使用法**：動筆前讀一遍，感受句長交替（長論證句配短支點句）、連接語密度、
