@@ -6,6 +6,11 @@
 
 1. **載入 doctrine**：paper-editing skill 自動觸發 → 讀 style-guide §〇/§一/§二/§四、
    rulings-ledger.md（教授裁決史）、approved-exemplars.md（節奏標準）。
+   ⚠️ **宣稱「guideline 沒有涵蓋某文體」之前，必須 grep＋讀完 modules/ 全部檔案**
+   （2026-07-06 事故：宣稱沒有 Related Work 規範，實際上 introduction.md 的前人
+   討論原則＋preliminary-methodology.md 的 Prelim/RW 邊界與「評價歸 RW」＋
+   qa-guideline 的精簡令，三處合起來就是 RW 文體的完整規範——只查檔名不讀內容
+   是錯的）。
 2. **讀論文狀態**：論文 repo 根目錄的 `PAPER-STATE.md`（各段核可狀態、現行 headline
    數字與出處、edit conventions、novelty 邊界、待辦）。沒有就先建。**Director 的
    狀態必須外部化在這個檔案，不准只活在對話 context 裡**（session 更換 = 狀態歸零
