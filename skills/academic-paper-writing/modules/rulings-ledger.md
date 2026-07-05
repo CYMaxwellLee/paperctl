@@ -99,6 +99,11 @@
   結果測試並以結果測試驗收；doctrine 高於任何 task brief。
 - **全局觀**（2026-07-05 第二批）：「drafter 要先整個看過…要遵照要自省是否有達到
   Guideline 或專業學術寫作的精神…然後把這些重要的東西掌握才 draft」。
+- **一氣呵成架構令**（2026-07-06）：「專注於如何之後把這些 transitions 改得專業
+  漂亮精美，讓讀者讀起來串接一氣呵成，不是獨立的短句子」「這個問題不可復發」→
+  架構 v3：Judge 改為 Voice（草稿是原料不是候選句，最終文字從頭一口氣重寫，修訂
+  輪也是整段重寫）；寫輕查重（brief 只給承重要點，規則書給檢查層）；正面樣本庫
+  `approved-exemplars.md` 上線（教授定稿段落＝節奏標準）。
 - **Agentic 分工**（2026-07-05 第三批）：Director / Planner / Writers / Critic /
   Judge / Verifier / Professor-Proxy 組織正式成立；「雖然這樣 Agentic Style 看似
   花費 Tokens，但我每次花很多時間和 Claude code 吵架或者糾正，其實浪費的更多。
