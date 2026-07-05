@@ -71,6 +71,7 @@ const GLOBAL_RULES = '\nGLOBAL RULES (the doctrine outranks this edit brief — 
   '- NO RE-EXPLANATION: a concept already established in an earlier paragraph is referenced in half a sentence, never re-argued. If you catch yourself restating an earlier paragraph\'s reasoning, cut it.\n' +
   '- SELLING TEST (when the module says this paragraph sells, e.g. intro P4): for EVERY sentence ask — does it answer WHY this is good/hard/important, or only WHAT it does? Mechanism narration is compressed to a minimum; the space goes to advantages, impact, significance.\n' +
   '- OUTCOME TESTS, not surface features: satisfying checkable constraints (terminology, numbers, opener syntax) does NOT discharge the spirit requirements above. Verify by outcome: would a reviewer feel the significance? know whose method this is? see no repetition?\n' +
+  '- CHAIN READ (mandatory; the professor\'s most-repeated correction): read every consecutive sentence PAIR, including the pair spanning the previous paragraph\'s last sentence. Each pair needs an explicit link — a connective phrase, a subject that picks up the previous sentence\'s content (given-new), or an unambiguous anaphor. Connective phrases (To this end, / To do so, / Under this regime, / In this way, / Beyond X,) are ENCOURAGED — the adverb-opener ban does not apply to them. If a sentence could be removed or reordered unnoticed, the chain is broken. Do not insert stand-alone bridge sentences; let the continuing sentence carry the connection itself.\n' +
   '- After the three-pass revision, ALSO run the module file\'s own self-check table (e.g. introduction.md\'s Anti-Mediocrity Check) item by item and fix failures.\n'
 
 const CONTEXT = '\nEDIT BRIEF (the professor\'s instruction — this defines success):\n' + A.editBrief +
@@ -157,9 +158,10 @@ const JUDGE_SCHEMA = {
     final: { type: 'string', description: 'the single best final paragraph, LaTeX-ready, fluent and correct as a whole' },
     provenance: { type: 'string', description: 'which sentences/moves came from which draft or the direction plan, and why' },
     globalChecks: { type: 'object', additionalProperties: false,
-      required: ['ownership', 'sellingVsNarrative', 'crossParagraphRedundancy', 'moduleSelfCheck'],
+      required: ['ownership', 'sellingVsNarrative', 'crossParagraphRedundancy', 'chainRead', 'moduleSelfCheck'],
       properties: {
         ownership: { type: 'string', description: 'is the method debut unambiguously marked as ours? quote the marker' },
+        chainRead: { type: 'string', description: 'pair-by-pair chain verdict incl. the pair spanning the previous paragraph boundary: name the link of every pair (connective / given-new subject / anaphor); flag any pair without one' },
         sellingVsNarrative: { type: 'string', description: 'sentence-by-sentence verdict: which sentences sell (why-good) vs narrate (what-it-does); overall verdict' },
         crossParagraphRedundancy: { type: 'string', description: 'every repetition against other paragraphs found and eliminated (quote both sides), or "none found"' },
         moduleSelfCheck: { type: 'string', description: 'the module checklist (e.g. Anti-Mediocrity Check) run item by item with results' },

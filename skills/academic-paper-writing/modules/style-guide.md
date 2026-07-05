@@ -144,6 +144,17 @@ catastrophic forgetting, early exit）。判準：它會出現在頂會論文的
   （Under this regime / Beyond this cross-block loss / 承接主詞），不是塞一個副詞。
   教授 2026-06-27 允許的 `Specifically,`/`Moreover,`/`Furthermore,` 在關係確為
   遞進/具體化時是正當 transition —— 本條擋的是用副詞掩蓋缺失的邏輯關係，不是禁這三個詞。
+- **連接語復權條款（教授 2026-07-06：「感覺你一直有 transition 很差的問題…你需要
+  從 high level 檢討」）**：句首副詞禁令**不及於連接性片語**。以下是正當且被鼓勵的
+  連接手段：`To this end,`、`To do so,`、`Under this regime,`、`In this way,`、
+  `Beyond X,`、`Building on this observation,`、`Guided by this insight,`、
+  purpose 前置子句、主詞承接前句賓語。教授多次**主動要求加連接語**（「例如加一個
+  『在這種情況下』」「例如 unfortunately」）——禁令的寒蟬效應導致無連接詞的斷句流
+  （「兩個 bullet item 硬貼」），是實際發生過的系統性錯誤，不可重演。
+- **鏈讀檢查（chain read，強制）**：任何合成或修改之後，把每一對相鄰句連讀，
+  每一對必須有明確連結——連接語、或主詞承接前句的內容（given-new）、或無歧義回指。
+  判準：**抽掉或調換某句而讀者不會察覺，鏈就是斷的。** 合成式寫作（多稿取句）與
+  點修（只改被指的那句）是鏈斷的兩大來源，改完必須連前後句重讀。
 - **指涉對齊**：句首的 The X / This / These 必須與前文建立的實體在**身分與數量**上
   對得上 —— 前文立了兩個 gap，就寫 Both gaps，不寫 The obstacle（教授 2026-07-04）。
 - **壓縮審計**：一句話若要求讀者自行補上未寫出的推理步驟，拆成兩句把中間步驟寫出來

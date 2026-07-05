@@ -58,6 +58,14 @@
   Impacts、Significance，不是只是列點講一些報告數字的東西」；We 開頭一律弱，
   但句法迴避不等於達標（遮蓋測試驗收）。
 - **Contributions 交棒句用冒號**（2026-07-05）：「應該要冒號吧」。
+- **Transition 累犯檢討**（2026-07-06）：「感覺你一直有 transition 很差的問題，
+  反而目前 Rei 用舊版的 paperctl，transition 她做得很好。你需要從 high level 檢討」
+  —— 一個 session 內被糾正五次。根因：副詞禁令的寒蟬效應（agents 為避 ban 而少用
+  連接語）＋合成式寫作的接縫失守＋點修不連讀。裁決結果：連接語復權條款＋強制鏈讀
+  檢查（style-guide §二）。連接語（To this end / Under this regime…）是被鼓勵的，
+  不是被禁的。橋接不要用獨立短句硬插，讓承接句自己完成連接
+  （「To this end, we propose X that supplies both components…」優於
+  「Both components can be supplied…. We propose X.」）。
 
 ## 三、Claim 與防審策略
 
