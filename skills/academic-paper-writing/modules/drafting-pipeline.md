@@ -32,8 +32,22 @@
   ├─ 4. Judge(強模型,繼承主線;effort 可調):
   │      best-of-breed 合成 + 裁決 findings(教授裁決 binding,防翻案)
   │      + 全局驗收 pass(所有權/賣vs敘述/跨段冗餘/模組自檢表,結果測試驗收)
-  └─ 5. 主線:套 .tex → compile → 真跑 paperctl lint → 給教授看 → OK 才推 Overleaf
+  ├─ 5. Verifier(Sonnet,工具實查不信自我宣稱):
+  │      cite key 對 bib、數字對 tables、掃全 repo 過期數字、術語漂移、ban 掃描
+  ├─ 6. Professor-Proxy(強模型,ground truth = rulings-ledger.md):
+  │      模擬教授逐句審,每條 finding 引帳本條目;approve / revise
+  ├─ 7. Refine(內部迭代,最多 2 輪,教授看不到):
+  │      Judge 自改 → Verifier 復查 → Proxy 復審;不收斂的進 openQuestions
+  └─ 8. Director(主線):套 .tex → compile → 真跑 lint → 呈報教授
+        (最終稿+diff+provenance+openQuestions)→ 教授裁決 → 推 Overleaf
+        教授的每條新 line-edit → 回寫 rulings-ledger.md(飛輪)
 ```
+
+**角色對照（教授 2026-07-05 第三批核可的組織）**：Director＝主線 session（唯一對教授
+的介面、全文狀態、triage、brief、整合呈報）；Planner＝Section Editor stage；
+Writers＝三 lens Sonnet；Critic＝攻擊者；Judge＝合成與裁決;Verifier＝機械事實查核；
+Reviewer/QA＝Professor-Proxy＋全局驗收。設計原則：**教授看到的永遠是內部迭代完的
+版本**——「我每次花很多時間和 Claude code 吵架或者糾正，其實浪費的更多。不如一次到位。」
 
 ### ⚠️ 2026-07-05 ¶4 首戰事故（本結構的由來，不可回退）
 
@@ -69,6 +83,7 @@ Workflow({
     paperctlRoot: ROOT,          // 換機器必給;doctrine 路徑由它解析
     paragraphText: "<段落原文,LaTeX 原樣>",
     sectionText: "<該 section 完整現行全文>",  // 全局視角的來源,幾乎必給(缺席會 log 警告)
+    repoDir: "<論文 repo 路徑>",               // Verifier 實查 bib/表格/全 repo 過期數字,幾乎必給
     editBrief: "<教授指示 + 段落角色,如 intro ¶4: method+contributions>",
     paperFacts: "<數字、模型清單、可用 cite keys、novelty 邊界、LaTeX 慣例(cleveref 有無、\\method{} 等)>",
     moduleFiles: ["skills/academic-paper-writing/modules/introduction.md"],  // 相對 ROOT;選填

@@ -19,6 +19,9 @@
 //                  (2026-07-05 ¶4 事故的直接教訓)。缺席時 pipeline 會 log 警告。
 //   editBrief      (required) 教授的指示 + 目標段落角色(如「intro ¶4: method+contributions」)
 //   paperFacts     (required) 論文事實包:數字、模型、cite keys、novelty 邊界、LaTeX 慣例
+//   repoDir        (STRONGLY RECOMMENDED) 論文 repo 路徑。Verifier 用它實查 bib key、
+//                  對表格核數字、掃其他 section 的過期數字(2026-07-05 教訓:學生更新
+//                  結果後 abstract/conclusion 數字全文不一致,只有 repo 實查抓得到)
 //   moduleFiles    (optional) 章節專用 doctrine 模組;相對路徑會以 paperctlRoot 為基底解析
 //                  (如 "skills/academic-paper-writing/modules/introduction.md");style-guide 永遠自動包含
 //   directionDraft (optional) 主線已寫好的方向草稿;缺省時由 pipeline 第一階段(繼承主線模型)產生
@@ -37,6 +40,9 @@ export const meta = {
     { title: 'Write', detail: '3 Sonnet writers with distinct lenses, each self-revised (three-pass)', model: 'sonnet' },
     { title: 'Attack', detail: '1 Sonnet critic attacks the draft and all variants', model: 'sonnet' },
     { title: 'Judge', detail: 'best-of-breed synthesis + finding adjudication against professor rulings' },
+    { title: 'Verify', detail: 'mechanical fact-check against the repo: cite keys, numbers vs tables, stale numbers elsewhere, bans', model: 'sonnet' },
+    { title: 'Proxy', detail: 'professor-proxy review against the rulings ledger' },
+    { title: 'Refine', detail: 'bounded internal revision loop (max 2 rounds) until verifier passes and proxy approves' },
   ],
 }
 
@@ -52,7 +58,8 @@ if (!A || !A.paragraphText || !A.editBrief || !A.paperFacts) {
 
 const ROOT = A.paperctlRoot || '/Users/cymaxwelllee/Project/Papers/paperctl'
 const STYLE_GUIDE = ROOT + '/skills/academic-paper-writing/modules/style-guide.md'
-const DOCTRINE = [STYLE_GUIDE, ...(A.moduleFiles || []).map(f => f.startsWith('/') ? f : ROOT + '/' + f)]
+const LEDGER = ROOT + '/skills/academic-paper-writing/modules/rulings-ledger.md'
+const DOCTRINE = [STYLE_GUIDE, LEDGER, ...(A.moduleFiles || []).map(f => f.startsWith('/') ? f : ROOT + '/' + f)]
 const readDoctrine = 'FIRST read these doctrine files with the Read tool and obey them (goal function, register audits, argument architecture, three-pass revision, claim strategy, bans):\n' +
   DOCTRINE.map(f => '- ' + f).join('\n') + '\n'
 
@@ -185,11 +192,79 @@ if (!judgement || judgement.final.length < Math.min(400, longestDraft * 0.5)) {
   )
 }
 
+// ---------- Phase 5: Verifier — mechanical fact check, tools actually run ----------
+phase('Verify')
+const VERIFY_SCHEMA = {
+  type: 'object', additionalProperties: false,
+  required: ['pass', 'issues', 'notes'],
+  properties: {
+    pass: { type: 'boolean', description: 'true only if zero must-fix issues' },
+    issues: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['severity', 'kind', 'detail'], properties: {
+      severity: { type: 'string', enum: ['must-fix', 'minor'] },
+      kind: { type: 'string', description: 'stale-number | cite-key | terminology | ban | fact' },
+      detail: { type: 'string' },
+    } } },
+    notes: { type: 'string' },
+  },
+}
+const verifierPrompt = (text) => readDoctrine + CONTEXT +
+  '\nYou are the VERIFIER. Mechanically fact-check the candidate text. ACTUALLY run every check with tools (Read/Grep/Bash); never report a check you did not run.' +
+  (A.repoDir
+    ? '\nPaper repo: ' + A.repoDir + ' — (1) grep every \\cite key in the candidate against the repo\'s .bib file(s); (2) read the results tables and cross-check every number in the candidate; (3) grep the OTHER section files for numbers that conflict with the current results and flag them as must-fix stale-number issues (even though they are outside the candidate — the professor must know); (4) check the candidate\'s terminology against the section for drift.'
+    : '\nNo repoDir given — verify text-only: numbers vs paperFacts, internal consistency, terminology vs sectionText.') +
+  '\n(5) grep-scan the candidate against the style-guide §八 ban list.\n\nCANDIDATE:\n' + text
+let verifier = await agent(verifierPrompt(judgement.final), { label: 'verifier', phase: 'Verify', schema: VERIFY_SCHEMA, model: 'sonnet' })
+
+// ---------- Phase 6: Professor-Proxy review, then bounded internal refinement ----------
+phase('Proxy')
+const PROXY_SCHEMA = {
+  type: 'object', additionalProperties: false,
+  required: ['verdict', 'lineEdits', 'overall'],
+  properties: {
+    verdict: { type: 'string', enum: ['approve', 'revise'] },
+    lineEdits: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['quote', 'problem', 'fix', 'rulingRef'], properties: {
+      quote: { type: 'string' }, problem: { type: 'string' }, fix: { type: 'string' },
+      rulingRef: { type: 'string', description: 'the ledger entry / doctrine clause this finding invokes' },
+    } } },
+    overall: { type: 'string', description: 'overall assessment; open questions the proxy cannot settle go here' },
+  },
+}
+const proxyPrompt = (text) => readDoctrine + CONTEXT +
+  '\nYou are the PROFESSOR-PROXY REVIEWER. The rulings ledger (among the doctrine files above) is your ground truth. Review the candidate exactly as the professor would, line by line: register line-edits (ledger §一), argument/structure/clarity (§二 — transitions, over-compressed sentences, referent alignment, cross-paragraph redundancy, selling vs narrative, ownership marker), claim safety (§三), conventions (§四). Cite the ledger entry in rulingRef for every finding. Verdict approve ONLY if the professor would plausibly accept without line edits. Professor-approved conventions are binding — do not flag them. When unsure whether something violates a ruling, raise it in overall as an open question instead of inventing a finding.\n\nCANDIDATE:\n' + text
+let proxy = await agent(proxyPrompt(judgement.final), { label: 'proxy', phase: 'Proxy', schema: PROXY_SCHEMA, effort: A.judgeEffort || 'high' })
+
+const REVISE_SCHEMA = { type: 'object', additionalProperties: false, required: ['final', 'changes'], properties: {
+  final: { type: 'string', description: 'the COMPLETE revised text' },
+  changes: { type: 'string', description: 'what changed and which finding each change answers' },
+} }
+let rounds = 0
+const unresolved = []
+while (rounds < 2 && (!verifier.pass || proxy.verdict === 'revise')) {
+  rounds += 1
+  log('internal refinement round ' + rounds + ' (verifier pass=' + verifier.pass + ', proxy=' + proxy.verdict + ')')
+  const revision = await agent(
+    readDoctrine + CONTEXT +
+    '\nYou are the JUDGE revising your own final text. Apply the verifier issues and professor-proxy line edits below. Doctrine and ledger outrank everything; do not regress any global check (ownership, selling, redundancy, terminology). Return the COMPLETE revised text, not a diff.\n\nCURRENT TEXT:\n' + judgement.final +
+    '\n\nVERIFIER ISSUES:\n' + JSON.stringify(verifier.issues, null, 2) +
+    '\n\nPROXY LINE EDITS:\n' + JSON.stringify(proxy.lineEdits, null, 2),
+    { ...judgeOpts, label: 'refine:' + rounds, phase: 'Refine', schema: REVISE_SCHEMA }
+  )
+  if (revision && revision.final && revision.final.length > 200) judgement.final = revision.final
+  verifier = await agent(verifierPrompt(judgement.final), { label: 'verifier:r' + rounds, phase: 'Refine', schema: VERIFY_SCHEMA, model: 'sonnet' })
+  proxy = await agent(proxyPrompt(judgement.final), { label: 'proxy:r' + rounds, phase: 'Refine', schema: PROXY_SCHEMA, effort: A.judgeEffort || 'high' })
+}
+if (!verifier.pass) unresolved.push('Verifier still failing: ' + JSON.stringify(verifier.issues.filter(i => i.severity === 'must-fix')))
+if (proxy.verdict === 'revise') unresolved.push('Proxy still requests revisions: ' + JSON.stringify(proxy.lineEdits.slice(0, 5)))
+
 return {
   final: judgement.final,
   provenance: judgement.provenance,
+  globalChecks: judgement.globalChecks,
   adjudications: judgement.adjudications,
-  openQuestions: judgement.openQuestions,
+  openQuestions: (judgement.openQuestions || '') + (unresolved.length ? '\n\nUNRESOLVED AFTER ' + rounds + ' REFINEMENT ROUND(S):\n' + unresolved.join('\n') : ''),
+  verifier,
+  proxy,
+  refinementRounds: rounds,
   critique,
   drafts: drafts.map(d => d.text),
   direction,

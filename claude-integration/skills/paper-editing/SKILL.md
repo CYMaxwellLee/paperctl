@@ -118,10 +118,12 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 ## 段落級改寫：para-pipeline（教授 2026-07-05 核可的多 agent 流程）
 
-段落級（含）以上的改寫，用 paperctl 的 pipeline：Direction（主線模型抓方向）→
-3× Sonnet 5 寫手（論證/防審/語域三 lens，各自自審）→ 1× Sonnet critic 攻擊 →
-強模型 Judge 合成＋裁決（教授 rulings 為 binding，防翻案）→ 主線套稿、compile、
-真跑 lint、**給教授過目後才推**。單句小修不開 pipeline，直接改。
+段落級（含）以上的改寫，用 paperctl 的完整 agentic 分工：Section Editor（全
+section 審計＋計畫）→ 3× Sonnet 寫手（論證/防審/語域 lens，各自自審）→ Critic
+攻擊 → Judge 合成＋全局驗收 → **Verifier**（工具實查 bib/數字/過期數字/術語）→
+**Professor-Proxy**（以 `rulings-ledger.md` 為 ground truth 模擬教授審稿）→
+內部迭代至多 2 輪 → 主線套稿、compile、真跑 lint、**給教授過目後才推**。
+教授每條新 line-edit 必須回寫 rulings-ledger.md（飛輪）。單句小修不開 pipeline。
 用法與 args：`skills/academic-paper-writing/modules/drafting-pipeline.md`；
 script：`claude-integration/workflows/para-pipeline.js`。
 **任何機器定位**：`ROOT=$(paperctl root)`，scriptPath 與 args.paperctlRoot 都用它。
