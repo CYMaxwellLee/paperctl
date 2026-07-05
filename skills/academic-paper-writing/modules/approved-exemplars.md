@@ -120,11 +120,11 @@ cross-block loss,」標出兩個 consequence 的層級關係；結尾把兩個 g
 >   up to 7.71x throughput (TPS) and up to an 87% reduction in forward evaluations
 >   (NFE), with accuracy comparable to Fast-dLLM and DSB and higher on several tasks.
 
-**可遷移手法**：跨段接棒的**教科書解**——上一段收在「requires two components」，
-本段第一句「**To this end, we propose X, a … that supplies both components …**」：
-連接語（To this end）＋所有權（we propose）＋最大賣點放主句（at decoding time
-alone, without any change to the model）一次完成，**不用獨立橋接短句**（修了三輪
-的教訓：花式開頭全被退，最傳統的寫法被接受）。第二句「It realizes A as …, and
+**可遷移手法**：跨段接棒的一個好解（**非唯一解**——教授 2026-07-06：「不一定
+always 要這樣寫」，Motivated by / Enlightened by 等寫法同樣可以；**學的是功能，
+不是句子**）。功能拆解：連接語（指回前段目標句）＋所有權（we propose）＋最大
+賣點放主句（at decoding time alone, without any change to the model），一句完成，
+**不用獨立橋接短句**——三輪修訂的真正教訓是「先把連接的功能做出來」。第二句「It realizes A as …, and
 B as …」把前段點名的兩個需求逐一映射到方法元件。機制只佔一句；其餘句子全在賣
 （安全性、部署性、數字）。Contributions：一條一主張、一到兩句、We 開頭沒問題、
 先 why 再 what 再 evidence、交棒句用冒號。
