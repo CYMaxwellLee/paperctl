@@ -1,5 +1,27 @@
 # 段落改寫 Pipeline（para-pipeline）
 
+## One-shot 作業程序（任何新 session 的標準開局，2026-07-06 定版）
+
+> 目標（教授原話）：「建立這套流程，讓未來我們都很容易 one shot 完成。」
+
+1. **載入 doctrine**：paper-editing skill 自動觸發 → 讀 style-guide §〇/§一/§二/§四、
+   rulings-ledger.md（教授裁決史）、approved-exemplars.md（節奏標準）。
+2. **讀論文狀態**：論文 repo 根目錄的 `PAPER-STATE.md`（各段核可狀態、現行 headline
+   數字與出處、edit conventions、novelty 邊界、待辦）。沒有就先建。**Director 的
+   狀態必須外部化在這個檔案，不准只活在對話 context 裡**（session 更換 = 狀態歸零
+   = 過期數字這類事故的根源）。
+3. **Preflight**：grep 學生標記（如 `\tjc`）找新更新；headline 數字對 tables 核一次；
+   確認 deadline。
+4. **Triage 選 profile**：教授逐句 line-edit → Director 直改（不開管線）；
+   修訂/壓縮/中風險段 → `profile: "light"`（Section Editor → Voice → Verifier →
+   Proxy，約 15–25 分）；新寫段落/高風險段（intro、abstract、contributions）→
+   full profile（加 3 lens 寫手 + critic，約 60–100 分）。
+5. **Director 收尾**：套 \cyl → compile → 真跑 lint → 呈報教授（最終稿＋修改說明＋
+   openQuestions，完整句子不用縮略）→ 教授 OK → 推 Overleaf。
+6. **飛輪**：教授每條糾正 → rulings-ledger 補一條；每段定稿 → approved-exemplars
+   補一篇；PAPER-STATE.md 同步。
+
+
 > 出處：教授 2026-07-05 提案：「我每次說要改哪一段，基本上先有個 Opus 4.8 先大概抓個
 > 方向…開個 3~5 個 Sonnet 5，要他們也寫…最後再給 Fable 5 or Opus 4.8 max 裁決，
 > 整段要流暢正確，最後給我看，然後再上傳。」

@@ -28,6 +28,9 @@
 //   judgeModel     (optional) 'fable' | 'opus' 釘死裁決模型;預設繼承主線 session 模型
 //                  (教授 2026-07-05:「反正用 Fable 5 or Opus 最新的」-- 主線選什麼就是什麼,政策變動不用改 code)
 //   judgeEffort    (optional) 裁決 effort,預設 'high'(最難的段落可給 'max')
+//   profile        (optional) 'full'(預設)| 'light'。light = 跳過 3 寫手與 critic,
+//                  Voice 直接以輸入文字為原料重寫(修訂/壓縮類任務,~15-25 分)。
+//                  新寫段落與高風險段(intro/abstract/contributions)用 full。
 //
 // 主線(呼叫方)的責任,pipeline 不代勞:套進 .tex、compile、真跑 paperctl lint、
 // 給教授過目、教授 OK 才推 Overleaf。永不 auto-push。
@@ -115,7 +118,9 @@ const WRITE_SCHEMA = {
     passNotes: { type: 'string', description: 'brief notes on what each of your three revision passes changed' },
   },
 }
-const drafts = (await parallel(LENSES.map(l => () =>
+const drafts = (A.profile === 'light')
+  ? [{ text: A.paragraphText, passNotes: '(light profile: input text is the raw material; no lens writers)' }]
+  : (await parallel(LENSES.map(l => () =>
   agent(
     readDoctrine + CONTEXT +
     '\nDIRECTION PLAN (follow its skeleton and boundaries):\n' + JSON.stringify(direction, null, 2) +
@@ -144,7 +149,7 @@ const CRITIQUE_SCHEMA = {
     overall: { type: 'string' },
   },
 }
-const critique = await agent(
+const critique = (A.profile === 'light') ? { findings: [], bestDraftIndex: 1, overall: '(light profile: critic skipped)' } : await agent(
   readDoctrine + CONTEXT +
   '\nYou are the ADVERSARIAL CRITIC. You do not write a draft. Attack the direction plan and every candidate below: argument holes, claim-safety exposures a hostile reviewer could cite, register leaks, terminology drift, ban violations, unfaithfulness to the edit brief. Quote the offending text for each finding. IMPORTANT: professor-attested rulings in the doctrine (provenance-dated items, the mandated replacements like because->since, the 2026-06-12 explicitly-OK list) are BINDING — do not report compliant usage as a problem.\n\nDIRECTION PLAN:\n' + JSON.stringify(direction, null, 2) +
   '\n\nCANDIDATE DRAFTS:\n' + drafts.map((d, i) => 'DRAFT ' + (i + 1) + ':\n' + d.text).join('\n\n'),
@@ -234,7 +239,7 @@ const PROXY_SCHEMA = {
   },
 }
 const proxyPrompt = (text) => readDoctrine + CONTEXT +
-  '\nYou are the PROFESSOR-PROXY REVIEWER. The rulings ledger (among the doctrine files above) is your ground truth. Review the candidate exactly as the professor would, line by line: register line-edits (ledger §一), argument/structure/clarity (§二 — transitions, over-compressed sentences, referent alignment, cross-paragraph redundancy, selling vs narrative, ownership marker), claim safety (§三), conventions (§四). Cite the ledger entry in rulingRef for every finding. Verdict approve ONLY if the professor would plausibly accept without line edits. Professor-approved conventions are binding — do not flag them. When unsure whether something violates a ruling, raise it in overall as an open question instead of inventing a finding.\n\nCANDIDATE:\n' + text
+  '\nYou are the PROFESSOR-PROXY REVIEWER. The rulings ledger (among the doctrine files above) is your ground truth. Review the candidate exactly as the professor would, line by line: register line-edits (ledger §一), argument/structure/clarity (§二 — transitions, over-compressed sentences, referent alignment, cross-paragraph redundancy, selling vs narrative, ownership marker), claim safety (§三), conventions (§四). Cite the ledger entry in rulingRef for every finding. Verdict approve ONLY if the professor would plausibly accept without line edits. Professor-approved conventions are binding — do not flag them. Pay disproportionate attention to paragraph OPENINGS, ENDINGS, and the sentence pairs spanning paragraph boundaries — the professor\'s corrections cluster there; also check that structural moves use conventional academic phrasing (To this end, we propose…) before inventive constructions. When unsure whether something violates a ruling, raise it in overall as an open question instead of inventing a finding.\n\nCANDIDATE:\n' + text
 let proxy = await agent(proxyPrompt(judgement.final), { label: 'proxy', phase: 'Proxy', schema: PROXY_SCHEMA, effort: A.judgeEffort || 'high' })
 
 const REVISE_SCHEMA = { type: 'object', additionalProperties: false, required: ['final', 'changes'], properties: {

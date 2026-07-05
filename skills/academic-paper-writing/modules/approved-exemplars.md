@@ -14,7 +14,7 @@
 > aggressively their parallel prediction capacity is converted into committed tokens.
 > Unlike autoregressive models that generate strictly left to right, dLLMs iteratively
 > refine masked positions through denoising and can predict many positions in a single
-> forward pass, and recent large-scale instances such as LLaDA and Dream reach
+> forward pass. Recent large-scale instances such as LLaDA and Dream reach
 > competitive accuracy on general language understanding, instruction following, and
 > reasoning benchmarks. This parallel potential, however, remains largely unrealized
 > in practice, and the bottleneck lies in how generation is currently scheduled.
@@ -42,8 +42,8 @@ potential, however,」承接上句的 promise 再轉折；冒號帶出兩條規�
 > confidence-thresholded parallel commitment, and adaptive block schedules. Much of
 > it rests on a shared observation that a prediction often stabilizes several steps
 > before it crosses the commit threshold, and confidence-only commitment is therefore
-> conservative. These methods act on that signal in two ways, either by committing
-> such tokens earlier or by deferring uncertain ones, and in both the predictions stay
+> conservative. These methods act on that signal either by committing such tokens
+> earlier or by deferring uncertain ones, and in both cases the predictions stay
 > outside the decoding context until finalized. The caution is deliberate, as an
 > unreliable prediction admitted into the context could propagate its error to every
 > position that conditions on it. The cross-block utility of uncommitted predictions
@@ -52,10 +52,9 @@ potential, however,」承接上句的 promise 再轉折；冒號帶出兩條規�
 > these positions and defers later blocks. The one pipeline that crosses block
 > boundaries, D2F, obtains this ability by distilling the model to condition on
 > partially denoised prefixes, and no training-free counterpart exists for frozen
-> models. Beyond this cross-block loss, the same masking discards informative
-> token-level content within a block, since a prediction below the threshold may
-> already be stable, and keeping it masked forces the redundant recomputation noted
-> above. Across these methods, an uncommitted prediction is rarely treated as more
+> models. Beyond this cross-block loss, the same masking discards stable predictions
+> within a block that have yet to clear the commit threshold, and forces the
+> redundant recomputation noted above. Across these methods, an uncommitted prediction is rarely treated as more
 > than a candidate to commit or discard, and two gaps open between what a model has
 > already produced and what it is permitted to exploit as context, one across blocks
 > and one within them.
@@ -93,6 +92,42 @@ cross-block loss,」標出兩個 consequence 的層級關係；結尾把兩個 g
 論證（不可逆要高信心 vs 當 context 只要大致對）是說服的承重牆；圖當主詞、冒號帶
 證據；收尾句直接變成下一段的任務書（two components …）——這就是教授要的
 「承先啟後」：交棒句寫在自己段裡，下一段用「To this end, we propose…」接。
+
+## 樣本 4：ACML 2026 SPD intro ¶4 + contributions（方法段，2026-07-06 定稿）
+
+> To this end, we propose Speculative Pipeline Decoding (SPD), a training-free,
+> drop-in decoder that supplies both components at decoding time alone, without any
+> change to the model. It realizes the schedule as a block-parallel pipeline that
+> keeps multiple blocks active within a single forward pass, and the verification
+> discipline as a draft-and-verify procedure that recycles uncommitted-but-stable
+> predictions as provisional cross-block context. SPD secures the utility as context
+> that the risk of error propagation previously foreclosed, while no token is
+> committed unconfirmed. Fig. 2 presents the design together with its
+> throughput--accuracy profile: across the LLaDA and Dream model families on GSM8K,
+> Minerva MATH, and MBPP, SPD attains up to 7.71x throughput (TPS) and up to an 87%
+> reduction in the number of forward evaluations (NFE) while maintaining accuracy
+> comparable to strong baselines including Fast-dLLM and DSB. The contributions of
+> this work are as follows:
+>
+> - We trace the token-by-token degeneration of dLLM decoding to the schedule's
+>   conflation of a prediction's readiness to be committed with its utility as
+>   context, a flaw that can be corrected at decoding time without retraining.
+> - We propose SPD, which brings cross-block pipeline parallelism to frozen dLLMs.
+>   To our knowledge, it is the first training-free method to combine a
+>   block-parallel pipeline schedule with recycling uncommitted-but-stable
+>   predictions as provisional cross-block context under a stability check.
+> - Across four LLaDA and Dream dLLMs on GSM8K, Minerva MATH, and MBPP, SPD achieves
+>   up to 7.71x throughput (TPS) and up to an 87% reduction in forward evaluations
+>   (NFE), with accuracy comparable to Fast-dLLM and DSB and higher on several tasks.
+
+**可遷移手法**：跨段接棒的**教科書解**——上一段收在「requires two components」，
+本段第一句「**To this end, we propose X, a … that supplies both components …**」：
+連接語（To this end）＋所有權（we propose）＋最大賣點放主句（at decoding time
+alone, without any change to the model）一次完成，**不用獨立橋接短句**（修了三輪
+的教訓：花式開頭全被退，最傳統的寫法被接受）。第二句「It realizes A as …, and
+B as …」把前段點名的兩個需求逐一映射到方法元件。機制只佔一句；其餘句子全在賣
+（安全性、部署性、數字）。Contributions：一條一主張、一到兩句、We 開頭沒問題、
+先 why 再 what 再 evidence、交棒句用冒號。
 
 ---
 

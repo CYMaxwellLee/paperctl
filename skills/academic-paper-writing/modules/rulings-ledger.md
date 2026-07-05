@@ -102,6 +102,13 @@
   結果測試並以結果測試驗收；doctrine 高於任何 task brief。
 - **全局觀**（2026-07-05 第二批）：「drafter 要先整個看過…要遵照要自省是否有達到
   Guideline 或專業學術寫作的精神…然後把這些重要的東西掌握才 draft」。
+- **One-shot 檢討批次**（2026-07-06）：「檢討我們這幾輪對話…讓未來我們都很容易
+  one shot 完成」→ 四條制度化：(1) **慣用句式優先**——¶4 開頭連修三輪，最後被
+  接受的是學生原稿就有的「To this end, we propose」，花式構句全被退（此為 P3→P4
+  的 canonical bridge）；(2) **邊界優先審查**——教授糾正集中於段落開頭/結尾/跨段
+  句對；(3) **Director 狀態外部化**——每篇論文維護 `PAPER-STATE.md`，狀態不准只
+  活在對話 context（過期數字事故根源）；(4) **pipeline light profile**——修訂類
+  任務走 Section Editor→Voice→Verifier→Proxy 短路徑。
 - **一氣呵成架構令**（2026-07-06）：「專注於如何之後把這些 transitions 改得專業
   漂亮精美，讓讀者讀起來串接一氣呵成，不是獨立的短句子」「這個問題不可復發」→
   架構 v3：Judge 改為 Voice（草稿是原料不是候選句，最終文字從頭一口氣重寫，修訂
