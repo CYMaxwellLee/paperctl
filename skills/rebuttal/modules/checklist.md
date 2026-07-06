@@ -32,7 +32,7 @@
 [ ] 無 Comma + V-ing
 [ ] 無 Em-dash（—）
 [ ] 無 We/Our 連發（文采：句式多變化，不是數字上限——教授 2026-06-12）
-[ ] 無 Banned words（thereby, numerous, utilize, etc.）
+[ ] 無 Banned words（thereby, numerous, etc.）
 [ ] Tone 與 reviewer 分數匹配（低分 → 最謙和，高分 → 感謝 + 補充）
 ```
 

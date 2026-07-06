@@ -8,7 +8,7 @@
 # BAN rules enforced (always-on, WHOLE paper -- the professor's general bans):
 #   1.  Em dash (---, —, –)
 #   2.  Adverb+comma sentence openers (Specifically allowed)
-#   3.  thereby / utilize / straightforward / numerous (case-proof)
+#   3.  thereby / straightforward / numerous (case-proof; utilize unbanned 2026-07-06)
 #   3b. Sentence-initial "Yet"; "underscore" (any use)
 #   4.  Weak reference phrases: "As shown in", "As can be seen from"
 #   4b. Parenthetical table/figure references "(Table 9)" -- float must be the subject
@@ -94,9 +94,10 @@ _add_rule '---|—|–' "Em dash / Unicode dash (convert en dash to --)" fail
 _add_rule '(^[0-9]*:|[{]|\. )[[:space:]]*(Equally|Notably|Importantly|Crucially|Interestingly|Essentially|Fundamentally|Consequently|Additionally|Remarkably|Significantly|Particularly|Ultimately|Accordingly|Obviously|Clearly|Undoubtedly|Naturally|Admittedly),' \
   "Adverb+comma sentence opener (except Specifically/Moreover/Furthermore)" fail
 
-# Banned words -- straightforward: CLAUDE.md; thereby/utilize/numerous: ruling 2026-06-12 同意
-_add_rule '\b([Tt]hereby|[Uu]tiliz(e|es|ed|ing)|[Ss]traightforward|[Nn]umerous)\b' \
-  "Banned word (thereby/utilize/straightforward/numerous)" fail
+# Banned words -- straightforward: CLAUDE.md; thereby/numerous: ruling 2026-06-12 同意
+# utilize removed 2026-07-06: professor unbanned it (「utilize不曉得為什麼ban, 拔掉這個限制」)
+_add_rule '\b([Tt]hereby|[Ss]traightforward|[Nn]umerous)\b' \
+  "Banned word (thereby/straightforward/numerous)" fail
 
 # Sentence-initial Yet -- ruling 2026-06-12 (「我確實很討厭Yet放句首」)
 _add_rule '(^[0-9]*:[[:space:]]*|[.?!:] |[{][[:space:]]*)Yet\b' \

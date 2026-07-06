@@ -53,7 +53,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 3. ❌ "straightforward"
 4. ❌ Semicolons joining clauses
 5. ❌ Comma+V-ing（`..., producing X`）
-6. ❌ `thereby` / `utilize` / `numerous`（教授 2026-06-12 同意）
+6. ❌ `thereby` / `numerous`（教授 2026-06-12 同意；`utilize` 於 2026-07-06 解禁）
 7. ❌ `because`（整篇，不限句首）→ since / as / given that
 8. ❌ casual：`but`、`so`、`give(s)`
 9. ❌ 弱引用：`As shown in`、`As can be seen from`、括號式 `(Table 9)` → 表圖當主詞

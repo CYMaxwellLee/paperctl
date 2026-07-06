@@ -50,7 +50,6 @@
 | `Yet`（句首） | 改為 "However," 或 "Nevertheless,"（教授 2026-06-12：「我確實很討厭Yet放句首」） |
 | `underscore`（動詞） | 改為 "highlight", "demonstrate", "emphasize"（教授 2026-06-12 同意） |
 | `---` 或 ` --- `（em dash；Unicode – 轉成 `--`） | 改為逗號或重新斷句（不要用分號——分號連句也是禁的） |
-| `utilize` | 改為 "use" |
 | `leverage`（過度重複） | 文采：多變化，部分改為 "use"（**不是**次數限制——教授 2026-06-12） |
 | `straightforward` | 聽起來居高臨下，改為 "simple" 或 "direct" |
 | `significant improvement` | 改為具體數字描述 |

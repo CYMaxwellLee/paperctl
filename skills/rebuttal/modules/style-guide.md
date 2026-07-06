@@ -307,7 +307,7 @@ discussion to address any additional questions.
 - **So 開頭禁止**：用 therefore / thus / accordingly
 - **because 禁止（整篇，不限句首——教授 2026-06-12：「整篇我都不想because」）**：用 Since / As / Given that
 - **自問自答禁止**：直接陳述
-- **Banned words**：thereby, numerous, utilize, underscore（任何用法）, "Notably," (句首), "As can be seen from", "As shown in"（弱引用，表圖當主詞）, Yet（句首）
+- **Banned words**：thereby, numerous, underscore（任何用法）, "Notably," (句首), "As can be seen from", "As shown in"（弱引用，表圖當主詞）, Yet（句首）
 - **明確不禁**（教授 2026-06-12 裁決，paper 與 rebuttal 都不禁，勿再加回）："It is worth noting that"、"As expected,"、"demonstrates the effectiveness of"；leverage 是文采問題（多變化），不是次數限制
 - **We/Our 連發**：文采問題——句式多變化（被動式、"This formulation…"、"The proposed…" 交替），不是數字上限
 - **but**：❌ 整篇禁（教授 2026-06-12），改 however / although / while
