@@ -45,7 +45,7 @@
 1. 讀 `editing-discipline.md`（確認 convention + 禁止行為）
 2. 讀 `style-guide.md` + 對應 section 的模組
 3. 用 `qa-checklist.md` 做快速 check
-4. 教授說「讀起來不順 / 接不太上 / 因果怪怪的」→ `cohesion-diagnostics.md`（禁用詞全清仍不順時，病灶在接縫層）
+4. 主人說「讀起來不順 / 接不太上 / 因果怪怪的」→ `cohesion-diagnostics.md`（禁用詞全清仍不順時，病灶在接縫層）
 
 **投稿期改稿（deadline 前）**：
 1. **必讀** `editing-discipline.md`（確認該篇的 edit convention）

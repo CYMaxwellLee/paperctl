@@ -135,7 +135,7 @@ git push overleaf main:master
 | 主題 | 相對路徑（from paperctl repo root） |
 |------|---------|
 | 寫作規範 + Banned words 完整表 | `skills/academic-paper-writing/modules/style-guide.md` |
-| 段落接縫診斷（教授說「讀起來不順」時） | `skills/academic-paper-writing/modules/cohesion-diagnostics.md` |
+| 段落接縫診斷（主人說「讀起來不順」時） | `skills/academic-paper-writing/modules/cohesion-diagnostics.md` |
 | 改稿紀律 + 3 種 convention 細節 | `skills/academic-paper-writing/modules/editing-discipline.md` |
 | Overleaf 推送 + merge 檢查 | `skills/conference-ops/modules/overleaf-git-patterns.md` |
 | 各會議格式速查 | `skills/conference-ops/modules/venue-reference.md` |
