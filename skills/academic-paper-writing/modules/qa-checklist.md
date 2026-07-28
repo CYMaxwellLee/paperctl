@@ -43,6 +43,7 @@ PASS 5 — GPT 語法
 [ ] We/Our 連發已打散
 [ ] "As shown in / As can be seen from" 弱引用已改寫（表圖當主詞）
 [ ] 段落內句子邏輯流動性已 check
+[ ] 段落接縫六問已跑（對比軸／指涉／數量詞／因果跳步／插入句／病因重複 → cohesion-diagnostics.md）
 
 PASS 6 — LaTeX 格式
 [ ] 全文無 \ref{} 直接引用（改用 \cref{}）

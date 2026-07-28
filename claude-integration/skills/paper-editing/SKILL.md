@@ -69,7 +69,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 **文采原則 ≠ 數字配額**（2026-06-12）：However/We/leverage 不要過度重複是「多變化」的文采原則，不是「每段 N 句」「>2 次」這種數字禁令；同理沒有頁數配額、ablation 行數、proof 行數門檻。Contributions 3–5 個端看情況，重點講為什麼 significant、有什麼 impact 與 insight。
 
 **強制檢查**：`paperctl lint --paper <name>` 自動掃 #1–#14 加括號式表圖引用 `(Table 9)`、句首 But/So（有 fail 會 exit 1 可當 gate；SAGA 類無 cleveref 論文自動跳過 bare-`\ref`；contributions 區塊的 `\item` 不會被 --intro 誤抓）。
-**人工判斷**（lint 掃不了，靠自己）：小括號補充子句、自問自答/反問句、However/We/leverage 文采變化、慎用 empirical/principle、表圖「當主詞」的正向確認（appendix 由 `verify-appendix` 管）。
+**人工判斷**（lint 掃不了，靠自己）：小括號補充子句、自問自答/反問句、However/We/leverage 文采變化、慎用 empirical/principle、表圖「當主詞」的正向確認（appendix 由 `verify-appendix` 管）、**段落接縫六問**（對比詞問「相對於什麼」、代名詞問「指誰」、數量詞問「幾個」、因果詞問「中間漏了嗎」、插入句問「它切開了誰」、同一個病因問「講第幾次」→ `cohesion-diagnostics.md`）。禁用詞全清、每段內容也都該在那裡，仍可能整段讀不順 —— 那一層在這六問。
 
 ---
 
@@ -135,6 +135,7 @@ git push overleaf main:master
 | 主題 | 相對路徑（from paperctl repo root） |
 |------|---------|
 | 寫作規範 + Banned words 完整表 | `skills/academic-paper-writing/modules/style-guide.md` |
+| 段落接縫診斷（教授說「讀起來不順」時） | `skills/academic-paper-writing/modules/cohesion-diagnostics.md` |
 | 改稿紀律 + 3 種 convention 細節 | `skills/academic-paper-writing/modules/editing-discipline.md` |
 | Overleaf 推送 + merge 檢查 | `skills/conference-ops/modules/overleaf-git-patterns.md` |
 | 各會議格式速查 | `skills/conference-ops/modules/venue-reference.md` |
