@@ -22,7 +22,35 @@
 [ ] 所有 anonymous links 都可以正常訪問
 [ ] 引用的 Section / Line 號碼與原文一致
 [ ] 承諾在 revision 中做的事情列表明確且可執行
+[ ] **⛔ 全文無 [TODO]、無空表格、無 [training in progress] 那類佔位**
+[ ] **跨份數字交叉核**（同一個量在多份 / 多張表出現時必須一致；protocol 不同導致的不同數字要在 caption 標明）
+[ ] **表格 average 欄自己加得出來**（加不出來時要說明是 per-task 還是 per-suite 平均，reviewer 會自己加）
 ```
+
+### 未完成的實驗怎麼呈現（主人 2026-07-28 裁示）
+
+跑不完的對照**不要留在表格裡當空格**，移出表格、改寫成表下一段散文：
+
+```
+❌  | + Direct correction head (matched cap.) |  [training in progress]  |
+    | + Score-matching energy head           |  [training in progress]  |
+
+✅  （表格只留跑完的列，下方接：）
+    Two further controls are training and will be posted during the discussion
+    period: a matched-capacity direct correction head, which isolates the energy
+    parameterization from capacity, and a score-matching head, which isolates the
+    training objective. The completed rows already establish the mechanism-level
+    result: [已完成的結論].
+```
+
+誠實度完全相同，**觀感差很多**。表格是拿來掃的，空格讀起來是「沒做完」；同樣的資訊寫成散文，讀起來是「有時程的計畫」。
+先講兩個對照各自要隔離什麼變因（顯示知道自己在測什麼），再把重心拉回已完成的結論。
+
+### 字數上限要按 bytes 檢查
+
+OpenReview 的 10000 字元上限，**含數學符號時要用 UTF-8 bytes 驗**。
+實測：一份砍到 9990 字元、以為過了，實際是 **10003 bytes**——文中 6 個 `−`（U+2212）各佔 3 bytes。
+`τ` `×` `Δ` `≈` 同理。餘裕不足時把它們正規化成 ASCII；餘裕充足（>1000）就保留符號，不要為了保險犧牲可讀性。
 
 ## 語言層面
 

@@ -31,6 +31,39 @@
 | "We admit that" | [不需要這種句子。直接用 evidence 說話] |
 | "Unfortunately" | [刪除，直接陳述事實] |
 
+#### 0.2.1 「不道歉」不等於「不示弱」——要掃兩層（主人 2026-07-28）
+
+掃完上表的字面道歉詞之後，**還要掃隱性認錯句式**。實測：一份 rebuttal 的
+`We apologize` 已歸零、禁用詞全清，但仍有七處在替 reviewer 說「我們錯了」：
+
+| 隱性示弱 | 為什麼不行 | 改法 |
+|---|---|---|
+| "We agree that this information was missing." | 替 reviewer 陳述我方缺陷，下一句才給證據 | **整句刪**，直接從證據開始 |
+| "…deserved an isolated measurement." | 承認原本的做法不夠格 | 直接給表：`Table R3 isolates…` |
+| "We agree."（光禿禿一句） | 沒有資訊量，純投降姿態 | 刪，直接進技術陳述 |
+| "We agree with the Area Chair and Reviewer X." | 同上 | `Two statements are made more precise below.` |
+| "We agree this was too narrow." | 承認範圍不足 | `The rebuttal period extends it to…`（講範圍擴大，不講原本不夠） |
+| "We agree that LIBERO alone does not establish…" | **主動宣告自身限制＝把武器遞給對方** | `The evaluation establishes X in simulation, and the revision states Y as the next step.`（主詞換成做到的） |
+
+**⛔ 連 "The reviewer is correct" 也不要（主人 2026-07-28 明確裁示）。**
+即使 reviewer 在技術上確實對，那句仍是把「我們錯了」寫進紀錄，只是包裝得客氣。
+
+**正解：直接討論，輕描淡寫帶過，不要承認。**
+把「他說得對」改寫成「事情就是這樣」——陳述同一個技術事實，不加評價姿態。
+
+```
+❌  The reviewer is correct, and we thank them for the precise argument.
+    Under the stated global Lipschitz assumption, every subsequent clipped step
+    would indeed continue to reduce energy…
+
+✅  Under the stated global Lipschitz assumption, every subsequent clipped step
+    would continue to reduce energy, and the degradation observed for k > 1
+    therefore does not follow from the proposition. Proposition 2 is rescoped
+    as a local descent guarantee below.
+```
+
+判準：**技術上該改的照改，但不留認錯的句子在紙上。** reviewer 自己知道他對，不必我們蓋章。
+
 ---
 
 ## 〇.五、Prose 原則：絕不列點

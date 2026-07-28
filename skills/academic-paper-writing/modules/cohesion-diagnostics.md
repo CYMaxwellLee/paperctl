@@ -173,6 +173,29 @@ per-object 控制。
 
 ---
 
+### 7. 指向圖表時問「圖上真的有嗎」
+
+**觸發**：正文寫 `\Cref{fig:x} shows / illustrates / visualizes …`、或提到圖上的任何標註。
+
+**檢查**：**開圖看**。不要用 caption 代替看圖，也不要用正文代替看圖。
+
+2026-07-28 同一天栽兩次：
+
+- 正文寫 `a segment describing object~A activates … over object~B` —— 圖上根本沒有 A、B 這兩個標註，
+  讀者照著找會找不到。（主人當場問「Fig. 1 的 objects 指誰」）
+- 正文與 caption 都稱該模組為 **Region-Guided Cross-Attention Rectification** ——
+  架構圖上那個框的標題卻是 **Additive Modulation**（那是後面小節才會講的東西）。
+  等於把後面的招牌掛在前面的架構圖上。
+
+**兩個方向都要查**：
+① 正文提到的標註，圖上有沒有；② 圖上的標註，正文用的是不是同一個詞。
+順帶檢查同一組概念在**多張圖之間**是否一致（同一個現象在 teaser 叫 A、在架構圖叫 B，就是缺口）。
+
+> 這條嚴格說是 evidence chain 不是 cohesion，但病灶相同：**接縫斷在讀者要跨越的地方**，
+> 而且用機械掃描抓不到——caption 是文字、圖是圖，只有開圖才看得見。
+
+---
+
 ## 收尾：一段改完之後
 
 把該段所有邏輯連接詞遮住讀一次（`style-guide.md` 第五節）。
