@@ -20,6 +20,7 @@ COMMANDS
   status             Show conference & paper status
   autostatus         Auto-detect paper status from section content
   pages              Extract page counts from compiled PDFs
+  spacing            Detect vertical spacing shortened by hand in PDFs
   digest             Show recent changes (Overleaf/upstream) per paper
   report             Student activity report (compare pre/post sync state)
   dashboard          Auto-generate README dashboard from conference.json
