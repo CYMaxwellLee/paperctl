@@ -25,7 +25,8 @@
 | 模組 | 檔案 | 功能 |
 |------|------|------|
 | **Style Guide** | `modules/style-guide.md` | 所有 section 共用的寫作規範、禁止項、品質標準 |
-| **Cohesion Diagnostics** | `modules/cohesion-diagnostics.md` | 段落內部接縫：對比軸、指涉、因果跳步、插入句（FOCUS 2026-07-28） |
+| **Structure First** | `modules/structure-first.md` | ⛔ **改寫學生初版的第一步**：先自己列功能段清單再打開他的段落。拿他的事實、不拿他的結構（FOCUS 2026-07-29） |
+| **Cohesion Diagnostics** | `modules/cohesion-diagnostics.md` | 段落內部接縫：對比軸、指涉、因果跳步、插入句（FOCUS 2026-07-28）。⛔ 前置＝Structure First |
 | **Introduction** | `modules/introduction.md` | §1 四段式結構、Teaser 規格 |
 | **Preliminary & Methodology** | `modules/preliminary-methodology.md` | §2-§3 漏斗結構、理論與實現的一致性 |
 | **Experimental Results** | `modules/experimental-results.md` | §4 結辯式寫法、insight-first 原則 |
@@ -43,9 +44,11 @@
 
 **改稿 / Polish 時**：
 1. 讀 `editing-discipline.md`（確認 convention + 禁止行為）
-2. 讀 `style-guide.md` + 對應 section 的模組
-3. 用 `qa-checklist.md` 做快速 check
-4. 主人說「讀起來不順 / 接不太上 / 因果怪怪的」→ `cohesion-diagnostics.md`（禁用詞全清仍不順時，病灶在接縫層）
+2. ⛔ **改寫學生初版 → 先跑 `structure-first.md` §0**（列功能段清單、對照、講出每處差異的理由）。
+   跳過這步，產出就是「學生骨架 ＋ 修好的字」
+3. 讀 `style-guide.md` + 對應 section 的模組
+4. 用 `qa-checklist.md` 做快速 check
+5. 主人說「讀起來不順 / 接不太上 / 因果怪怪的」→ `cohesion-diagnostics.md`（禁用詞全清仍不順時，病灶在接縫層）
 
 **投稿期改稿（deadline 前）**：
 1. **必讀** `editing-discipline.md`（確認該篇的 edit convention）
