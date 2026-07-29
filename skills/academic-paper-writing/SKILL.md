@@ -32,7 +32,7 @@
 | **QA Guideline** | `modules/qa-guideline.md` | 8-pass QA 系統，從數學正確性到 GPT 句式清除 |
 | **QA Checklist** | `modules/qa-checklist.md` | 精簡版 checklist，適合時間緊張時快速 review |
 | **Overleaf Ops** | `modules/overleaf-ops.md` | Overleaf 推送鐵律、merge 後檢查、compile 流程（NeurIPS 2026 教訓） |
-| **Editing Discipline** | `modules/editing-discipline.md` | 改稿紀律：三種 edit convention、禁止行為、跨 repo 規則（NeurIPS 2026 教訓） |
+| **Editing Discipline** | `modules/editing-discipline.md` | ⛔ **第零節＝最高鐵則「不精簡內容」**（超頁先窮盡排版，刪內容要主人同意）；三種 edit convention、禁止行為、跨 repo 規則 |
 
 ### 使用方式
 
@@ -62,12 +62,12 @@
 | Venue | 頁數限制 | 特殊注意 |
 |-------|---------|---------|
 | ECCV / ICCV | 14p (excl. refs) | LLNCS class；single-column |
-| CVPR | 8p (excl. refs) | CVF class；壓縮力度更大 |
+| CVPR | 8p (excl. refs) | CVF class |
 | NeurIPS | 9p (excl. refs) | neurips class；有 checklist |
 | ICML | 8p (excl. refs) | icml class |
 | CoRL | 8p submit / 9p camera-ready (excl. refs) | corl class；必須有 Limitations section（算頁數）；必須有 robotics focus 否則直接退回；OpenReview |
 
-頁數限制直接影響冗餘刪減的力度。CVPR/ICML/CoRL 的 8 頁比 ECCV 的 14 頁需要更激進的壓縮。
+⛔ **頁數緊不等於可以刪內容。** 超頁時一律先窮盡排版手段（orphan 收行 → `\vspace` → 圖片尺寸／單欄化 → 表格排版 → 並排 float），刪減內容是最後手段且必須先呈報「犧牲分析」、取得主人明確同意 —— 見 `editing-discipline.md` 第零節。
 
 ### 交付流程（通用）
 
