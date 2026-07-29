@@ -165,8 +165,16 @@ in §3.2] is essential for handling [the challenge in ¶1].
 
 ---
 
-## 超頁時的壓縮優先順序
+## 超頁時的處置 ⛔ 先讀 `editing-discipline.md` 的「零、最高鐵則：不精簡內容」
 
-> **沒有頁數配額表**（教授 2026-06-12：「沒這回事，這種規則不應該存在」）。篇幅由內容與會議頁限決定。
+> **沒有頁數配額表**（主人 2026-06-12：「沒這回事，這種規則不應該存在」）。篇幅由內容與會議頁限決定。
 
-壓縮優先順序：Implementation Details > 額外分析 > 部分 ablation entries > Qualitative（減少例子）。Quantitative main results 和 core ablation 不能壓縮。
+⛔ **超頁時第一手段永遠是排版，不是刪內容。** 完整順序（orphan 收行 → `\vspace` → 圖片尺寸／單欄化 → 表格排版 → 並排 float → 最後才是內容）見 `editing-discipline.md` 第零節。
+
+**⚠️ 本節原本寫的是「壓縮優先順序：Implementation Details > 額外分析 > 部分 ablation entries > Qualitative」。那份清單假設了「超頁就得砍內容」，主人 2026-07-29 明令推翻：**
+
+> 縮空間的方法很多，包含方陣魔法和 vspace 和調整圖片大小，**最不能做的就是「精簡內容」**，除非我明確指令
+
+→ 上面那份順序**只有在主人已經明確同意刪減之後**才拿來用（用來決定「既然要刪，從哪裡刪代價最小」）。**它不是超頁時的第一動作。**
+
+刪減前一律先做「犧牲分析」呈報並取得同意，格式見 `editing-discipline.md` 第零節。Quantitative main results 和 core ablation 任何情況都不能壓縮。
