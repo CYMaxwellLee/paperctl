@@ -67,7 +67,7 @@
 | ICML | 8p (excl. refs) | icml class |
 | CoRL | 8p submit / 9p camera-ready (excl. refs) | corl class；必須有 Limitations section（算頁數）；必須有 robotics focus 否則直接退回；OpenReview |
 
-⛔ **頁數緊不等於可以刪內容。** 超頁時一律先窮盡排版手段（orphan 收行 → `\vspace` → 圖片尺寸／單欄化 → 表格排版 → 並排 float），刪減內容是最後手段且必須先呈報「犧牲分析」、取得主人明確同意 —— 見 `editing-discipline.md` 第零節。
+⛔ **頁數緊不等於可以刪內容，超頁也不是 Rei 自己要解決的問題。** 主人 2026-07-29：「超頁除非得到允許，**不准在意超頁，只能提醒我，不能自行砍內容**」。職責＝量準 → 回報主人 → 只做可自行處理的排版（圖片單欄化／表格排版／並排 float）。`\vspace` 主人親自動手；`\looseness=-1` 已實證無效；刪減內容需「犧牲分析」＋明確同意。見 `editing-discipline.md` 第零節。
 
 ### 交付流程（通用）
 

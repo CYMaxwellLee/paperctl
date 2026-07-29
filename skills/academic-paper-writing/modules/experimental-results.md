@@ -2,7 +2,7 @@
 
 > 繼承 `style-guide.md` 的所有規範。本模組專注於 §4 Experiments。
 
-> ⚠️ **適用範圍：正文 §4（頁數有限，故「不重抄 Table 數字、insight 先於數字、細節移 Supp、壓縮」）。**
+> ⚠️ **適用範圍：正文 §4。** 本模組的「不重抄 Table 數字、insight 先於數字」是**寫作原則**（文字要講 insight，不是把 Table 抄成句子），⛔ **不是「頁數不夠所以要壓縮」** —— 超頁的處置見本檔最後一節。
 > **Appendix / Supplementary 的改寫相反**：藍字版是完整獨立版，要**覆蓋每個 table/figure/數字、≥ 學生長度、不可壓縮**。
 > 補 appendix 時以 paper-editing skill 的「Appendix 改寫鐵則」為準，`paperctl verify-appendix` 會擋掉「只 highlight 少數數字」這種正文寫法。
 
@@ -169,12 +169,15 @@ in §3.2] is essential for handling [the challenge in ¶1].
 
 > **沒有頁數配額表**（主人 2026-06-12：「沒這回事，這種規則不應該存在」）。篇幅由內容與會議頁限決定。
 
-⛔ **超頁時第一手段永遠是排版，不是刪內容。** 完整順序（orphan 收行 → `\vspace` → 圖片尺寸／單欄化 → 表格排版 → 並排 float → 最後才是內容）見 `editing-discipline.md` 第零節。
+⛔ **超頁不是 Rei 要自己解決的問題**（主人 2026-07-29 明令）：
 
-**⚠️ 本節原本寫的是「壓縮優先順序：Implementation Details > 額外分析 > 部分 ablation entries > Qualitative」。那份清單假設了「超頁就得砍內容」，主人 2026-07-29 明令推翻：**
+> 超頁除非得到允許，**不准在意超頁，只能提醒我，不能自行砍內容**
 
-> 縮空間的方法很多，包含方陣魔法和 vspace 和調整圖片大小，**最不能做的就是「精簡內容」**，除非我明確指令
+職責只有三件：**量準 → 回報主人 → 只做可自行處理的排版**（圖片單欄化／表格排版／並排 float）。`\vspace` 主人親自動手，`\looseness=-1` 已實證無效，刪減內容需「犧牲分析」＋明確同意。全部見 `editing-discipline.md` 第零節。
 
-→ 上面那份順序**只有在主人已經明確同意刪減之後**才拿來用（用來決定「既然要刪，從哪裡刪代價最小」）。**它不是超頁時的第一動作。**
+### ❌ 已刪除：原本的「壓縮優先順序」清單（主人裁定為幻覺）
 
-刪減前一律先做「犧牲分析」呈報並取得同意，格式見 `editing-discipline.md` 第零節。Quantitative main results 和 core ablation 任何情況都不能壓縮。
+本節原本寫著「壓縮優先順序：Implementation Details > 額外分析 > 部分 ablation entries > Qualitative」。
+**主人 2026-07-29：「先砍 implementation results 一定是幻覺，刪掉」** —— 那不是主人的規則，是先前版本的我自己編出來、再寫進 skill 當權威的。而它正是 AAAI 交件日讓我自行砍內容的依據。
+
+⛔ **不要復原，也不要改寫成「經主人同意後才拿來用」的版本** —— 那等於把幻覺留在檔案裡，下次仍會被當成合法清單引用。（我 2026-07-29 第一次改這節時就是這樣寫的，當場被主人抓掉。）
