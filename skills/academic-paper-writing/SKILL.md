@@ -25,8 +25,8 @@
 | 模組 | 檔案 | 功能 |
 |------|------|------|
 | **Style Guide** | `modules/style-guide.md` | 所有 section 共用的寫作規範、禁止項、品質標準 |
-| **Structure First** | `modules/structure-first.md` | ⛔ **改寫學生初版的第一步**：先自己列功能段清單再打開他的段落。拿他的事實、不拿他的結構（FOCUS 2026-07-29） |
-| **Cohesion Diagnostics** | `modules/cohesion-diagnostics.md` | 段落內部接縫：對比軸、指涉、因果跳步、插入句（FOCUS 2026-07-28）。⛔ 前置＝Structure First |
+| **Structure First** | `modules/structure-first.md` | ⛔ **改寫學生初版的第一步**：先自己列功能段清單（功能＋**承接**兩個必填欄）再打開他的段落。拿他的事實、不拿他的結構。含**份量下限**與「局部修補會偽裝成重構」（FOCUS 2026-07-29 / 07-30） |
+| **Cohesion Diagnostics** | `modules/cohesion-diagnostics.md` | 段落**內部**接縫：對比軸、指涉、因果跳步、插入句、圖表對照、**given-new**（FOCUS 2026-07-28 / 07-30）。⛔ 前置＝Structure First；⛔ 段**間**承接不在這裡 |
 | **Introduction** | `modules/introduction.md` | §1 四段式結構、Teaser 規格 |
 | **Preliminary & Methodology** | `modules/preliminary-methodology.md` | §2-§3 漏斗結構、理論與實現的一致性 |
 | **Experimental Results** | `modules/experimental-results.md` | §4 結辯式寫法、insight-first 原則 |
