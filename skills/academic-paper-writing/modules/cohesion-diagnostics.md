@@ -240,7 +240,7 @@ per-object 控制。
 
 | 模組 | 管什麼 | 例 |
 |------|--------|-----|
-| `style-guide.md` | 詞與句式 | 禁用詞、comma+V-ing、弱引用 |
+| `style-guide.md` | 詞與句式 | 禁用詞、comma+V-ing、弱引用、register 三類型 |
 | `introduction.md` / `preliminary-methodology.md` / `experimental-results.md` | 每段該放什麼、**該承接上一段的什麼**（定義層） | ¶1 痛點、¶3 insight、§4.2 功能 3 承接功能 2 的機制 |
 | `structure-first.md` | 段落**該不該存在**、**段與段怎麼接**（實例化層） | 功能段清單、承接欄、份量下限 |
 | **本模組** | **句與句怎麼接** | 對比軸、指涉、跳步、插入句、given-new |

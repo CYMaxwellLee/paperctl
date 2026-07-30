@@ -24,7 +24,7 @@
 
 | 模組 | 檔案 | 功能 |
 |------|------|------|
-| **Style Guide** | `modules/style-guide.md` | 所有 section 共用的寫作規範、禁止項、品質標準 |
+| **Style Guide** | `modules/style-guide.md` | 所有 section 共用的寫作規範、禁止項、品質標準。含 **register 三類型**（詞表管不到的那層，⛔ 不做成詞表） |
 | **Structure First** | `modules/structure-first.md` | ⛔ **改寫學生初版的第一步**：先自己列功能段清單（功能＋**承接**兩個必填欄）再打開他的段落。拿他的事實、不拿他的結構。含**份量下限**與「局部修補會偽裝成重構」（FOCUS 2026-07-29 / 07-30） |
 | **Cohesion Diagnostics** | `modules/cohesion-diagnostics.md` | 段落**內部**接縫：對比軸、指涉、因果跳步、插入句、圖表對照、**given-new**（FOCUS 2026-07-28 / 07-30）。⛔ 前置＝Structure First；⛔ 段**間**承接不在這裡 |
 | **Introduction** | `modules/introduction.md` | §1 四段式結構、Teaser 規格 |
