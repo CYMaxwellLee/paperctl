@@ -57,4 +57,4 @@
    - **Supp/appendix evidence 早提**：第一句就用「as already detailed/reported in Sec. X / Tab. Y of the supplementary material」訊號「我們本來就有」。
    - **滿頁正好**：ECCV 1 頁正好填滿是合適長度，不要為精簡砍掉解釋或 evidence。
    - **改學生稿用最小動作**：只改違反紅線（認錯語、空洞承諾、真 banned words、分號），其他保留學生語氣。
-   - **Banned words 以 paper style-guide 現行版為準**（2026-06-12 裁決後）：仍禁 thereby、numerous、underscore（任何用法）、"Notably," (句首)、"As can be seen from"、"As shown in"、Yet（句首）、because（整篇）、but/so/give。**不禁**："It is worth noting that"、"As expected,"、"demonstrates the effectiveness of"（教授明示 OK，勿再加回）。
+   - **Banned words 以 paper style-guide 現行版為準**（2026-06-12 裁決後）：仍禁 thereby、numerous、underscore（任何用法）、"Notably," (句首)、Yet（句首）、because（整篇）、but/so/give。**不禁**："It is worth noting that"、"As expected,"、"demonstrates the effectiveness of"（2026-06-12 主人明示 OK）、**"As can be seen from"、"It can be observed that"、"As shown in"（2026-08-04 主人明示 OK）**。⛔ 勿再加回。

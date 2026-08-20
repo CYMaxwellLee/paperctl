@@ -340,7 +340,11 @@ discussion to address any additional questions.
 - **So 開頭禁止**：用 therefore / thus / accordingly
 - **because 禁止（整篇，不限句首——教授 2026-06-12：「整篇我都不想because」）**：用 Since / As / Given that
 - **自問自答禁止**：直接陳述
-- **Banned words**：thereby, numerous, underscore（任何用法）, "Notably," (句首), "As can be seen from", "As shown in"（弱引用，表圖當主詞）, Yet（句首）
+- **Banned words**：thereby, numerous, underscore（任何用法）, "Notably," (句首), Yet（句首）
+- **明確不禁（2026-08-04 主人裁示，⛔ 勿再加回）**："As can be seen from"、"It can be observed that"、"As shown in"
+  ⚠️ 這三個先前被錯誤列進 banned words（並被冠上「弱引用，表圖當主詞」的理由）。
+  主人 8/04 原話：「**我沒有禁 it can be observed or As can be seen，那是錯的**」「**As shown in 可以接受**」。
+  ★ 表格之後用它們把 reviewer 帶進觀察是**主人主動建議**的寫法（與 `We would like to bring to the reviewer's kind attention that ...` 同一語域，可輪替使用）。
 - **明確不禁**（教授 2026-06-12 裁決，paper 與 rebuttal 都不禁，勿再加回）："It is worth noting that"、"As expected,"、"demonstrates the effectiveness of"；leverage 是文采問題（多變化），不是次數限制
 - **We/Our 連發**：文采問題——句式多變化（被動式、"This formulation…"、"The proposed…" 交替），不是數字上限
 - **but**：❌ 整篇禁（教授 2026-06-12），改 however / although / while
