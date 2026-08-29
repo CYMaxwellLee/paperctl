@@ -408,3 +408,46 @@ discussion to address any additional questions.
 - 使用 Anonymous GitHub 或 Anonymous 4open.science
 - 格式：`https://anonymous.4open.science/r/rebuttal-paper-XXXX/filename.png`
 - 每個連結都要在文字中 contextualize（不要只丟連結）
+
+
+---
+
+## 六、2026-08-29 主人逐字裁示（WACV 2027 #892 rebuttal 期間；per-campaign provenance）
+
+以下為該篇 rebuttal 逐句校對時主人親自否決的用字，與既有裁示（2026-06-12／08-04）不衝突：
+
+| 否決 | 原因（主人原話大意） | 替代 |
+|---|---|---|
+| cannot / cannot be constructed | 「聽起來像我們弱、做不到」 | 正面陳述對方缺什麼能力 |
+| never | 「像是在吵架」 | not / rather than |
+| already | 「太兇」 | 直述事實 |
+| has no place | 「太口語，像小朋友在拒絕」 | professional 直述 |
+| only through | 「聽起來在找藉口」 | 拿掉或改正面條件句 |
+| shows / so / claims | casual；claims 像吵架 | reports / confirms / states |
+| is not well-defined | 「他會說那你們怎麼不好好定義」 | 說明該概念在對方框架中不存在 |
+| em dash（—） | 同 paper 規範 | 冒號或拆句 |
+| comma+V-ing | 同 paper 規範 | together with / 拆句 |
+| 模糊 it / this / that | 指涉不明時點名（"of this SPL"、"the term"） | 便宜處明確化 |
+| "the requested control" 類代稱 | 「他們可能不知道是什麼，直接點名」 | 寫出具體對象 |
+| v.s. | 正確縮寫是 vs.（一個點） | vs. |
+
+**therefore 不是禁字**：要看 context——檢查因果是否真實成立。實戰案例：兩個子句主詞
+不同、因果斷裂時被主人抓「為什麼會有個 therefore，這兩個有什麼因果關係」；
+改法是把真正的因果鏈寫明，或刪 therefore 直述。
+
+## 七、一頁 PDF 版面戰技（2026-08-29 實戰）
+
+1. **Rebuttal 自有浮動編號**：`\setcounter{table}{0}` ＋ `\renewcommand{\thetable}{R\arabic{table}}`
+   → Table R1，與主文 Tab. 1-N 永不混淆（figure 同理 Fig. R1）。
+2. **Caption 黏表格**：caption＋tabular 包進同一個 `minipage`（不可分割），防止欄位斷點把
+   caption 和表切開。
+3. **[t] float 落欄規則**：float 浮到「宣告點所在欄」的頂端——要落右欄頂，就把 float
+   宣告移到會排進右欄的文字流位置；在宣告點**之前**加字會把宣告點推過欄界、float 彈頁。
+4. **方陣魔法**（把每段結尾行填滿）：只能在「段落最後一行的剩餘空間」內加字，
+   加完必 compile 驗證——多一兩個字就會生出單字孤行（比原本更醜）；孤行出現時換更短的
+   有意義填詞，不塞空話。刪字拉回孤行同理（縮半行要真的跨過斷行點才有效）。
+5. **本機 vs Overleaf 斷行有差（±1-2 行）**：頁界邊緣的判定**以 Overleaf 編譯為準**，
+   流程＝推上去→主人看實排→回報差幾行→按值調。
+6. **綠色行號尺規是模板**：review 模式的 line-number ruler（顏色按 track：Applications 綠、
+   Datasets 藍、Algorithms 紅）印在頁中間、會壓到欄邊字——官方 kit 原始範本同款，
+   不是 bug，勿浪費時間修。

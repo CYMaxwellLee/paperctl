@@ -92,3 +92,23 @@ OpenReview 的 10000 字元上限，**含數學符號時要用 UTF-8 bytes 驗**
 3. 檢查所有數字 placeholder 是否已填
 4. 預覽 formatting（OpenReview 有預覽功能）
 5. 深呼吸，提交
+
+
+---
+
+## 兩輪制（rebuttal＋revised manuscript）追加檢查（2026-08-29）
+
+- [ ] **Alignment matrix（腳本驗證，不用肉眼）**：rebuttal 引用的每個 Sec./Tab./Fig./Eq./Prop.
+      逐項對主文 `main.aux` 的 `\newlabel` 實際編號；Supp 的字母（A-G）與小節（E.2 等）
+      對 supp 編譯後的 pdftotext。一項不合就是事故。
+- [ ] **禁用行號引用**：rebuttal 不寫 L484-489 型行號（修訂會漂移）→ 用 Sec. 編號。
+      修訂若需插入新 section，插在**尾部**（如 Related Work 放實驗後、Conclusion 前），
+      既有 Sec./Eq./Tab. 編號全數保住，rebuttal 引用不炸。
+- [ ] **契約兌現**：rebuttal 每句 "the revised X" 在修訂稿裡真的存在（GOAT 旗標型、
+      新 section 型）；tex 源碼的 `% TODO(改主文時)` 清單全數清空。
+- [ ] **上傳後下載回驗**：從 OpenReview 把三個檔案抓回來，驗頁數、#ID、匿名、問號、
+      關鍵標記（最新一批修改的特徵字串）——md5 與本地不同沒關係（Overleaf 重編譯），
+      內容特徵必須全中。
+- [ ] **官方規則逐字再查**（每會每年）：頁限含不含 references（WACV：正文 8 頁不含 refs、
+      「Additional pages containing only cited references are allowed」；rebuttal 1 頁**含** refs）、
+      same-reviewers 條款、rebuttal 的 highlight 義務。

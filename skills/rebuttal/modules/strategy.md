@@ -162,3 +162,21 @@
 - **絕對不要說 "the reviewer is mistaken"。**
 - 正確做法：「We appreciate this question. We would like to clarify that ...」然後用 evidence 呈現正確的理解。
 - 讓 evidence 說話，不是你的文字。
+
+
+---
+
+## Step 5：Revise-and-resubmit（兩輪制）專屬策略（2026-08-29，WACV 2027 #892 實戰）
+
+兩輪制（WACV 型）與一般 rebuttal 的三個結構差異：
+
+1. **同批 reviewers + AC 對照舊版重審**。回覆用 per-reviewer 色碼 tag（`[\AC/\Rb]` 型），
+   讓每位 reviewer 秒找自己的塊；重複的關鍵數字若服務不同 reviewer 的不同論證，
+   屬「功能性重複」可保留，同一論證講兩次才刪。
+2. **排序不只看分數**：(a) **AC meta review 點名的決定性題目最先**；(b) **swing voter
+   （给 4 分且明文開提分條件者）的條件題緊接**——他說「做到就提分」的那幾題就是勝負手；
+   (c) 之後才按低分 reviewer 順序。
+3. **Rebuttal↔修訂稿是一紙契約**：rebuttal 每一句 "the revised Tab. X / Sec. Y carries..."
+   都必須在修訂稿真正兌現。作法：tex 源碼留 `% TODO(改主文時)` 清單追蹤，
+   上傳前逐項驗證（見 checklist 的 alignment matrix）。反向也成立：修訂稿做了的大事
+   （新 section、旗標修正）要在 rebuttal 裡點名，官方本來就要求 rebuttal highlight changes。

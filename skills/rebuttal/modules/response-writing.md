@@ -601,3 +601,30 @@ We will improve the writing.
 | "The reviewer is correct that..." | 過度附和 | "We appreciate this question. [直接進入我們的論點]" |
 | 只用文字辯論，沒有數據 | 缺乏 evidence | 每個 concern 都附 table/figure/reference |
 | 回覆太短草率 | 不夠重視 | 完整回應，包含 evidence + implication |
+
+
+---
+
+## 策略十：標題即問題、首句即答案（主人 2026-08-29 多次糾正）
+
+一頁 PDF 的每個 `\newparagraph{[tags] 主題}` 塊：**標題寫什麼，第一句就直接回答什麼**，
+然後才是實驗數字，結論看篇幅。主人原話：「直接開頭就是主題，直接就講答案，你在扯一堆有的沒」、
+「Title寫什麼，就直接起頭先回什麼，再回細節和數字和實驗」。
+自檢法：把每塊的標題和第一句單獨抽出來讀——第一句若不是對標題問題的直接判決，重寫。
+反例（被打槍）：開頭鋪陳背景、第五句才出現真正的回答。
+
+## 絕對句先查證（"none of the baselines..." 事件，2026-08-29）
+
+對文獻寫絕對否定句（none / no prior work / 沒有人做過）之前，**逐篇查原文含 appendix**。
+實戰：想寫 "none of the five baselines publishes cost figures"，五篇平行查證後發現
+一篇有 component 級計時、兩篇有訓練算力——絕對句會被單一反例擊殺信用。
+改寫成**逐篇點名**的精準句（"X and Y report training compute only, Z reports one
+solver timing"）反而更狠：展示我們五篇都讀過。原則：絕對句是玻璃大砲，點名句是實彈。
+
+## 數字下放給表格（2026-08-29）
+
+Rebuttal 同頁有表格時，正文不重複表內數字（「Table 上面有的數字就不要再講了，
+大家自己會看，版面有限」）。主文的表（不在 rebuttal 頁上）之數字可引，替 reviewer 省翻頁。
+表格自身要能打：勾叉對比表（我們 vs baselines 誰報了什麼）＋量化列（如 active params
+per token——口徑選對整列翻盤：MoE 模型報 active 而非 total，誠實且有利；各方法
+backbone 名字都公開時，參數量是「公開事實的推導」不是估計，不可被打）。
