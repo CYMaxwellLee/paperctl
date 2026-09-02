@@ -14,6 +14,8 @@
 - **慎用 "empirical"**：reviewer 會反問 theoretical justification
 - **少用 "principle"**：太教條
 - **不要照抄 guideline 的模板句式** — guideline 給的是結構提示，不是可以直接填空的模板
+- **寫明白優先於寫漂亮**（主人 2026-09-02 對「The obstacle to reading this record is form rather than content」直說「我看不懂這一句」）：壓縮過頭的雋語句要讀者解碼，攤開寫成明白的句子
+- **弱 be 動詞句型換 full lexical verb**（主人 2026-09-02 NSN 稿一輪連改四處，原話「(is 換professional)」）：「Underlying X is Y」→ stems from、「is available」→ remains／constitutes、「is the response」→ emerges from、「a deeper obstacle is that」→ lies in the lack of。能用實義動詞承載的句子，不用 be 句型掛著（cleft 等非用不可的除外）
 
 ---
 
@@ -74,7 +76,7 @@
 | 類型 | 形狀 | 已抓到的例 |
 |------|------|-----------|
 | **擬人／生動動詞用在技術對象** | 把只有生物做得出的動作安到機制、特徵、模型身上 | `feature bleeding`（2026-07-29 §4.4） |
-| **口語替代** | 該用學術語域的地方落回日常語域 | `give`／`so`／`but`（主人 2026-06 裁為 casual，見上面兩表） |
+| **口語替代** | 該用學術語域的地方落回日常語域 | `give`／`so`／`but`（主人 2026-06 裁為 casual，見上面兩表）；`studies`／`becomes free`／`pays for`／`is already a graph`（主人 2026-09-02 NSN 稿逐句抓） |
 | **誇飾** | 強度超過證據撐得住的範圍 | `resolving the longstanding tension`（見第四節⑤）；`strongest`／`any` 這類絕對詞（主人 2026-07-27 FOCUS：**加了 scope 也不行**，改從機制本身取力） |
 
 ⚠️ **右欄是「這個類型長什麼樣」的示範，⛔ 不是待搜尋的字串清單。**

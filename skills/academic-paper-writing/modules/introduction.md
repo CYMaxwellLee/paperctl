@@ -139,6 +139,12 @@ state-of-the-art performance is achieved.
 - 避免純功能描述和空話
 - 個數 3–5 個端看情況（教授 2026-06-12）。重要的是講清楚**為什麼 significant、為什麼有 impact、帶來什麼重要 insight**，不是淪為列舉數字的報告
 
+**⛔ Contributions 是「我們」做的貢獻，不是表象的事實**（主人 2026-09-02，NSN Intro）：
+
+> 「Contributions應該是『我們』做的貢獻，你的描述更像是『表象的事實』」
+
+現象句＋後果句（"X proves recoverable... This finding removes..."）＝觀察報告，不是 contribution。合格形狀是 **We propose／design／extend ＋ 我們的東西 → 這個設計帶來的 significance 與落點**。上方好範例的「This insight drives the design of ...」那半是**必要件**——只留 insight 半句、沒有 design credit，就退化成表象事實。數字放句尾、至多一個；story 級數字留給散文，bullet 與散文的數字不重複。同輪另一裁示：只放數字也不行（「Bullets 要講 Significance impact highlights 你再報一堆數字」）。
+
 ---
 
 ## 寫完後自我檢視（Anti-Mediocrity Check）
