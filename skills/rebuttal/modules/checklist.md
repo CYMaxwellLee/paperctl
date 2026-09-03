@@ -109,6 +109,11 @@ OpenReview 的 10000 字元上限，**含數學符號時要用 UTF-8 bytes 驗**
 - [ ] **上傳後下載回驗**：從 OpenReview 把三個檔案抓回來，驗頁數、#ID、匿名、問號、
       關鍵標記（最新一批修改的特徵字串）——md5 與本地不同沒關係（Overleaf 重編譯），
       內容特徵必須全中。
+- [ ] **⛔ 正式上傳的 PDF 一律取 Overleaf 編譯產物，嚴禁上傳本機編譯**（2026-09-03 ACCV #209 事故）：
+      同一份 tex，本機 TeX Live 2026 的 lineno v5.7 在 twocolumn+switch 下把右欄行號印到
+      「頁中央」，Overleaf 環境的舊版 lineno 印在左右頁緣。本機編譯只供草稿迭代與頁數估算。
+      流程＝轉黑推 Overleaf → Overleaf 編譯 → 下載該 PDF → 上傳。回驗必須含**版面**
+      （行號位置、欄界、尺規），不只內容字串——對本機產物驗 md5 只證明「錯的檔案完整無缺」。
 - [ ] **官方規則逐字再查**（每會每年）：頁限含不含 references（WACV：正文 8 頁不含 refs、
       「Additional pages containing only cited references are allowed」；rebuttal 1 頁**含** refs）、
       same-reviewers 條款、rebuttal 的 highlight 義務。
