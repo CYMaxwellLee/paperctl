@@ -29,6 +29,7 @@ COMMANDS
   patch              Apply SEARCH/REPLACE patch files to papers
   bib-check          Validate bibliography (undefined cites, duplicates)
   ref-check          Check cross-references (undefined refs, missing figs)
+  fleet-brief        Composite ref-check+bib-check+lint brief + task cards
   overview           Unified dashboard (pages, words, git, activity)
   scaffold-supp      Generate standalone supp.tex from conference template
   supp-check         Validate supplementary material structure & naming
@@ -153,6 +154,11 @@ EXAMPLES
   # Cross-reference check
   paperctl ref-check                        # check all papers
   paperctl ref-check --paper textnav       # single paper
+
+  # Fleet brief (composite check + task cards)
+  paperctl fleet-brief                      # all papers: ref-check+bib-check+lint
+  paperctl fleet-brief --paper textnav      # single paper
+  paperctl fleet-brief --with-compile       # accepted; v0 no-op (TODO, see cmd file)
 
   # Supplementary material
   paperctl scaffold-supp --paper ewm        # generate supp.tex from template
