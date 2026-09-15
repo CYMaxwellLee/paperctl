@@ -144,6 +144,9 @@ Preliminary **不是 notation glossary**。唯一功能：**為 §3 的理論分
 | 規則 | 說明 |
 |------|------|
 | **公式前後必須有文字** | ❌ 兩個公式背靠背 ✅ 前有 setup，後有 interpretation |
+| **公式引入句用 integrated as-follows** | 引入句以 "can be written as follows:"／"is defined as follows:" 結尾（主人 2026-09-14 LEAH、2026-09-16 SAGA §III-B：「Eq. 前面應該 as follows:」）。⚠️ comma-tail 型（"..., expressed as follows:"）主人會親手剪 |
+| **公式後接 where 子句點名符號** | 式子後的解釋以 "where ..." 接續，逐一點名式中出現的符號與各項（主人 2026-09-16：「The first term is... 應該 where... 呀」）；式尾標點配合改逗號 |
+| **每個 subsection 第一句＝主題句** | 呼應 subsection title 的全部，不能拿推導的前提句（"Since every timestep belongs to exactly one stage"）當開場（主人 2026-09-16：「開頭就沒來由… 主題句要呼應 title 吧」；2026-09-14 LEAH 同裁） |
 | **不在 §3 重複 §2 的定義** | §2 已定義的直接用 |
 | **Module 名稱在 §3.3 首次出現時 bold** | 之後正常字體 |
 | **Subsection title 要 formal 且 descriptive** | ❌ "How We Fuse Features" ✅ "3D Spatial Fusion Module" |
