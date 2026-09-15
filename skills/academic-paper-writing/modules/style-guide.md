@@ -38,6 +38,7 @@
 | **句首副詞+逗號** | ❌ 「Equally, ...」「Additionally, ...」 | ✅ 副詞嵌入句中，或換成子句結構 |
 | **縮寫先於全名** | ❌ 首次出現就用 ELSA | ✅ 先全名再縮寫 |
 | **分號連接句子** | ❌ 禁止（FLORA methodology rewrite 明確禁止） | ✅ 句號拆開，或用連接詞 |
+| **", so that"** | ⚠️ 避免（教授 2026-09-15 SAGA abstract：「so that 要避免，這是 paperctl」；lint 目前放行 purposive so that，以此裁示為準） | ✅ 拆句，或 therefore／hence 接因果 |
 
 > ⚠️ **文采原則就寫成文采原則，不要翻譯成數字配額**（「每段最多 N 句」「>2 次」這種）。教授 2026-06-12：「不是列數字什麼的禁，這個本身就是大錯誤的方向」。同理：沒有頁數配額、沒有 ablation 行數上限、沒有 proof 行數門檻。
 
@@ -76,7 +77,7 @@
 | 類型 | 形狀 | 已抓到的例 |
 |------|------|-----------|
 | **擬人／生動動詞用在技術對象** | 把只有生物做得出的動作安到機制、特徵、模型身上 | `feature bleeding`（2026-07-29 §4.4） |
-| **口語替代** | 該用學術語域的地方落回日常語域 | `give`／`so`／`but`（主人 2026-06 裁為 casual，見上面兩表）；`studies`／`becomes free`／`pays for`／`is already a graph`（主人 2026-09-02 NSN 稿逐句抓） |
+| **口語替代** | 該用學術語域的地方落回日常語域 | `give`／`so`／`but`（主人 2026-06 裁為 casual，見上面兩表）；`studies`／`becomes free`／`pays for`／`is already a graph`（主人 2026-09-02 NSN 稿逐句抓）；`adds`（主人 2026-09-15 SAGA abstract：「adds 太口語」→ introduces／requires） |
 | **誇飾** | 強度超過證據撐得住的範圍 | `resolving the longstanding tension`（見第四節⑤）；`strongest`／`any` 這類絕對詞（主人 2026-07-27 FOCUS：**加了 scope 也不行**，改從機制本身取力） |
 
 ⚠️ **右欄是「這個類型長什麼樣」的示範，⛔ 不是待搜尋的字串清單。**
@@ -149,6 +150,10 @@
 2. **沒實驗背書的 generality／transferability claim ＝ 送頭。**
    - 寫「applies to any…」「generalizes to…」而論文只測一個 setting → reviewer 會說「I want to see」，再以「你沒做」為由打。
    - claim 一律 **scope 在已展示的範圍**；要講貢獻廣度，改成描述「方法論／設計原則」本身（論文可自證），不承諾跨任務／跨資料集的實證泛化。
+
+3. **Abstract／Intro 不攤 protocol 細節與樣本數**（主人 2026-09-15 SAGA abstract 原話：「Under a controlled protocol with a shared backbone, training data, observation space, and rollout budget」「你這樣直接就是要引戰了，reviewer 不看都可以說你這是 limited」；「in all three seeds」「你這樣寫是要被戰說只跑三個 seeds 然後 reviewer 說 I want to see 嗎」）。protocol 的變數清單與 seed 數留在 §4 setup；abstract／intro 用 consistently、under matched training conditions 這類措辭。⚠️ 這類句子多半是從學生 rebuttal 語言直接搬來的，出現就是「被學生帶著走」的訊號。
+
+4. **Abstract 是論說文，要有「To address X, we propose Y」的提出句**（同日：「你沒有提 To address 我們提出 ...」「你這個沒有 follow paperctl 的精神不是論說文」）：問題 → 病因 → To address…, we propose… → 方法做什麼／不需要什麼 → 結果。少了提出句、只剩事實陳列，就不是論說文。
 
 ---
 
