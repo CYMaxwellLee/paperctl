@@ -30,7 +30,7 @@
 
 | 平台 | 字數/頁數限制 | 格式 | 特殊注意 |
 |------|---------|------|---------|
-| **OpenReview** (ICML/NeurIPS/ICLR) | 無限制 | Markdown | 可以寫長。但不要灌水 |
+| **OpenReview** (ICML/NeurIPS/ICLR) | 10,000 字元，且**以 UTF-8 bytes 計不是字元數** | Markdown | 可以寫長，但不要灌水。數學符號吃 bytes（`−` `τ` `×` `Δ` `≈` 各 3 bytes），餘裕不足時正規化成 ASCII；驗法見 `modules/checklist.md` |
 | **OpenReview + PDF** (ECCV 2026 起) | 1 頁 PDF（含 references，two-column） | LaTeX (官方 template) | 必須極度精簡。匿名要求嚴格，禁止 external link |
 | **CMT** (CVPR/ICCV 多數年份) | 通常 5000 字元 | Plain text | 必須嚴格精簡。確認當年規則 |
 | **OpenReview 兩輪制** (WACV 2027 起) | 1 頁 PDF（含 references；官方 rebuttal template） | LaTeX | Revise-and-resubmit：rebuttal 與 revised manuscript **同表單一起交**；**same reviewers + AC 續審**；官方明文要求 rebuttal "highlighting what changes were made"；修訂稿本身的變更標示無規範（2026-08-29 裁定：\cyl 藍字保留，藍字即 highlight 的視覺實作） |

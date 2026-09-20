@@ -1,15 +1,20 @@
 #!/bin/bash
 # paperctl.d/cmd_preflight.sh -- Submission preflight checklist
 #
-# Final checks before submission:
+# Final checks before submission. This list is what the code below ACTUALLY runs
+# (the old header advertised eight checks, three of which were never implemented
+# here -- a reader trusting it would think preflight had covered them):
 #   1. Anonymity: no author names/affiliations leaked
-#   2. Page count: within limit (14 for ECCV)
-#   3. Review mode: line numbers enabled
-#   4. No TODO/FIXME markers left
-#   5. No supplementary in main PDF (\input{X_suppl} should be removed)
-#   6. Overleaf conflict check (dry-run merge)
-#   7. All figures/tables referenced
-#   8. No debugging artifacts (\textcolor{red}, \hl{}, \todo{})
+#   2. No TODO/FIXME/XXX/HACK markers left
+#   3. No supplementary in main PDF (\input{X_suppl} should be removed)
+#   4. No debug artifacts (\textcolor{red}, \hl{}, \colorbox{}, \fcolorbox{})
+#   5. Overleaf conflict check (dry-run merge)
+#   6. Upstream (student fork) conflict check
+#
+# NOT checked here -- these live elsewhere, run them separately:
+#   - Page count vs venue limit   -> paperctl validate  (.conference.page_limit)
+#   - Unreferenced figures/tables -> paperctl validate CHECK 7 / paperctl ref-check
+#   - Review mode (line numbers)  -> paperctl check     (per-venue template only)
 #
 # Usage: paperctl preflight [--paper <name>]
 

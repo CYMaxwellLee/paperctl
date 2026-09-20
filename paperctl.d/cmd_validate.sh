@@ -557,10 +557,29 @@ doc.close()
     fi
 
     if [[ -n "$pages" ]]; then
-      if [[ "$pages" -le 14 ]]; then
-        check_pass "Pages: $pages / 14 ($(( 14 - pages )) remaining)"
+      # The page limit is a PER-VENUE fact and belongs in conference.json, not in
+      # this file. It was hardcoded to 14 (ECCV) from this command's first commit
+      # (7d6c807, 2026-03-01), so every other venue was measured against the wrong
+      # number. .conference.page_limit / .page_limit_note already existed in the
+      # schema and were read by nothing.
+      local page_limit page_note
+      page_limit=$(_jq "$CONF_FILE" '.conference.page_limit' 2>/dev/null || echo "null")
+      page_note=$(_jq "$CONF_FILE" '.conference.page_limit_note' 2>/dev/null || echo "null")
+      [[ "$page_note" == "null" ]] && page_note=""
+      if [[ ! "$page_limit" =~ ^[0-9]+$ ]]; then
+        # No limit configured -> report the count, pass no judgment. Inventing a
+        # default is the fabricated-quota mistake the skills forbid (2026-06-12:
+        # 「沒有頁數配額，這種規則不應該存在」).
+        check_info "Pages: $pages (set .conference.page_limit in conference.json to check it)"
+      elif [[ "$pages" -le "$page_limit" ]]; then
+        check_pass "Pages: $pages / $page_limit ($(( page_limit - pages )) remaining)"
       else
-        check_fail "Pages: $pages / 14 (OVER by $(( pages - 14 ))!)"
+        # WARN, not FAIL: this is a WHOLE-PDF count, and most venues exclude
+        # references/appendix from the limit, so the overflow may be entirely
+        # back matter. Measure and report; the decision is the author's
+        # (editing-discipline.md 第零節: 量準 -> 回報, never act on it here).
+        check_warn "Pages: $pages / $page_limit -- whole-PDF count is $(( pages - page_limit )) over the limit"
+        [[ -n "$page_note" ]] && echo "         limit note: $page_note"
       fi
     fi
 

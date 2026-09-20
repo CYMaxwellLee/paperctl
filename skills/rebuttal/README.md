@@ -25,7 +25,7 @@ rebuttal/
 
 ## Supported Platforms
 
-- **OpenReview** (ICML, NeurIPS, ICLR): No word limit, Markdown, images via anonymous links
+- **OpenReview** (ICML, NeurIPS, ICLR): 10,000-character limit measured in UTF-8 **bytes**, Markdown, images via anonymous links
 - **CMT** (ECCV, CVPR, ICCV): 5000 char limit, plain text, no images
 
 ## Companion Skill

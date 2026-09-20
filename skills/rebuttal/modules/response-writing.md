@@ -561,7 +561,7 @@ We will improve the writing.
 
 ### OpenReview（ICML / NeurIPS / ICLR）
 
-- **無字數限制** → 可以寫充分，用足夠的 evidence
+- **10,000 字元上限，且以 UTF-8 bytes 計不是字元數**（實測：砍到 9990 字元卻是 10003 bytes，因為 6 個 `−` 各佔 3 bytes）→ 空間夠寫充分，但不是無限。驗法見 `checklist.md`
 - 可以用 Markdown 格式（表格、粗體）
 - 可以附圖片連結（anonymous link）
 - Discussion phase 可以多輪來回
