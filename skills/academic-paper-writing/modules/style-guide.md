@@ -39,6 +39,7 @@
 | **縮寫先於全名** | ❌ 首次出現就用 ELSA | ✅ 先全名再縮寫 |
 | **分號連接句子** | ❌ 禁止（FLORA methodology rewrite 明確禁止） | ✅ 句號拆開，或用連接詞 |
 | **", so that"** | ⚠️ 避免（教授 2026-09-15 SAGA abstract：「so that 要避免，這是 paperctl」；lint 目前放行 purposive so that，以此裁示為準） | ✅ 拆句，或 therefore／hence 接因果 |
+| **", so"（逗號＋so 連接句）** | ❌ 口語因果連接（主人 2026-09-23 GraphMem 稿連刀兩次後核入表；先前表上只有 So 句首與 ", so that"） | ✅ 拆句用 Therefore／thus，或改 since 前置子句 |
 
 > ⚠️ **文采原則就寫成文采原則，不要翻譯成數字配額**（「每段最多 N 句」「>2 次」這種）。教授 2026-06-12：「不是列數字什麼的禁，這個本身就是大錯誤的方向」。同理：沒有頁數配額、沒有 ablation 行數上限、沒有 proof 行數門檻。
 

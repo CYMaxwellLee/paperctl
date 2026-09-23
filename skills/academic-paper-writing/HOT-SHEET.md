@@ -20,7 +20,7 @@
 
 ## 禁詞硬底線（零容忍）
 - because（整篇→since/as/given that）、but、So 句首、give(s)/make(s)/let(s)
-- comma+V-ing 掛尾、分號連句、em-dash、", so that"、", yet"（warn）
+- comma+V-ing 掛尾、分號連句、em-dash、", so that"、", so" 連接（9/23 入表）、", yet"（warn）
 - 句首副詞+逗號（Additionally,/Notably,/In addition,…；允許 Specifically,/Moreover,/Furthermore,）
 - As shown in／As can be seen（表圖當主詞）、thereby、numerous、straightforward、underscore(v.)、Yet 句首
 - corroboration（主人 9/17 嚴格禁）、「X is Y」弱 be 句在定義處→ is defined as/is selected as、not a X→rather than a X（對比處）
