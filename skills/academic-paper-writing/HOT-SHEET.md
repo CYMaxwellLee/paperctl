@@ -33,7 +33,7 @@
 
 ## 格式與量測
 - eq 前 integrated "as follows:"（comma-tail 型會被剪）＋eq 符號正文點名
-- \cref／句首 \Cref；⛔ 訊息與正文寫「Sec.」；**Table 首字大寫不論位置、每篇同規**（主人 9/24；preamble 設 `\crefname{table}{Table}{Tables}`，新稿開局就加）
+- \cref／句首 \Cref；⛔ 訊息與正文寫「Sec.」；**Table 與 Section 首字大寫不論位置、每篇同規**（主人 9/24；preamble 設 `\crefname{table}{Table}{Tables}`＋`\crefname{section}{Section}{Sections}`＋`\crefname{subsection}{Section}{Sections}`（subsection 那行別漏，\cref 指到 \subsection 的 label 走的是 subsection 型），新稿開局就加）
   ⚠️ 若某個專案的 preamble 沒載 cleveref，那是**該專案的狀態**，在那個專案裡才退回 `Fig.~\ref`／`Table~\ref`（帶 `~`）。⛔ 不是通則。
 - 方陣：段尾行/caption 行/eq lead-in 行 ≥85%，pdftotext -layout 量、⛔ 心算；零損刀填縫（真資訊/收縮/拔冗餘）、⛔ 填料詞、⛔ 動主人已定的字
 - 改動包 \cyl{}（學生原文註解保留）；不確定數字 \red{}；量測與 push 分鏈
