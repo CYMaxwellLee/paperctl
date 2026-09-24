@@ -13,7 +13,7 @@
 1. 動段前看 paperctl 該模組（讀的是處方、不是印象）
 2. 不被學生帶著走（骨架／選材／句式／開場全查；We study 型開場＝重寫訊號）
 3. 論說文不 narration（claim→支撐→意義；⛔ 流水帳／架構巡禮／報導腔）
-4. 不聊天 register（gives/makes/lets/asks/pays/takes/adds/goes back…→實義動詞）
+4. 不聊天 register（gives/makes/lets/asks/pays/takes/adds/goes back…→實義動詞；9/23-24 增補：buy(s)/need not/becomes something）
 5. 實驗段 insight/significance/impact 先講、數字後報（表格引導句可在前）
 6. 主題句呼應 subsection title 的**兩半**
 7. intro ¶4＝advantage＋impact＋significance＋insight 四件套、承接 ¶3
@@ -26,6 +26,9 @@
 - corroboration（主人 9/17 嚴格禁）、「X is Y」弱 be 句在定義處→ is defined as/is selected as、not a X→rather than a X（對比處）
 - 自問自答、小括號補充子句、"XX et al." 當主詞（數字 cite 稿）、縮寫先於全名
 - 直引號→``…''；\(…\)→$…$；float 一律 [t]
+
+## 用字節制（非禁詞，頻率控管）
+- hence（主人 9/24：「不是禁詞但用太多了」）——同段不重複、單篇少用；換 thus/therefore 或重構句子
 
 ## 格式與量測
 - eq 前 integrated "as follows:"（comma-tail 型會被剪）＋eq 符號正文點名
