@@ -18,6 +18,13 @@
 6. 主題句呼應 subsection title 的**兩半**
 7. intro ¶4＝advantage＋impact＋significance＋insight 四件套、承接 ¶3
 
+## 9/25 段落級增補（主人 MEMOIR §4.4／ablation 輪連續裁示）
+
+- component 段的主題句先講該元件的**用途與精神**、再進機制（「主題句要講到該 component 最主要的用途和精神」）
+- 段落依賴的大觀念／分層框架在小節**開頭就錨定**，⛔ 邊寫邊帶出（「大觀念很晚才出來，有種邊寫邊講的感覺，不是從 big picture 開始的論說文寫法」）
+- 句與句要有**明講的 transition phrases**；意思連貫仍不夠（「看起來像獨立句子串接、沒什麼轉折」）
+- 插入語別把句子切太碎（「太多斷句」）；假設語氣處補 could／may；口語時間詞（now）換 professional 寫法
+
 ## 禁詞硬底線（零容忍）
 - because（整篇→since/as/given that）、but、So 句首、give(s)/make(s)/let(s)
 - comma+V-ing 掛尾、分號連句、em-dash、", so that"、", so" 連接（9/23 入表）、", yet"（warn）
