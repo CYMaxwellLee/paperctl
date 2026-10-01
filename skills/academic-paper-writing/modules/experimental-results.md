@@ -85,7 +85,7 @@ all compared methods.
 
 - **按 capability / challenge 組織，不是按 sample 組織**
 - 每個例子展示一個特定的 capability 或 advantage
-- **必須包含 failure case 分析**
+- **Failure case 放 appendix，正文輕描淡寫帶過**（主人 9/15：「這些要輕描淡寫帶過，寫了就等於挖坑被炸」；9/21：「Failure放appendix」；10/1 重申「我還是認同放appendix 輕描淡寫」）
 - Qualitative improvement 應 trace back 到 Methodology 的某個 module
 
 **Figure 要求**：
