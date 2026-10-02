@@ -27,15 +27,15 @@
 
 ## 禁詞硬底線（零容忍）
 - because（整篇→since/as/given that）、but（not only … but also 可以，主人 10/2）、So 句首、give(s)/make(s)/let(s)
-- comma+V-ing 掛尾、分號連句、em-dash、", so that"、", so" 連接（9/23 入表）、", yet"（warn）
+- comma+V-ing 掛尾、分號連句、em-dash、", so that"、", so" 連接（9/23 入表）、", yet"（主人 10/2：禁）
 - 句首副詞+逗號（Additionally,/Notably,/In addition,…；允許 Specifically,/Moreover,/Furthermore,）
 - As shown in／As can be seen（表圖當主詞）、thereby、numerous、straightforward、underscore(v.)、Yet 句首
 - corroboration（主人 9/17 嚴格禁）、「X is Y」弱 be 句在定義處→ is defined as/is selected as、not a X→rather than a X（對比處）
 - 自問自答、小括號補充子句、"XX et al." 當主詞（數字 cite 稿）、縮寫先於全名（後面跟著引用的專名不算，例：SAM~\cite{…}；VLM、FIFO 這種一般縮寫照擋；主人 10/2）
-- 直引號→``…''；\(…\)→$…$；float 一律 [t]
+- 直引號→``…''；\(…\)→$…$；float 一律置頂 [t]（[t!]／[!t] 也算置頂；主人 10/2：「圖表我是想都置頂」）
 
 ## 用字節制（非禁詞，頻率控管）
-- hence（主人 9/24：「不是禁詞但用太多了」）——同段不重複、單篇少用；換 thus/therefore 或重構句子
+- hence（主人 9/24：「不是禁詞但用太多了」）——每一節最多一次（主人 10/2）；換 thus/therefore 或重構句子
 - Together,（主人 10/1：「也是不要用太多，適當」）——同段不重複、單篇少用；能用普通銜接就不用
 - 同介系詞排比訓（主人 9/24）：", to a X, to a Y, and to a Z" 型逗號＋重複介系詞的平行列舉（Fable 5 慣性、「不會特別顯示寫作厲害」）——改普通列舉（介系詞一次）或散文句
 - 冒號句型節制（主人 9/25：「我其實也沒一定絕對要禁，但這幾天改下來有覺得特別多」）——文采原則不設配額：「X: Y」展開句是調味不是主力，連段出現就顯眼；transition 不靠冒號扛，能拆成兩個普通句就拆（9/25 MEMOIR 實測全篇 prose 近每段一顆＝太多的樣子）
