@@ -26,12 +26,12 @@
 - 插入語別把句子切太碎（「太多斷句」）；假設語氣處補 could／may；口語時間詞（now）換 professional 寫法
 
 ## 禁詞硬底線（零容忍）
-- because（整篇→since/as/given that）、but、So 句首、give(s)/make(s)/let(s)
+- because（整篇→since/as/given that）、but（not only … but also 可以，主人 10/2）、So 句首、give(s)/make(s)/let(s)
 - comma+V-ing 掛尾、分號連句、em-dash、", so that"、", so" 連接（9/23 入表）、", yet"（warn）
 - 句首副詞+逗號（Additionally,/Notably,/In addition,…；允許 Specifically,/Moreover,/Furthermore,）
 - As shown in／As can be seen（表圖當主詞）、thereby、numerous、straightforward、underscore(v.)、Yet 句首
 - corroboration（主人 9/17 嚴格禁）、「X is Y」弱 be 句在定義處→ is defined as/is selected as、not a X→rather than a X（對比處）
-- 自問自答、小括號補充子句、"XX et al." 當主詞（數字 cite 稿）、縮寫先於全名
+- 自問自答、小括號補充子句、"XX et al." 當主詞（數字 cite 稿）、縮寫先於全名（後面跟著引用的專名不算，例：SAM~\cite{…}；VLM、FIFO 這種一般縮寫照擋；主人 10/2）
 - 直引號→``…''；\(…\)→$…$；float 一律 [t]
 
 ## 用字節制（非禁詞，頻率控管）
