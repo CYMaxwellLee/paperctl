@@ -41,7 +41,6 @@ PASS 5 — GPT 語法
 [ ] Banned words 全文搜尋完成（以 paperctl lint 清單為準）
 [ ] Comma + V-ing 全文清除
 [ ] We/Our 連發已打散
-[ ] "As shown in / As can be seen from" 弱引用已改寫（表圖當主詞）
 [ ] 段落內句子邏輯流動性已 check
 [ ] 段落接縫六問已跑（對比軸／指涉／數量詞／因果跳步／插入句／病因重複 → cohesion-diagnostics.md）
 

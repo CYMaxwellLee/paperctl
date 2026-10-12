@@ -147,7 +147,7 @@ in §3.2] is essential for handling [the challenge in ¶1].
 |------|------|
 | **不在正文重抄 Table 數字** | 只 highlight 最關鍵的 1-2 個，其餘讓 reviewer 看 Table |
 | **每段 insight 先於數字** | ❌ 先報數字再解釋 ✅ 先講 insight，再用數字佐證 |
-| **Table 引用不要太機械** | ❌ 每段開頭 "As shown in Table X, ..." ✅ 自然嵌入句子 |
+| **Table 引用不要太機械** | ❌ 每段開頭都 "As shown in Table X, ..."（單用不禁，主人 2026-08-04／10-12；別每段機械重複） ✅ 自然嵌入句子 |
 | **不在正文描述 Table layout** | ❌ "The first column shows..." ✅ 直接講 insight |
 | **Ablation 的每個 entry 必須有意義** | 不要為了湊數加 trivial ablation |
 | **不過度使用 "significant" / "substantial"** | 用數字取代形容詞 |

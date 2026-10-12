@@ -59,11 +59,10 @@
 | `significant improvement` | 改為具體數字描述 |
 | `Notably,`（句首） | 刪導語，讓事實自己說話 |
 | `because` | 整篇禁用 → "since" / "as" / "given that" |
-| `As can be seen from` | 弱引用，表圖要當主詞 |
-| `As shown in` | 弱引用，表圖要當主詞（教授 2026-06） |
 | `give` / `gives` | casual → provides / yields / produces |
 
 > ⚠️ **2026-06-12 教授裁決——以下「不禁」，不要再加回禁字表**：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」。這幾條是先前 session 自己發明寫進 lint 的，教授明示這些用法 OK／沒這種規定。同裁決：display math 哪裡都可以放（inline math 一律 `$...$`）、float 一律 `[t]` 置頂並放在第一次 mention 的那一頁、直引號必須 enforce（LaTeX）。
+> ⚠️ **2026-08-04／2026-10-12 主人裁決——「As shown in」「As can be seen from」「It can be observed that」不禁，⛔ 勿再加回**：先前被冠上「弱引用，表圖要當主詞」列進上表。主人 8/04 原話：「我沒有禁 it can be observed or As can be seen，那是錯的」「As shown in 可以接受」；10/12 寫稿側同步（「As shown in 好像沒有禁，幫我更新 paperctl」）。表圖當主詞仍是偏好寫法，不是禁令；括號式 `(Table 9)` 仍禁。
 
 ### ⛔ 詞表管不到的那層：register
 

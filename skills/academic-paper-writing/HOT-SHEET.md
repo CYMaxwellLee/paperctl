@@ -29,10 +29,11 @@
 - because（整篇→since/as/given that）、but（not only … but also 可以，主人 10/2）、So 句首、give(s)/make(s)/let(s)（數學定義句「Let $G$ be …」不算，主人 10/3：「數學定義式沒問題」）
 - comma+V-ing 掛尾（含逗號＋副詞＋V-ing，例 ", thus allowing"，主人 10/3：「擋掉」；", while using"／", without using" 是可接受句型，主人 10/3）、分號連句、em-dash、", so that"、", so" 連接（9/23 入表）、", yet"（主人 10/2：禁）
 - 句首副詞+逗號（Additionally,/Notably,/In addition,/Thus,…；允許 Specifically,/Moreover,/Furthermore,/In particular,/Overall,/Meanwhile,；Thus 與後三個是主人 10/3 裁：「Thus 不同意，其它放行」）
-- As shown in／As can be seen（表圖當主詞）、thereby、numerous、straightforward、underscore(v.)、Yet 句首
+- thereby、numerous、straightforward、underscore(v.)、Yet 句首
 - corroboration 與動詞形 corroborate(s/d)（主人 9/17 嚴格禁；動詞形 10/3：「一起擋」）、「X is Y」弱 be 句在定義處→ is defined as/is selected as、not a X→rather than a X（對比處）
 - 自問自答、小括號補充子句、"XX et al." 當主詞（數字 cite 稿）、縮寫先於全名（後面跟著引用的專名不算，例：SAM~\cite{…}；VLM、FIFO 這種一般縮寫照擋；主人 10/2）
 - 直引號→``…''；\(…\)→$…$；float 一律置頂 [t]（[t!]／[!t] 也算置頂；主人 10/2：「圖表我是想都置頂」）
+- ⛔ 勿再加回（不是禁詞）：As shown in／As can be seen from／It can be observed that——主人 8/04 原話：「我沒有禁 it can be observed or As can be seen，那是錯的」「As shown in 可以接受」；10/12 寫稿側同步（「As shown in 好像沒有禁，幫我更新 paperctl」）。表圖當主詞是偏好寫法，不是禁令；括號式 (Table 9) 仍禁
 
 ## 用字節制（非禁詞，頻率控管）
 - hence（主人 9/24：「不是禁詞但用太多了」）——每一節最多一次（主人 10/2）；換 therefore 或重構句子（⛔ 別換成句首 Thus,，主人 10/3 不同意）

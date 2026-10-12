@@ -10,7 +10,8 @@
 #   2.  Adverb+comma sentence openers (Specifically allowed)
 #   3.  thereby / straightforward / numerous (case-proof; utilize unbanned 2026-07-06)
 #   3b. Sentence-initial "Yet"; "underscore" (any use)
-#   4.  Weak reference phrases: "As shown in", "As can be seen from"
+#   4.  (removed 2026-10-12) weak reference phrases -- master ruled "As shown in" / "As can be seen from"
+#       NOT banned (2026-08-04 rebuttal ruling, 2026-10-12 paper side); do not re-add
 #   4b. Parenthetical table/figure references "(Table 9)" -- float must be the subject
 #   5.  Casual give/gives
 #   6.  Casual conjunctions (, but / , so) and semicolon clause-joins (fail);
@@ -107,11 +108,10 @@ _add_rule '(^[0-9]*:[[:space:]]*|[.?!:] |[{][[:space:]]*)Yet\b' \
 _add_rule '\bunderscor(e|es|ed|ing)\b' \
   "'underscore' (any use) -- use highlight/demonstrate/emphasize" fail
 
-# Weak reference phrases -- professor 2026-06 appendix session (floats must be the sentence subject).
-# The five other GPT-isms that used to live here were ruled OK on 2026-06-12 and removed.
-# \b guards against 'was shown in' / 'has shown in' passives; [Aa] covers mid-sentence forms
-_add_rule '([Aa]s can be seen from|\b[Aa]s shown in)' \
-  "Weak reference phrase (As shown in / As can be seen from) -- make the table/figure the subject" fail
+# Weak reference phrases ("As shown in" / "As can be seen from") were a fail rule here from the 2026-06
+# appendix session. Master ruled them NOT banned: 2026-08-04 (「我沒有禁 it can be observed or As can be seen，
+# 那是錯的」「As shown in 可以接受」) and 2026-10-12 (「As shown in 好像沒有禁，幫我更新 paperctl」).
+# Floats as the sentence subject stays a preference, not a lint rule. Do not re-add.
 
 # Parenthetical table/figure reference -- professor 2026-06 (表圖當主詞，不要括號式 "(Table 9)")
 _add_rule '\([[:space:]]*(Table|Figure|Fig\.|Tab\.)[~ ]' \

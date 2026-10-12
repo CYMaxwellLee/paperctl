@@ -149,7 +149,7 @@ assert_has "mid-line adverb fires (. Additionally,)" 'Additionally, the cost' "$
 assert_not "Moreover opener now allowed"            'Moreover, the cost stays flat. Furthermore' "$OUT"
 assert_not "utilize now allowed (unbanned 2026-07-06)" 'We utilize' "$OUT"
 assert_has "capitalized Numerous fires"             'Numerous prior works' "$OUT"
-assert_has "weak ref fires (As shown in)"           'Weak reference' "$OUT"
+assert_not "'As shown in' allowed (ruled not banned 2026-08-04/10-12)" 'Weak reference' "$OUT"
 assert_not "'was shown in' passive stays silent"    'lemma' "$OUT"
 assert_has "gives fires"                            "Casual 'give" "$OUT"
 assert_has "', but' fires"                          'variance grew' "$OUT"

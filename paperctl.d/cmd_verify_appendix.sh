@@ -9,7 +9,7 @@
 #   B  blue paragraph count >= student        (no collapsing N paragraphs into 1)
 #   C  every table/figure/number in student reappears in blue (no silent drops)
 #   D  student DISPLAYED equations stay displayed in blue (no flattening to prose)
-#   E  table/figure is the sentence SUBJECT  (no "(Table~\ref{})" / "As shown in")
+#   E  table/figure is the sentence SUBJECT  (no "(Table~\ref{})"; "As shown in" is NOT banned, master 2026-08-04/10-12)
 #   F  no context-assuming openers           ("This sweep ...") -- connect to main or name a subject
 #   J  per-paper LaTeX dialect               (manual \ref vs \cref; [H] availability)
 #

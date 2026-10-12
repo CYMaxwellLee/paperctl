@@ -56,7 +56,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 6. ❌ `thereby` / `numerous`（教授 2026-06-12 同意；`utilize` 於 2026-07-06 解禁）
 7. ❌ `because`（整篇，不限句首）→ since / as / given that
 8. ❌ casual：`but`、`so`、`give(s)`
-9. ❌ 弱引用：`As shown in`、`As can be seen from`、括號式 `(Table 9)` → 表圖當主詞
+9. ❌ 括號式 `(Table 9)` → 表圖當主詞（`As shown in`／`As can be seen from` **不禁**，主人 2026-08-04／2026-10-12）
 10. ❌ 直引號 `"..."` → `` `` ``...'' ``（LaTeX，必須 enforce）
 11. ❌ inline math 用 `\(...\)` → 一律 `$...$`（display math 哪裡都可以放）
 12. ❌ float `[h]/[b]/[H]` → 一律 `[t]` 置頂，放在第一次 mention 的那一頁。**正文與 supplementary 都一樣**（2026-06-12：「always置頂，不管正文或者supp」；supp 模板與 supp-check 已同步改 `[t]`）
@@ -66,6 +66,7 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 
 **注意**：`--` (en-dash) 用於 `accuracy--speed` → **保留不動**
 **明確不禁**（2026-06-12 裁決，勿再加回）：「It is worth noting that」「As expected,」「demonstrates the effectiveness of」「has gained significant attention」「Recently, many works」「In this paper, we」；Intro 的 `\Delta/\tau` notation 與 figure ref 沒有限制（teaser 在 ¶3 必引）。
+**明確不禁**（2026-08-04／2026-10-12 主人裁決，勿再加回）：「As shown in」「As can be seen from」「It can be observed that」——主人 8/04 原話：「我沒有禁 it can be observed or As can be seen，那是錯的」「As shown in 可以接受」；10/12 寫稿側同步（「As shown in 好像沒有禁，幫我更新 paperctl」）。
 **文采原則 ≠ 數字配額**（2026-06-12）：However/We/leverage 不要過度重複是「多變化」的文采原則，不是「每段 N 句」「>2 次」這種數字禁令；同理沒有頁數配額、ablation 行數、proof 行數門檻。Contributions 3–5 個端看情況，重點講為什麼 significant、有什麼 impact 與 insight。
 
 **強制檢查**：`paperctl lint --paper <name>` 自動掃 #1–#14 加括號式表圖引用 `(Table 9)`、句首 But/So（有 fail 會 exit 1 可當 gate；SAGA 類無 cleveref 論文自動跳過 bare-`\ref`；contributions 區塊的 `\item` 不會被 --intro 誤抓）。
@@ -84,9 +85,9 @@ Rebuttal side-by-side         → 學生文保留 + \cyl{\noindent ...} 緊接
 - **B 段數對齊**：學生幾段，藍字就 **≥ 幾段**。不可把多段壓成一段。
 - **C 元素全覆蓋**：學生版裡每個 equation／table／figure／數字，藍字版**全部都要出現**，一個都不能掉。
 - **D 公式照 display**：學生的 displayed equation（`\begin{equation}` / `align`）在藍字裡**仍要 displayed**，不准攤平成 inline 或散文。含 display math 的藍字區塊用 `{\color{blue} ... }`，**不要**用 `\textcolor{blue}{}` 去包 display math（會壞）。
-- **E 表圖當主詞**：`Table~\ref{} reports...`、`\Cref{fig:} shows...`。**不要**寫成括號式 `(Table 9)`，也**不要** `As shown in Table 9`。
+- **E 表圖當主詞**：`Table~\ref{} reports...`、`\Cref{fig:} shows...`。**不要**寫成括號式 `(Table 9)`（`As shown in Table 9` 不禁，主人 2026-08-04／10-12；表圖當主詞是偏好）。
 - **F 開頭直接破題**：每節第一句要**接正文**（`\cref{sec:...}` 點出主題從哪來），或**以表圖／專有名詞當主詞**。**禁止** `This sweep...` / `This ablation...` / `These tables...` 這種假設讀者已知 context 的 narrative 開頭。要 argument，不要 narrative。
-- **G 不准 casual**：`so` / `but` / `give(s)` / `As shown in` / `As can be seen from` 一律不用。
+- **G 不准 casual**：`so` / `but` / `give(s)` 一律不用（`As shown in`／`As can be seen from` 不禁，主人 2026-08-04／10-12）。
 - **I 引用資料不算禁忌**：失敗描述等 `\textit{``...''}` 逐字引用內的 but／分號／破折號是**資料**，不是你的文字，不要被它觸發禁忌（也不要去改它）。
 - **N append 慣例**：學生原文**保留不動**，藍字是完整教授版 append 在後。
 
